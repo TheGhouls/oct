@@ -11,7 +11,8 @@ setup(
     version=__version__,
     author='Emmanuel Valette',
     author_email='manu.valette@gmail.com',
-    packages=['oct', 'oct.core', 'oct.multimechanize', 'oct.testing'],
+    packages=['oct', 'oct.core', 'oct.multimechanize', 'oct.testing',
+              'oct.multimechanize.utilities', 'oct.utilities'],
     description='A library based on multi-mechanize for performances testing',
     install_requires=[
         'argparse',
@@ -20,10 +21,12 @@ setup(
         'matplotlib',
         'beautifulsoup4',
         'requests-cache',
+        'celery'
     ],
     entry_points={'console_scripts': [
         'multimech-run = oct.multimechanize.utilities.run:main',
         'multimech-newproject = oct.multimechanize.utilities.newproject:main',
         'multimech-gridgui = oct.multimechanize.utilities.gridgui:main',
+        'oct-run = oct.utilities.run:oct_main',
     ]}
 )
