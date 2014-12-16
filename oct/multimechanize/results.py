@@ -15,10 +15,11 @@ import reportwriterxml
 
 
 
-def output_results(results_dir, results_file, run_time, rampup, ts_interval, user_group_configs=None, xml_reports=False):
+def output_results(results_dir, results_file, run_time, rampup, ts_interval, user_group_configs=None,
+                   xml_reports=False, parent='../../'):
     results = Results(results_dir + results_file, run_time)
 
-    report = reportwriter.Report(results_dir)
+    report = reportwriter.Report(results_dir, parent)
 
     print 'transactions: %i' % results.total_transactions
     print 'errors: %i' % results.total_errors
@@ -350,4 +351,4 @@ def percentile(seq, percentile):
 
 
 if __name__ == '__main__':
-    output_results('./', 'results.csv', 60, 30, 10)
+    output_results('./', 'results.csv', 60, 30, 10, parent='../../')

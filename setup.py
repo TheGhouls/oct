@@ -13,6 +13,7 @@ setup(
     author_email='manu.valette@gmail.com',
     packages=['oct', 'oct.core', 'oct.multimechanize', 'oct.testing',
               'oct.multimechanize.utilities', 'oct.utilities'],
+    package_data={'oct.utilities': ['templates/css/*']},
     description='A library based on multi-mechanize for performances testing',
     install_requires=[
         'argparse',
@@ -28,5 +29,6 @@ setup(
         'multimech-newproject = oct.multimechanize.utilities.newproject:main',
         'multimech-gridgui = oct.multimechanize.utilities.gridgui:main',
         'oct-run = oct.utilities.run:oct_main',
-    ]}
+        'oct-newproject = oct.utilities.newproject:main',
+    ]},
 )
