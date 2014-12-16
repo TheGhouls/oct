@@ -12,7 +12,7 @@ setup(
     author='Emmanuel Valette',
     author_email='manu.valette@gmail.com',
     packages=['oct', 'oct.core', 'oct.multimechanize', 'oct.testing',
-              'oct.multimechanize.utilities', 'oct.utilities'],
+              'oct.multimechanize.utilities', 'oct.utilities', 'oct.tools'],
     package_data={'oct.utilities': ['templates/css/*']},
     description='A library based on multi-mechanize for performances testing',
     install_requires=[
@@ -30,5 +30,6 @@ setup(
         'multimech-gridgui = oct.multimechanize.utilities.gridgui:main',
         'oct-run = oct.utilities.run:oct_main',
         'oct-newproject = oct.utilities.newproject:main',
+        'octtools-sitemap-to-csv = oct.tools.csv:sitemap_to_csv'
     ]},
 )
