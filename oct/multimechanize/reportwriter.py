@@ -7,6 +7,7 @@
 #
 import os
 import shutil
+import sys
 
 
 class Report(object):
@@ -27,7 +28,8 @@ class Report(object):
             shutil.copytree(os.path.join(self.templates_dir, 'img'), os.path.join(self.results_dir, 'img'))
             shutil.copytree(os.path.join(self.templates_dir, 'scripts'), os.path.join(self.results_dir, 'scripts'))
         except OSError:
-            pass
+            sys.stderr.write('\nERROR : can not create directory for results\n\n')
+            sys.exit(1)
 
     def write_line(self, line):
         with open(self.fn, 'a') as f:
