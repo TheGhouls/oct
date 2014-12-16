@@ -62,14 +62,29 @@ h1	{
 h2 {
 	font-size: 2em;
 	background: #f78930;
+	margin: 15px 0 15px 0;
 }
 
 h1, h2, h3, h4, h5, h6 {
 	padding: 15px;
 }
 
+h4 {
+	font-weight: bold;
+	font-size: 1.3em;
+}
+
+h3 {
+	font-size: 1.5em;
+	font-weight: bold;
+}
+
 .summary {
 	padding-left: 15px;
+}
+
+.summary > b {
+	font-weight: bold;
 }
 
 #main table {
@@ -92,4 +107,10 @@ h1, h2, h3, h4, h5, h6 {
 	min-width: 70px;
 	padding: 10px 5px 10px 5px;
 	border: 1px solid grey;
+}
+
+hr {
+	color: #f4f4f4;
+	background-color: #f4f4f4;
+	border: none;
 }
