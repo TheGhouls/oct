@@ -18,6 +18,7 @@ import shutil
 import subprocess
 import sys
 import time
+from datetime import datetime
 
 try:
     # installed
@@ -77,7 +78,9 @@ def run_test(project_name, cmd_opts, remote_starter=None):
     run_time, rampup, results_ts_interval, console_logging, progress_bar, results_database, post_run_script, xml_report, user_group_configs = configure(project_name, cmd_opts)
 
     run_localtime = time.localtime()
-    output_dir = '%s/%s/results/results_%s' % (cmd_opts.projects_dir, project_name, time.strftime('%Y.%m.%d_%H.%M.%S/', run_localtime))
+    milisec = datetime.now().microsecond
+    output_dir = '%s/%s/results/results_%s' % (cmd_opts.projects_dir, project_name,
+                                               time.strftime('%Y.%m.%d_%H.%M.%S_'+str(milisec)+'/', run_localtime))
 
     # this queue is shared between all processes/threads
     queue = multiprocessing.Queue()
