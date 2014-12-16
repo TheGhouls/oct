@@ -18,7 +18,7 @@ HEAD_CONTENT = """
     <link rel="stylesheet" type="text/css" href="css/style.css" />
 </head>
 
-<body>
+<body id="main">
 """
 
 FOOTER_CONTENT = """
