@@ -21,6 +21,11 @@ HEAD_CONTENT = """
 <body>
 """
 
+FOOTER_CONTENT = """
+</body>
+</html>
+"""
+
 
 def create_project(
         project_name,
@@ -30,7 +35,8 @@ def create_project(
         config_content=CONFIG_CONTENT,
         script_content=SCRIPT_CONTENT,
         template_dir=TEMPLATE_DIR,
-        head_content=HEAD_CONTENT):
+        head_content=HEAD_CONTENT,
+        footer_content=FOOTER_CONTENT):
 
     if os.path.exists(project_name):
         sys.stderr.write('\nERROR: project already exists: %s\n\n' % project_name)
@@ -53,6 +59,8 @@ def create_project(
         f.write(script_content)
     with open(os.path.join(project_name, template_dir, 'head.html'), 'w') as f:
         f.write(head_content)
+    with open(os.path.join(project_name, template_dir, 'footer.html'), 'w') as f:
+        f.write(footer_content)
 
 
 def main():

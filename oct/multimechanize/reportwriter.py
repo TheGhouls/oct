@@ -19,6 +19,9 @@ class Report(object):
         with open(os.path.join(self.templates_dir, 'head.html')) as f:
             self.head = f.read()
 
+        with open(os.path.join(self.templates_dir, 'footer.html')) as f:
+            self.footer = f.read()
+
         self.set_statics()
         self.write_head_html()
 
@@ -41,10 +44,7 @@ class Report(object):
 
     def write_closing_html(self):
         with open(self.fn, 'a') as f:
-            f.write("""\
-</body>
-</html>
-""")
+            f.write(self.footer)
 
 
 
