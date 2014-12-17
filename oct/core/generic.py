@@ -86,7 +86,11 @@ class GenericTransaction(object):
         :return: None
         """
         if self.statics_enabled is None:
-            self.statics_enabled = self.config.getboolean('global', 'statics_enabled')
+            try:
+                self.statics_enabled = self.config.getboolean('global', 'statics_enabled')
+            except ConfigParser.NoOptionError:
+                print "No statics_enabled option in config file, set value to False (default value)"
+                self.statics_enabled = False
         if not self.statics_enabled:
             return None
 
