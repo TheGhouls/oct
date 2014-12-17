@@ -1,7 +1,7 @@
 import os
 import shutil
 import sys
-from oct.multimechanize.utilities.newproject import CONFIG_CONTENT, CONFIG_NAME, SCRIPT_CONTENT, SCRIPT_NAME, \
+from oct.multimechanize.utilities.newproject import CONFIG_NAME, SCRIPT_NAME, \
     SCRIPTS_DIR
 
 
@@ -25,6 +25,54 @@ FOOTER_CONTENT = """
 </body>
 </html>
 """
+
+SCRIPT_CONTENT = """
+from oct.core.generic import GenericTransaction
+import random
+import time
+import os
+
+
+CONFIG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../')
+
+
+class Transaction(GenericTransaction):
+    def __init__(self):
+        GenericTransaction.__init__(self, True, CONFIG_PATH)
+
+    def run(self):
+        r = random.uniform(1, 2)
+        time.sleep(r)
+        self.custom_timers['Example_Timer'] = r
+
+
+if __name__ == '__main__':
+    trans = Transaction()
+    trans.run()
+    print trans.custom_timers
+"""
+
+CONFIG_CONTENT = """
+[global]
+run_time = 30
+rampup = 0
+results_ts_interval = 10
+progress_bar = on
+console_logging = off
+xml_report = off
+base_url = http://localhost
+default_sleep_time = 2
+
+
+[user_group-1]
+threads = 3
+script = %s
+
+[user_group-2]
+threads = 3
+script = %s
+
+""" % (SCRIPT_NAME, SCRIPT_NAME)
 
 
 def create_project(

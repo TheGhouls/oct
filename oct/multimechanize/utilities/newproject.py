@@ -38,12 +38,11 @@ script = %s
 
 
 SCRIPT_CONTENT = """
-from oct.core.generic import GenericTransaction
 import random
 import time
 
 
-class Transaction(GenericTransaction):
+class Transaction(object):
     def __init__(self):
         pass
 
