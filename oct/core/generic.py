@@ -26,7 +26,7 @@ class GenericTransaction(object):
         :param use_cookies: default to True, set to False if you don't want cookies with browser object
         """
         self.config = ConfigParser.ConfigParser()
-        self.config.read(os.path.join(pathtoini, 'settings.cfg'))
+        self.config.read(os.path.join(pathtoini, 'config.cfg'))
         self.base_url = self.config.get('global', 'base_url')
         self.br = Browser()
         self.br.set_handle_robots(handle_robots)
@@ -41,7 +41,7 @@ class GenericTransaction(object):
         self.sleep_time = self.config.getfloat('global', 'default_sleep_time')
 
         for i in range(kwargs.pop('threads', 5)):
-            t = Thread(self.multi_process_statics)
+            t = Thread(target=self.multi_process_statics)
             t.daemon = True
             t.start()
 
