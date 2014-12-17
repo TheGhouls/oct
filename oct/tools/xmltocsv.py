@@ -4,6 +4,12 @@ from xml.dom.minidom import parse
 import csv
 
 def sitemap_to_csv():
+    """
+    Take as options: Xml file, CSV File
+
+    Parse the XML and write each value get from it inside the CSV file prodived.
+    :return: none
+    """
     parser = argparse.ArgumentParser(description="Convert XML file to CSV file")
     parser.add_argument("xml", metavar='xml', type=str, nargs=1, help="The XML file to parse")
     parser.add_argument("csv", metavar='csv', type=str, nargs=1, help="The CSV file to generate")
