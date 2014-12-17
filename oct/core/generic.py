@@ -100,9 +100,9 @@ class GenericTransaction(object):
             include = self.statics_include
 
         soup = BeautifulSoup(response.read())
-        img = [i['src'] for i in soup.findAll('img', src=True)]
-        scripts = [s['src'] for s in soup.findAll('scripts', src=True)]
-        stylesheets = [s['href'] for s in soup.findAll('link', href=True)]
+        img = [i['src'] for i in soup.findAll('img', src=True) if i['src'].startswith(include)]
+        scripts = [s['src'] for s in soup.findAll('scripts', src=True) if s['src'].startswith(include)]
+        stylesheets = [s['href'] for s in soup.findAll('link', href=True) if s['href'].startswith(include)]
         statics = img + scripts + stylesheets
         for key, static in enumerate(statics):
             if static[0] == '/' and static[1] != '/':
