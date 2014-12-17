@@ -91,10 +91,13 @@ class GenericTransaction(object):
             return None
 
         if self.statics_include is None:
-            items = self.config.items('statics')
-            self.statics_include = tuple
-            for key, value in enumerate(items):
-                self.statics_include += value
+            try:
+                items = self.config.items('statics')
+                self.statics_include = tuple
+                for key, value in enumerate(items):
+                    self.statics_include += value
+            except ConfigParser.NoSectionError:
+                self.statics_include = ('', )
 
         if include is None:
             include = self.statics_include
