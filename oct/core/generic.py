@@ -7,11 +7,14 @@ import requests
 from threading import Thread
 import cookielib
 from bs4 import BeautifulSoup
+from exceptions import OctGenericException
+from mechanize import FormNotFoundError
 import time
+import urllib2
+import random
 
 
 class GenericTransaction(object):
-
     def __init__(self, handle_robots, pathtoini, **kwargs):
         """
         Initialize the base object for using method in your Transaction
@@ -53,8 +56,15 @@ class GenericTransaction(object):
         if 'user_agent' in kwargs:
             self.br.addheaders = [('User-agent', kwargs.pop('user_agent'))]
 
-    def get_random_from_csv(self, csv_file):
-        pass
+    def csv_to_list(self, csv_file):
+        with open(csv_file, 'rb') as f:
+            reader = csv.reader(f)
+            csv_list = list(reader)
+        return csv_list
+
+    def get_random_csv(self, csvfile):
+        random_url = random.choice(csv_list)
+        return random_url
 
     def multi_process_statics(self):
         """
@@ -67,7 +77,7 @@ class GenericTransaction(object):
             url = self.q.get()
             try:
                 if url.startswith('//'):
-                    url = "http:"  + url
+                    url = "http://".join(url)
                 requests.get(url, allow_redirects=False, timeout=self.timeout)
             except Exception as e:
                 print("Unexpected error: {0}".format(e))
@@ -122,6 +132,94 @@ class GenericTransaction(object):
         self.q.join()
         self.custom_timers[timer_name] = time.time() - start_time
         pass
+
+    def run_generic_test(self, timer_name, url, test_func, *args):
+        """
+        Play the test_func param with *args parameters
+        This function will call the browser on the url param for you
+        You can pass existing or custom functions, but if you want to create custom
+        test function, it must at least take a response object as first parameter
+
+        :param timer_name: the name of the timer
+        :type timer_name: str
+        :param url: the url to test
+        :type url: str
+        :param test_func: pointer on a testing function
+        :type test_func: function
+        :param args: the parameters of the test function
+        :return: The response object from Mechanize.Browser()
+        """
+        start_time = time.time()
+        try:
+            resp = self.br.open(url)
+        except urllib2.HTTPError, err:
+            raise (OctGenericException("Error accessing url: '{0}', message: {1}".format(url, str(err))))
+        except urllib2.URLError, err:
+            raise (OctGenericException("URL ERROR with url: '{0}', message: {1}".format(url, str(err))))
+
+        test_func(*args)
+
+        self.custom_timers[timer_name] = time.time() - start_time
+        return resp
+
+    def get_form(self, **kwargs):
+        """
+        This method help you for getting a form in a given response object
+        The form will be set inside the br property of the class
+
+        :param form_name: the name attribute of the form
+        :type form_name: str
+        :param form_id: the id attribute of the form
+        :type form_id: str
+        :param form_class: the class attribute of the form
+        :type form_class: str
+        :return: None
+        """
+        if 'form_name' not in kwargs:
+            if 'form_id' in kwargs:
+                predicate = lambda f: 'id' in f.attrs and f.attrs['id'] == kwargs['form_id']
+            elif 'form_class' in kwargs:
+                predicate = lambda f: 'class' in f.attrs and f.attrs['class'] == kwargs['class']
+            else:
+                raise FormNotFoundError("You have to at least give a name, a class or an id")
+            self.br.select_form(predicate=predicate)
+        else:
+            self.br.select_form(name=kwargs['form_name'])
+
+    def fill_form(self, form_data):
+        """
+        Fill the form selected in self.br with form_data dict
+
+        :param form_data: dict containing the data
+        :type form_data: dict
+        """
+        for key, data in form_data.iteritems():
+            self.br[key] = data
+
+    def open_url(self, url, data=None):
+        """
+        Open an url with the Browser object
+
+        :param url: the url to open
+        :type url: str
+        :param data: the data to pass to url
+        :type data: dict
+        """
+        try:
+            resp = self.br.open(self.base_url + url, data)
+        except urllib2.HTTPError, e:
+            raise OctGenericException("Error accessing url: '{0}', error: {0}".format(self.base_url + url, e))
+        except urllib2.URLError, e:
+            raise OctGenericException("URL ERROR with url: '{0}', error: {0}".format(self.base_url + url, e))
+        return resp
+
+    def run(self):
+        """
+        Run method will be call by multi-mechanize run function
+        You must implement it
+
+        """
+        raise NotImplementedError("You must implement the run method in your class")
 
     def __repr__(self):
         print "<Generic Transaction>"

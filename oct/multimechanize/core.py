@@ -17,6 +17,7 @@ import time
 from oct.multimechanize.script_loader import ScriptLoader
 import os.path
 
+
 def init(projects_dir, project_name):
     """
     Sanity check that all test scripts can be loaded.
@@ -28,9 +29,11 @@ def init(projects_dir, project_name):
     # -- NORMAL-CASE: Ensure that all scripts can be loaded (at program start).
     ScriptLoader.load_all(scripts_path, validate=True)
 
+
 def load_script(script_file):
     """
     Load a test scripts as Python module.
+
     :returns: Imported script as python module.
     """
     module = ScriptLoader.load(script_file)
@@ -71,7 +74,6 @@ class UserGroup(multiprocessing.Process):
             agent_thread.join()
 
 
-
 class Agent(threading.Thread):
     def __init__(self, queue, process_num, thread_num, start_time, run_time,
                  user_group_name, script_module, script_file):
@@ -91,7 +93,6 @@ class Agent(threading.Thread):
             self.default_timer = time.clock
         else:
             self.default_timer = time.time
-
 
     def run(self):
         elapsed = 0

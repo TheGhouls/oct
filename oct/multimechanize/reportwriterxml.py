@@ -10,7 +10,6 @@
 from xml.etree import ElementTree as ET
 
 
-
 def write_jmeter_output(mm_data, output_path):
     """
     Take the list of ResponseStats objects and write a JMeter 2.1
