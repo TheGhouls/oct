@@ -8,12 +8,12 @@ from threading import Thread
 import cookielib
 from bs4 import BeautifulSoup
 from exceptions import OctGenericException
+from mechanize import FormNotFoundError
 import time
 import urllib2
 
 
 class GenericTransaction(object):
-
     def __init__(self, handle_robots, pathtoini, **kwargs):
         """
         Initialize the base object for using method in your Transaction
@@ -69,7 +69,7 @@ class GenericTransaction(object):
             url = self.q.get()
             try:
                 if url.startswith('//'):
-                    url = "http:"  + url
+                    url = "http:" + url
                 requests.get(url, allow_redirects=False, timeout=self.timeout)
             except Exception as e:
                 print("Unexpected error: {0}".format(e))
@@ -145,14 +145,38 @@ class GenericTransaction(object):
         try:
             resp = self.br.open(url)
         except urllib2.HTTPError, err:
-            raise(OctGenericException("Error accessing url: '{0}', message: {1}".format(url, str(err))))
+            raise (OctGenericException("Error accessing url: '{0}', message: {1}".format(url, str(err))))
         except urllib2.URLError, err:
-            raise(OctGenericException("URL ERROR with url: '{0}', message: {1}".format(url, str(err))))
+            raise (OctGenericException("URL ERROR with url: '{0}', message: {1}".format(url, str(err))))
 
         test_func(*args)
 
         self.custom_timers[timer_name] = time.time() - start_time
         return resp
+
+    def get_form(self, **kwargs):
+        """
+        This method help you for getting a form in a given response object
+        The form will be set inside the br property of the class
+
+        :param form_name: the name attribute of the form
+        :type form_name: str
+        :param form_id: the id attribute of the form
+        :type form_id: str
+        :param form_class: the class attribute of the form
+        :type form_class: str
+        :return: None
+        """
+        if 'form_name' not in kwargs:
+            if 'form_id' in kwargs:
+                predicate = lambda f: 'id' in f.attrs and f.attrs['id'] == kwargs['form_id']
+            elif 'form_class' in kwargs:
+                predicate = lambda f: 'class' in f.attrs and f.attrs['class'] == kwargs['class']
+            else:
+                raise FormNotFoundError("You have to at least give a name, a class or an id")
+            self.br.select_form(predicate=predicate)
+        else:
+            self.br.select_form(name=kwargs['form_name'])
 
     def __repr__(self):
         print "<Generic Transaction>"
