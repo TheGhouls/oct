@@ -189,6 +189,11 @@ class GenericTransaction(object):
             self.br[key] = data
 
     def run(self):
+        """
+        Run method will be call by multi-mechanize run function
+        You must implement it
+
+        """
         raise NotImplementedError("You must implement the run method in your class")
 
     def __repr__(self):
