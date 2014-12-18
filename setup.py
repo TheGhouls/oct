@@ -31,5 +31,6 @@ setup(
         'oct-run = oct.utilities.run:oct_main',
         'oct-newproject = oct.utilities.newproject:main',
         'octtools-sitemap-to-csv = oct.tools.xmltocsv:sitemap_to_csv'
+        'octtools-user-generator = oct.tools.email_generator:email_generator'
     ]},
 )
