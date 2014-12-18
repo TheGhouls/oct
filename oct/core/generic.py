@@ -56,13 +56,15 @@ class GenericTransaction(object):
         if 'user_agent' in kwargs:
             self.br.addheaders = [('User-agent', kwargs.pop('user_agent'))]
 
-    def csv_to_list(self, csv_file):
+    @staticmethod
+    def csv_to_list(csv_file):
         with open(csv_file, 'rb') as f:
             reader = csv.reader(f)
-            csv_list = list(reader)
+            csv_list = [row for row in reader]
         return csv_list
 
-    def get_random_csv(self, csvfile):
+    @staticmethod
+    def get_random_csv(csv_list):
         random_url = random.choice(csv_list)
         return random_url
 
