@@ -11,6 +11,7 @@ from exceptions import OctGenericException
 from mechanize import FormNotFoundError
 import time
 import urllib2
+import random
 
 
 class GenericTransaction(object):
@@ -55,8 +56,15 @@ class GenericTransaction(object):
         if 'user_agent' in kwargs:
             self.br.addheaders = [('User-agent', kwargs.pop('user_agent'))]
 
-    def get_random_from_csv(self, csv_file):
-        pass
+    def csv_to_list(self, csv_file):
+        with open(csv_file, 'rb') as f:
+            reader = csv.reader(f)
+            csv_list = list(reader)
+        return csv_list
+
+    def get_random_csv(self, csvfile):
+        random_url = random.choice(csv_list)
+        return random_url
 
     def multi_process_statics(self):
         """
