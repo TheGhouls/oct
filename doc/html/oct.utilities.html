@@ -1,0 +1,148 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>oct.utilities package &mdash; oct 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="oct 0.1 documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">oct 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="oct-utilities-package">
+<h1>oct.utilities package<a class="headerlink" href="#oct-utilities-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-oct.utilities.celery">
+<span id="oct-utilities-celery-module"></span><h2>oct.utilities.celery module<a class="headerlink" href="#module-oct.utilities.celery" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-oct.utilities.newproject">
+<span id="oct-utilities-newproject-module"></span><h2>oct.utilities.newproject module<a class="headerlink" href="#module-oct.utilities.newproject" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="oct.utilities.newproject.create_project">
+<tt class="descclassname">oct.utilities.newproject.</tt><tt class="descname">create_project</tt><big>(</big><em>project_name</em>, <em>config_name='config.cfg'</em>, <em>script_name='v_user.py'</em>, <em>scripts_dir='test_scripts'</em>, <em>config_content='\n[global]\nrun_time = 30\nrampup = 0\nresults_ts_interval = 10\nprogress_bar = on\nconsole_logging = off\nxml_report = off\nbase_url = http://localhost\ndefault_sleep_time = 2\nstatics_enabled = 1\n\n\n[user_group-1]\nthreads = 3\nscript = v_user.py\n\n[user_group-2]\nthreads = 3\nscript = v_user.py\n\n'</em>, <em>script_content=&quot;\nfrom oct.core.generic import GenericTransaction\nimport random\nimport time\nimport os\n\n\nCONFIG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__))</em>, <em>'../')\n\n\nclass Transaction(GenericTransaction):\n    def __init__(self):\n        GenericTransaction.__init__(self</em>, <em>True</em>, <em>CONFIG_PATH)\n\n    def run(self):\n        r = random.uniform(1</em>, <em>2)\n        time.sleep(r)\n        self.custom_timers['Example_Timer'] = r\n\n\nif __name__ == '__main__':\n    trans = Transaction()\n    trans.run()\n    print trans.custom_timers\n&quot;</em>, <em>template_dir='templates'</em>, <em>head_content='\n&lt;!DOCTYPE html&gt;\n&lt;html&gt;\n\n&lt;head&gt;\n    &lt;title&gt; OCT | Results &lt;/title&gt;\n    &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;css/style.css&quot; /&gt;\n&lt;/head&gt;\n\n&lt;body id=&quot;main&quot;&gt;\n'</em>, <em>footer_content='\n&lt;/body&gt;\n&lt;/html&gt;\n'</em><big>)</big><a class="headerlink" href="#oct.utilities.newproject.create_project" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="oct.utilities.newproject.main">
+<tt class="descclassname">oct.utilities.newproject.</tt><tt class="descname">main</tt><big>(</big><big>)</big><a class="headerlink" href="#oct.utilities.newproject.main" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-oct.utilities.run">
+<span id="oct-utilities-run-module"></span><h2>oct.utilities.run module<a class="headerlink" href="#module-oct.utilities.run" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="oct.utilities.run.oct_main">
+<tt class="descclassname">oct.utilities.run.</tt><tt class="descname">oct_main</tt><big>(</big><big>)</big><a class="headerlink" href="#oct.utilities.run.oct_main" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call the main multi-mechanize run function as a celery task</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-oct.utilities">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-oct.utilities" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">oct.utilities package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-oct.utilities.celery">oct.utilities.celery module</a></li>
+<li><a class="reference internal" href="#module-oct.utilities.newproject">oct.utilities.newproject module</a></li>
+<li><a class="reference internal" href="#module-oct.utilities.run">oct.utilities.run module</a></li>
+<li><a class="reference internal" href="#module-oct.utilities">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/oct.utilities.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">oct 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, valett_e bene_t philip_l frolic_v leverg_l.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>
