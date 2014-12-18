@@ -10,7 +10,9 @@ from bs4 import BeautifulSoup
 from .exceptions import OctGenericException
 from mechanize import FormNotFoundError
 import time
-import urllib.request, urllib.error, urllib.parse
+import urllib.request
+import urllib.error
+import urllib.parse
 import random
 
 
