@@ -188,5 +188,8 @@ class GenericTransaction(object):
         for key, data in form_data.iteritems():
             self.br[key] = data
 
+    def run(self):
+        raise NotImplementedError("You must implement the run method in your class")
+
     def __repr__(self):
         print "<Generic Transaction>"
