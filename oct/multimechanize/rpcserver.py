@@ -12,7 +12,6 @@ import socket
 import thread
 
 
-
 def launch_rpc_server(bind_addr, port, project_name, run_callback):
     server = SimpleXMLRPCServer.SimpleXMLRPCServer((bind_addr, port), logRequests=False)
     server.register_instance(RemoteControl(project_name, run_callback))
@@ -23,7 +22,6 @@ def launch_rpc_server(bind_addr, port, project_name, run_callback):
         server.serve_forever()
     except KeyboardInterrupt:
         pass
-
 
 
 class RemoteControl(object):

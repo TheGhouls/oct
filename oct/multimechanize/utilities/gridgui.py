@@ -20,13 +20,11 @@ import tkFileDialog
 import xmlrpclib
 
 
-
 # list of hosts:ports where multi-mechanize is listening
 NODES = [
     '192.168.1.2:9001',
     '192.168.1.3:9001',
 ]
-
 
 
 class Application:
@@ -47,16 +45,13 @@ class Application:
         self.text_box = ScrolledText.ScrolledText(self.root, width=59, height=24, font=('Helvetica', 9))
         self.text_box.place(x=162, y=5)
 
-
     def clear_window(self):
         self.text_box.delete(1.0, Tkinter.END)
-
 
     def list_nodes(self):
         self.clear_window()
         for host, port in self.hosts:
             self.text_box.insert(Tkinter.END, '%s:%s\n' % (host, port))
-
 
     def run_tests(self):
         self.clear_window()
@@ -68,7 +63,6 @@ class Application:
             except socket.error:
                 self.text_box.insert(Tkinter.END, 'can not make connection to: %s:%s\n' % (host, port))
 
-
     def get_configs(self):
         self.clear_window()
         for host, port in self.hosts:
@@ -78,7 +72,6 @@ class Application:
                 self.text_box.insert(Tkinter.END, '%s:%s config:\n%s\n\n\n' % (host, port, config))
             except socket.error:
                 self.text_box.insert(Tkinter.END, 'can not make connection to: %s:%s\n' % (host, port))
-
 
     def update_configs(self):
         self.clear_window()
@@ -91,7 +84,6 @@ class Application:
             except socket.error:
                 self.text_box.insert(Tkinter.END, 'can not make connection to: %s:%s\n' % (host, port))
 
-
     def get_results(self):
         self.clear_window()
         for host, port in self.hosts:
@@ -101,7 +93,6 @@ class Application:
                 self.text_box.insert(Tkinter.END, '%s:%s results:\n%s\n\n\n' % (host, port, results))
             except socket.error:
                 self.text_box.insert(Tkinter.END, 'can not make connection to: %s:%s\n' % (host, port))
-
 
     def get_project_names(self):
         self.clear_window()
@@ -113,7 +104,6 @@ class Application:
             except socket.error:
                 self.text_box.insert(Tkinter.END, 'can not make connection to: %s:%s\n' % (host, port))
 
-
     def check_servers(self):
         self.clear_window()
         for host, port in self.hosts:
@@ -123,7 +113,6 @@ class Application:
                 self.text_box.insert(Tkinter.END, '%s:%s test running:\n%s\n\n' % (host, port, is_running))
             except socket.error:
                 self.text_box.insert(Tkinter.END, 'can not make connection to: %s:%s\n' % (host, port))
-
 
 
 def main():
