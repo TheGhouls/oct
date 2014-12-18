@@ -195,7 +195,7 @@ class GenericTransaction(object):
             if 'form_id' in kwargs:
                 predicate = lambda f: 'id' in f.attrs and f.attrs['id'] == kwargs['form_id']
             elif 'form_class' in kwargs:
-                predicate = lambda f: 'class' in f.attrs and f.attrs['class'] == kwargs['class']
+                predicate = lambda f: 'class' in f.attrs and f.attrs['class'] == kwargs['form_class']
             else:
                 raise FormNotFoundError("You have to at least give a name, a class or an id")
             self.br.select_form(predicate=predicate)
