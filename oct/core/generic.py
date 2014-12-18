@@ -188,6 +188,23 @@ class GenericTransaction(object):
         for key, data in form_data.iteritems():
             self.br[key] = data
 
+    def open_url(self, url, data=None):
+        """
+        Open an url with the Browser object
+
+        :param url: the url to open
+        :type url: str
+        :param data: the data to pass to url
+        :type data: dict
+        """
+        try:
+            resp = self.br.open(self.base_url + url, data)
+        except urllib2.HTTPError, e:
+            raise OctGenericException("Error accessing url: '{0}', error: {0}".format(self.base_url + url, e))
+        except urllib2.URLError, e:
+            raise OctGenericException("URL ERROR with url: '{0}', error: {0}".format(self.base_url + url, e))
+        return resp
+
     def run(self):
         """
         Run method will be call by multi-mechanize run function
