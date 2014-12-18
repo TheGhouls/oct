@@ -58,6 +58,14 @@ class GenericTransaction(object):
 
     @staticmethod
     def csv_to_list(csv_file):
+        """
+        Take a csv file as parameter and read it. Return a list containing all lines
+
+        :param csv_file: the csv file to read
+        :type csv_file: str
+        :return: A list containing the lines
+        :rtype: list
+        """
         with open(csv_file, 'r') as f:
             reader = csv.reader(f)
             csv_list = [row for row in reader]
@@ -65,6 +73,12 @@ class GenericTransaction(object):
 
     @staticmethod
     def get_random_csv(csv_list):
+        """
+        Simply return a random element from csv_list param
+
+        :param csv_list: a list
+        :return: random element from the csv_list
+        """
         random_url = random.choice(csv_list)
         return random_url
 
