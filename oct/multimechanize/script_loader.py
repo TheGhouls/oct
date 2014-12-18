@@ -8,9 +8,10 @@ import glob
 import inspect
 import os.path
 import sys
+import collections
 
 
-class InvalidScriptError(StandardError):
+class InvalidScriptError(Exception):
     """
     Should be raised when a Script does not confirm to required interface.
 
@@ -39,7 +40,7 @@ class ScriptValidator(object):
         run_method = getattr(transaction_class, "run", None)
         if not run_method:
             return "{module}.Transaction.run() method is missing".format(module=module.__name__)
-        if not callable(run_method):
+        if not isinstance(run_method, collections.Callable):
             return "{module}.Transaction.run() method is not callable".format(module=module.__name__)
         # -- EVERYTHING CHECKED: No problems detected.
         return None
@@ -53,7 +54,7 @@ class ScriptValidator(object):
         """
         problem = cls.check_module_invalid(module)
         if problem:
-            raise InvalidScriptError, problem
+            raise InvalidScriptError(problem)
 
 
 class ScriptLoader(object):
@@ -82,12 +83,12 @@ class ScriptLoader(object):
             module = __import__(module_name)
             # module.__name__ = module_name
             # module.__file__ = path
-        except ImportError, e:
-            print "IMPORT-ERROR: %s (file=%s, curdir=%s)" % \
-                  (module_name, path, os.getcwd())
+        except ImportError as e:
+            print("IMPORT-ERROR: %s (file=%s, curdir=%s)" % \
+                  (module_name, path, os.getcwd()))
             sys.stderr.write("Cannot import: %s\n" % e)
             for index, searchpath in enumerate(sys.path):
-                print "  %2s.  %s" % (index, searchpath)
+                print("  %2s.  %s" % (index, searchpath))
             raise
         return module
 

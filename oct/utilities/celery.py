@@ -1,4 +1,4 @@
-from __future__ import absolute_import
+
 __author__ = 'manu'
 
 from celery import Celery
@@ -8,5 +8,5 @@ app = Celery('utilities',
              include=['oct', 'oct.utilities', 'oct.utilities.run'])
 
 if __name__ == '__main__':
-    print "tata"
+    print("tata")
     app.start()

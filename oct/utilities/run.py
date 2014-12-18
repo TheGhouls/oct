@@ -33,7 +33,7 @@ def oct_main():
         sys.exit(1)
 
     if cmd_opts.num:
-        for i in xrange(0, cmd_opts.num):
+        for i in range(0, cmd_opts.num):
             call_multimech.delay(os.path.abspath(project_name), project_name)
             time.sleep(0.0001)
     else:

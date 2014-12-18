@@ -1,4 +1,4 @@
-from __future__ import absolute_import
+
 import argparse
 from xml.dom.minidom import parse
 import csv

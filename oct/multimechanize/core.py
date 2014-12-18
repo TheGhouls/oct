@@ -109,7 +109,7 @@ class Agent(threading.Thread):
 
             try:
                 trans.run()
-            except Exception, e:  # test runner catches all script exceptions here
+            except Exception as e:  # test runner catches all script exceptions here
                 error = str(e).replace(',', '')
 
             finish = self.default_timer()

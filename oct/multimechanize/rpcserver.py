@@ -7,17 +7,17 @@
 #
 
 
-import SimpleXMLRPCServer
+import xmlrpc.server
 import socket
-import thread
+import _thread
 
 
 def launch_rpc_server(bind_addr, port, project_name, run_callback):
-    server = SimpleXMLRPCServer.SimpleXMLRPCServer((bind_addr, port), logRequests=False)
+    server = xmlrpc.server.SimpleXMLRPCServer((bind_addr, port), logRequests=False)
     server.register_instance(RemoteControl(project_name, run_callback))
     server.register_introspection_functions()
-    print '\nMulti-Mechanize: %s listening on port %i' % (bind_addr, port)
-    print 'waiting for xml-rpc commands...\n'
+    print('\nMulti-Mechanize: %s listening on port %i' % (bind_addr, port))
+    print('waiting for xml-rpc commands...\n')
     try:
         server.serve_forever()
     except KeyboardInterrupt:
@@ -35,7 +35,7 @@ class RemoteControl(object):
         if self.test_running:
             return 'Test Already Running'
         else:
-            thread.start_new_thread(self.run_callback, (self,))
+            _thread.start_new_thread(self.run_callback, (self,))
             return 'Test Started'
 
     def check_test_running(self):

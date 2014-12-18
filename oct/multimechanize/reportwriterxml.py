@@ -42,7 +42,7 @@ def write_jmeter_output(mm_data, output_path):
             transaction_root.set('s', 'true')
 
         # parse the custom_timers and add each as a JMeter sub-sample
-        for timer_name, timer_duration in test_transaction.custom_timers.items():
+        for timer_name, timer_duration in list(test_transaction.custom_timers.items()):
             timer_duration = float(timer_duration)
             timer_element = ET.SubElement(transaction_root, 'sample')
             ms_trans_time = timer_duration * 1000

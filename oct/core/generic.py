@@ -1,16 +1,16 @@
 import csv
-import ConfigParser
+import configparser
 import os
 from mechanize import Browser
-from Queue import Queue
+from queue import Queue
 import requests
 from threading import Thread
-import cookielib
+import http.cookiejar
 from bs4 import BeautifulSoup
-from exceptions import OctGenericException
+from .exceptions import OctGenericException
 from mechanize import FormNotFoundError
 import time
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 import random
 
 
@@ -28,7 +28,7 @@ class GenericTransaction(object):
         :param timeout: the timeout in second for static files requests
         :param use_cookies: default to True, set to False if you don't want cookies with browser object
         """
-        self.config = ConfigParser.ConfigParser()
+        self.config = configparser.ConfigParser()
         self.config.read(os.path.join(pathtoini, 'config.cfg'))
         self.base_url = self.config.get('global', 'base_url')
         self.br = Browser()
@@ -50,7 +50,7 @@ class GenericTransaction(object):
 
         if kwargs.pop('use_cookie', True):
             # Cookie Jar
-            cj = cookielib.LWPCookieJar()
+            cj = http.cookiejar.LWPCookieJar()
             self.br.set_cookiejar(cj)
 
         if 'user_agent' in kwargs:
@@ -96,7 +96,7 @@ class GenericTransaction(object):
                     url = "http://".join(url)
                 requests.get(url, allow_redirects=False, timeout=self.timeout)
             except Exception as e:
-                print("Unexpected error: {0}".format(e))
+                print(("Unexpected error: {0}".format(e)))
             self.q.task_done()
 
     def get_statics(self, response, timer_name, include=None):
@@ -114,8 +114,8 @@ class GenericTransaction(object):
         if self.statics_enabled is None:
             try:
                 self.statics_enabled = self.config.getboolean('global', 'statics_enabled')
-            except ConfigParser.NoOptionError:
-                print "No statics_enabled option in config file, set value to False (default value)"
+            except configparser.NoOptionError:
+                print("No statics_enabled option in config file, set value to False (default value)")
                 self.statics_enabled = False
         if not self.statics_enabled:
             return None
@@ -126,7 +126,7 @@ class GenericTransaction(object):
                 self.statics_include = tuple
                 for key, value in enumerate(items):
                     self.statics_include += value
-            except ConfigParser.NoSectionError:
+            except configparser.NoSectionError:
                 self.statics_include = ('', )
 
         if include is None:
@@ -168,10 +168,10 @@ class GenericTransaction(object):
         start_time = time.time()
         try:
             resp = self.br.open(url)
-        except urllib2.HTTPError, err:
-            raise (OctGenericException("Error accessing url: '{0}', message: {1}".format(url, str(err))))
-        except urllib2.URLError, err:
-            raise (OctGenericException("URL ERROR with url: '{0}', message: {1}".format(url, str(err))))
+        except urllib.error.HTTPError as err:
+            raise OctGenericException
+        except urllib.error.URLError as err:
+            raise OctGenericException
 
         test_func(*args)
 
@@ -209,7 +209,7 @@ class GenericTransaction(object):
         :param form_data: dict containing the data
         :type form_data: dict
         """
-        for key, data in form_data.iteritems():
+        for key, data in form_data.items():
             self.br[key] = data
 
     def open_url(self, url, data=None):
@@ -223,9 +223,9 @@ class GenericTransaction(object):
         """
         try:
             resp = self.br.open(self.base_url + url, data)
-        except urllib2.HTTPError, e:
+        except urllib.error.HTTPError as e:
             raise OctGenericException("Error accessing url: '{0}', error: {0}".format(self.base_url + url, e))
-        except urllib2.URLError, e:
+        except urllib.error.URLError as e:
             raise OctGenericException("URL ERROR with url: '{0}', error: {0}".format(self.base_url + url, e))
         return resp
 
@@ -238,4 +238,4 @@ class GenericTransaction(object):
         raise NotImplementedError("You must implement the run method in your class")
 
     def __repr__(self):
-        print "<Generic Transaction>"
+        print("<Generic Transaction>")
