@@ -7,7 +7,9 @@ import requests
 from threading import Thread
 import cookielib
 from bs4 import BeautifulSoup
+from exceptions import OctGenericException
 import time
+import urllib2
 
 
 class GenericTransaction(object):
@@ -122,6 +124,35 @@ class GenericTransaction(object):
         self.q.join()
         self.custom_timers[timer_name] = time.time() - start_time
         pass
+
+    def run_generic_test(self, timer_name, url, test_func, *args):
+        """
+        Play the test_func param with *args parameters
+        This function will call the browser on the url param for you
+        You can pass existing or custom functions, but if you want to create custom
+        test function, it must at least take a response object as first parameter
+
+        :param timer_name: the name of the timer
+        :type timer_name: str
+        :param url: the url to test
+        :type url: str
+        :param test_func: pointer on a testing function
+        :type test_func: function
+        :param args: the parameters of the test function
+        :return: The response object from Mechanize.Browser()
+        """
+        start_time = time.time()
+        try:
+            resp = self.br.open(url)
+        except urllib2.HTTPError, err:
+            raise(OctGenericException("Error accessing url: '{0}', message: {1}".format(url, str(err))))
+        except urllib2.URLError, err:
+            raise(OctGenericException("URL ERROR with url: '{0}', message: {1}".format(url, str(err))))
+
+        test_func(*args)
+
+        self.custom_timers[timer_name] = time.time() - start_time
+        return resp
 
     def __repr__(self):
         print "<Generic Transaction>"
