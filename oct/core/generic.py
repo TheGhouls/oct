@@ -69,7 +69,7 @@ class GenericTransaction(object):
             url = self.q.get()
             try:
                 if url.startswith('//'):
-                    url = "http:" + url
+                    url = "http://".join(url)
                 requests.get(url, allow_redirects=False, timeout=self.timeout)
             except Exception as e:
                 print("Unexpected error: {0}".format(e))
