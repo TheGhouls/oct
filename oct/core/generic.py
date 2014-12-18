@@ -1,14 +1,14 @@
 import csv
 import configparser
 import os
-from mechanize import Browser
+from robobrowser.browser import RoboBrowser
 from queue import Queue
 import requests
 from threading import Thread
 import http.cookiejar
 from bs4 import BeautifulSoup
 from .exceptions import OctGenericException
-from mechanize import FormNotFoundError
+from robobrowser.exceptions import RoboError
 import time
 import urllib.request
 import urllib.error
@@ -17,12 +17,10 @@ import random
 
 
 class GenericTransaction(object):
-    def __init__(self, handle_robots, pathtoini, **kwargs):
+    def __init__(self, pathtoini, session=True, user_agent='user_agent', **kwargs):
         """
         Initialize the base object for using method in your Transaction
 
-        :param handle_robots: set if robots are handle or not
-        :type handle_robots: bool
         :param pathtoini: the path to the ini file
         :type pathtoini: str
         :param threads: number of threads for static files
@@ -33,8 +31,7 @@ class GenericTransaction(object):
         self.config = configparser.ConfigParser()
         self.config.read(os.path.join(pathtoini, 'config.cfg'))
         self.base_url = self.config.get('global', 'base_url')
-        self.br = Browser()
-        self.br.set_handle_robots(handle_robots)
+        self.br = RoboBrowser(session=session, user_agent=user_agent)
         self.id_choice = None
         self.random_url = None
         self.q = Queue()
@@ -49,14 +46,6 @@ class GenericTransaction(object):
             t = Thread(target=self.multi_process_statics)
             t.daemon = True
             t.start()
-
-        if kwargs.pop('use_cookie', True):
-            # Cookie Jar
-            cj = http.cookiejar.LWPCookieJar()
-            self.br.set_cookiejar(cj)
-
-        if 'user_agent' in kwargs:
-            self.br.addheaders = [('User-agent', kwargs.pop('user_agent'))]
 
     @staticmethod
     def csv_to_list(csv_file):
@@ -199,10 +188,10 @@ class GenericTransaction(object):
             elif 'form_class' in kwargs:
                 predicate = lambda f: 'class' in f.attrs and f.attrs['class'] == kwargs['form_class']
             else:
-                raise FormNotFoundError("You have to at least give a name, a class or an id")
-            self.br.select_form(predicate=predicate)
+                raise RoboError("You have to at least give a name, a class or an id")
+            self.br.get_form(predicate=predicate)
         else:
-            self.br.select_form(name=kwargs['form_name'])
+            self.br.get_form(name=kwargs['form_name'])
 
     def fill_form(self, form_data):
         """

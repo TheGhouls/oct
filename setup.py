@@ -17,12 +17,11 @@ setup(
     description='A library based on multi-mechanize for performances testing',
     install_requires=[
         'argparse',
-        'mechanize',
         'requests',
         'matplotlib',
         'beautifulsoup4',
-        'requests-cache',
-        'celery'
+        'celery',
+        'robobrowser'
     ],
     entry_points={'console_scripts': [
         'multimech-run = oct.multimechanize.utilities.run:main',
