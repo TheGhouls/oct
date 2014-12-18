@@ -10,7 +10,7 @@ import sys
 try:
     import matplotlib
     matplotlib.use('Agg')  # use a non-GUI backend
-    from pylab import *
+    from pylab import figure, xticks, yticks, savefig
 except ImportError:
     print 'ERROR: can not import Matplotlib. install Matplotlib to generate graphs'
 
