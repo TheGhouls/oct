@@ -58,7 +58,7 @@ class GenericTransaction(object):
 
     @staticmethod
     def csv_to_list(csv_file):
-        with open(csv_file, 'rb') as f:
+        with open(csv_file, 'r') as f:
             reader = csv.reader(f)
             csv_list = [row for row in reader]
         return csv_list
