@@ -178,5 +178,15 @@ class GenericTransaction(object):
         else:
             self.br.select_form(name=kwargs['form_name'])
 
+    def fill_form(self, form_data):
+        """
+        Fill the form selected in self.br with form_data dict
+
+        :param form_data: dict containing the data
+        :type form_data: dict
+        """
+        for key, data in form_data.iteritems():
+            self.br[key] = data
+
     def __repr__(self):
         print "<Generic Transaction>"
