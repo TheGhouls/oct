@@ -50,6 +50,7 @@ coverage.xml
 # Sphinx documentation
 docs/_build/
 
+
 # PyBuilder
 target/
 
@@ -58,3 +59,6 @@ target/
 
 # Backup
 *.py.bak
+
+*.html
+doc/
