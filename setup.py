@@ -21,7 +21,7 @@ setup(
         'matplotlib',
         'beautifulsoup4',
         'celery',
-        'robobrowser'
+        'mechanicalsoup'
     ],
     entry_points={'console_scripts': [
         'multimech-run = oct.multimechanize.utilities.run:main',

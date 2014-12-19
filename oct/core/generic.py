@@ -1,23 +1,19 @@
 import csv
 import configparser
 import os
-from robobrowser.browser import RoboBrowser
+from mechanicalsoup.browser import Browser
 from queue import Queue
 import requests
 from threading import Thread
-import http.cookiejar
 from bs4 import BeautifulSoup
 from .exceptions import OctGenericException
-from robobrowser.exceptions import RoboError
 import time
-import urllib.request
-import urllib.error
-import urllib.parse
+import requests.exceptions
 import random
 
 
 class GenericTransaction(object):
-    def __init__(self, pathtoini, session=True, user_agent='user_agent', **kwargs):
+    def __init__(self, pathtoini, session=True, **kwargs):
         """
         Initialize the base object for using method in your Transaction
 
@@ -31,7 +27,7 @@ class GenericTransaction(object):
         self.config = configparser.ConfigParser()
         self.config.read(os.path.join(pathtoini, 'config.cfg'))
         self.base_url = self.config.get('global', 'base_url')
-        self.br = RoboBrowser(session=session, user_agent=user_agent)
+        self.br = Browser(session=session)
         self.id_choice = None
         self.random_url = None
         self.q = Queue()
@@ -158,10 +154,8 @@ class GenericTransaction(object):
         """
         start_time = time.time()
         try:
-            resp = self.br.open(url)
-        except urllib.error.HTTPError as err:
-            raise OctGenericException
-        except urllib.error.URLError as err:
+            resp = self.br.get(url)
+        except requests.exceptions.HTTPError as err:
             raise OctGenericException
 
         test_func(*args)
@@ -174,34 +168,34 @@ class GenericTransaction(object):
         This method help you for getting a form in a given response object
         The form will be set inside the br property of the class
 
-        :param form_name: the name attribute of the form
-        :type form_name: str
         :param form_id: the id attribute of the form
         :type form_id: str
         :param form_class: the class attribute of the form
         :type form_class: str
         :return: None
         """
-        if 'form_name' not in kwargs:
-            if 'form_id' in kwargs:
-                predicate = lambda f: 'id' in f.attrs and f.attrs['id'] == kwargs['form_id']
-            elif 'form_class' in kwargs:
-                predicate = lambda f: 'class' in f.attrs and f.attrs['class'] == kwargs['form_class']
-            else:
-                raise RoboError("You have to at least give a name, a class or an id")
-            self.br.get_form(predicate=predicate)
+        if 'form_id' in kwargs:
+            form = self.br.soup.select('#' + kwargs['form_id'])[0].select('form')[0]
+        elif 'form_class' in kwargs:
+            form = self.br.soup.select("." + kwargs['form_class'])[0].select('form')[0]
         else:
-            self.br.get_form(name=kwargs['form_name'])
+            raise OctGenericException("You have to at least give a name, a class or an id")
+        return form
 
-    def fill_form(self, form_data):
+    @staticmethod
+    def fill_form(form, form_data):
         """
-        Fill the form selected in self.br with form_data dict
+        Fill the form param with form_data dict
 
+        :param form: the form to fill
+        :type form: Form object from MechanicalSoup
         :param form_data: dict containing the data
         :type form_data: dict
         """
-        for key, data in form_data.items():
-            self.br[key] = data
+        for key, value in form_data.items():
+            keys = list(value[0].keys())
+            form.find(key, value[1])[keys[0]] = value[0][keys[0]]
+        return form
 
     def open_url(self, url, data=None):
         """
@@ -213,11 +207,9 @@ class GenericTransaction(object):
         :type data: dict
         """
         try:
-            resp = self.br.open(self.base_url + url, data)
-        except urllib.error.HTTPError as e:
+            resp = self.br.get(self.base_url + url, data)
+        except requests.exceptions.HTTPError as e:
             raise OctGenericException("Error accessing url: '{0}', error: {0}".format(self.base_url + url, e))
-        except urllib.error.URLError as e:
-            raise OctGenericException("URL ERROR with url: '{0}', error: {0}".format(self.base_url + url, e))
         return resp
 
     def run(self):
