@@ -168,10 +168,10 @@ class GenericTransaction(object):
         start_time = time.time()
         try:
             resp = self.br.open(url)
-        except urllib2.HTTPError, err:
-            raise (OctGenericException("Error accessing url: '{0}', message: {1}".format(url, str(err))))
-        except urllib2.URLError, err:
-            raise (OctGenericException("URL ERROR with url: '{0}', message: {1}".format(url, str(err))))
+        except urllib2.HTTPError as err:
+            raise (OctGenericException(err, "Error accessing url: '{0}', message: {1}".format(url, err)))
+        except urllib2.URLError as err:
+            raise (OctGenericException(err, "URL ERROR with url: '{0}', message: {1}".format(url, err)))
 
         test_func(*args)
 
@@ -223,10 +223,10 @@ class GenericTransaction(object):
         """
         try:
             resp = self.br.open(self.base_url + url, data)
-        except urllib2.HTTPError, e:
-            raise OctGenericException("Error accessing url: '{0}', error: {0}".format(self.base_url + url, e))
-        except urllib2.URLError, e:
-            raise OctGenericException("URL ERROR with url: '{0}', error: {0}".format(self.base_url + url, e))
+        except urllib2.HTTPError as e:
+            raise OctGenericException("Error accessing url: '{0}', error: {1}".format(self.base_url + url, e))
+        except urllib2.URLError as e:
+            raise OctGenericException("URL ERROR with url: '{0}', error: {1}".format(self.base_url + url, e))
         return resp
 
     def run(self):
