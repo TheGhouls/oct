@@ -15,19 +15,21 @@ import random
 
 
 class GenericTransaction(object):
-    def __init__(self, handle_robots, pathtoini, **kwargs):
-        """
-        Initialize the base object for using method in your Transaction
+    """
+    Base class for Transaction, this class provides tools for simpler test writing
 
-        :param handle_robots: set if robots are handle or not
-        :type handle_robots: bool
-        :param pathtoini: the path to the ini file
-        :type pathtoini: str
-        :param threads: number of threads for static files
-        :type threads: int
-        :param timeout: the timeout in second for static files requests
-        :param use_cookies: default to True, set to False if you don't want cookies with browser object
-        """
+    :param handle_robots: set if robots are handle or not
+    :type handle_robots: bool
+    :param pathtoini: the path to the ini file
+    :type pathtoini: str
+    :param threads: number of threads for static files
+    :type threads: int
+    :param timeout: the timeout in second for static files requests
+    :param use_cookies: default to True, set to False if you don't want cookies with browser object
+    """
+
+    def __init__(self, handle_robots, pathtoini, **kwargs):
+
         self.config = ConfigParser.ConfigParser()
         self.config.read(os.path.join(pathtoini, 'config.cfg'))
         self.base_url = self.config.get('global', 'base_url')
