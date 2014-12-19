@@ -60,5 +60,5 @@ target/
 # Backup
 *.py.bak
 
-*.html
-doc/
+# doc
+doc/html
