@@ -55,3 +55,6 @@ target/
 
 # PyCharm
 .idea/
+
+# Backup
+*.py.bak

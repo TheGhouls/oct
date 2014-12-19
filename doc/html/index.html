@@ -24,7 +24,8 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="oct 0.1 documentation" href="#" /> 
+    <link rel="top" title="oct 0.1 documentation" href="#" />
+    <link rel="next" title="oct package" href="oct.html" /> 
   </head>
   <body>
     <div class="related">
@@ -36,6 +37,9 @@
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="oct.html" title="oct package"
+             accesskey="N">next</a> |</li>
         <li><a href="#">oct 0.1 documentation</a> &raquo;</li> 
       </ul>
     </div>  
@@ -47,9 +51,166 @@
             
   <div class="section" id="welcome-to-oct-s-documentation">
 <h1>Welcome to oct&#8217;s documentation!<a class="headerlink" href="#welcome-to-oct-s-documentation" title="Permalink to this headline">¶</a></h1>
-<p>Contents:</p>
-<div class="toctree-wrapper compound">
+<p>Oct stand for Open Charge Tester, the goal of this project is to give you the basics tools for write simple tests. The
+tests are simple python scripts that make calls to web page or web service, submit data, login, etc...
+OCT will give you basics tools for easily writing your test.</p>
+<dl class="docutils">
+<dt>This documentation will provide you basics examples for writing tests, use oct-tools, lunch tests, get results or even</dt>
+<dd>customize the results to fit your needs</dd>
+</dl>
+<p>Note that the OCT project is in early development and is not suitable for productions tests actually.</p>
+<p>If you want to contribute you&#8217;re welcome ! Check the git, fork the project, and submit your pull requests !</p>
+<p>The OCT module steel need many features at this point, here somme examples :</p>
 <ul class="simple">
+<li>Full python3 support</li>
+<li>New lib for replace Mechanize (based on html5lib ?)</li>
+<li>Full celery integration for multi-processing</li>
+<li>More generic tests in core module</li>
+<li>More fancy templates</li>
+<li>etc...</li>
+</ul>
+</div>
+<div class="section" id="basics-module-information">
+<h1>Basics module information<a class="headerlink" href="#basics-module-information" title="Permalink to this headline">¶</a></h1>
+<p>OCT is based on multi-mechanize, a library for testing website. But this module is no longer under active developpement
+and the last commit was 3 years ago.</p>
+<p>So instead of a fork, for building OCT module we include multi-mechanize as a module, and we update it. For the moment
+modifications are minors and the main job of OCT module is inside the core submodules, which contains a <cite>GenericTransaction</cite> class</p>
+<blockquote>
+<div>which provide you useful methods for writing your tests scripts.</div></blockquote>
+<p>We already have done some update on the multi-mechanize modules like :</p>
+<ul class="simple">
+<li>update render of graphics</li>
+<li>update command for new projects</li>
+<li>more information in config file</li>
+<li>customisable templates</li>
+</ul>
+<p>But other improvements are on the way ! So stay tune on github !</p>
+</div>
+<div class="section" id="contents">
+<h1>Contents<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><a class="reference internal" href="oct.core.html"><em>oct.core package</em></a></li>
+<li><a class="reference internal" href="oct.multimechanize.html"><em>oct.multimechanize package</em></a></li>
+<li><a class="reference internal" href="oct.testing.html"><em>oct.testing package</em></a></li>
+<li><a class="reference internal" href="oct.tools.html"><em>oct.tools package</em></a></li>
+<li><a class="reference internal" href="oct.utilities.html"><em>oct.utilities package</em></a></li>
+</ul>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="oct.html">oct package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="oct.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="oct.core.html">oct.core package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="oct.core.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="oct.core.html#module-oct.core.exceptions">oct.core.exceptions module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="oct.core.html#module-oct.core.generic">oct.core.generic module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="oct.core.html#module-oct.core">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="oct.multimechanize.html">oct.multimechanize package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="oct.multimechanize.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="oct.multimechanize.utilities.html">oct.multimechanize.utilities package</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="oct.multimechanize.utilities.html#submodules">Submodules</a></li>
+<li class="toctree-l6"><a class="reference internal" href="oct.multimechanize.utilities.html#module-oct.multimechanize.utilities.gridgui">oct.multimechanize.utilities.gridgui module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="oct.multimechanize.utilities.html#module-oct.multimechanize.utilities.newproject">oct.multimechanize.utilities.newproject module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="oct.multimechanize.utilities.html#module-oct.multimechanize.utilities.run">oct.multimechanize.utilities.run module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="oct.multimechanize.utilities.html#module-oct.multimechanize.utilities">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="oct.multimechanize.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="oct.multimechanize.html#module-oct.multimechanize.core">oct.multimechanize.core module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="oct.multimechanize.html#module-oct.multimechanize.dependency_checker">oct.multimechanize.dependency_checker module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="oct.multimechanize.html#module-oct.multimechanize.graph">oct.multimechanize.graph module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="oct.multimechanize.html#module-oct.multimechanize.progressbar">oct.multimechanize.progressbar module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="oct.multimechanize.html#module-oct.multimechanize.reportwriter">oct.multimechanize.reportwriter module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="oct.multimechanize.html#module-oct.multimechanize.reportwriterxml">oct.multimechanize.reportwriterxml module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="oct.multimechanize.html#module-oct.multimechanize.results">oct.multimechanize.results module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="oct.multimechanize.html#oct-multimechanize-resultsloader-module">oct.multimechanize.resultsloader module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="oct.multimechanize.html#module-oct.multimechanize.resultswriter">oct.multimechanize.resultswriter module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="oct.multimechanize.html#module-oct.multimechanize.rpcserver">oct.multimechanize.rpcserver module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="oct.multimechanize.html#module-oct.multimechanize.script_loader">oct.multimechanize.script_loader module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="oct.multimechanize.html#module-oct.multimechanize">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="oct.testing.html">oct.testing package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="oct.testing.html#module-oct.testing">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="oct.tools.html">oct.tools package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="oct.tools.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="oct.tools.html#module-oct.tools.email_generator">oct.tools.email_generator module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="oct.tools.html#module-oct.tools.xmltocsv">oct.tools.xmltocsv module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="oct.tools.html#module-oct.tools">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="oct.utilities.html">oct.utilities package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="oct.utilities.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="oct.utilities.html#module-oct.utilities.celery">oct.utilities.celery module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="oct.utilities.html#module-oct.utilities.newproject">oct.utilities.newproject module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="oct.utilities.html#module-oct.utilities.run">oct.utilities.run module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="oct.utilities.html#module-oct.utilities">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="oct.html#module-oct">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="oct.core.html">oct.core package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="oct.core.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="oct.core.html#module-oct.core.exceptions">oct.core.exceptions module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="oct.core.html#module-oct.core.generic">oct.core.generic module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="oct.core.html#module-oct.core">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="oct.multimechanize.html">oct.multimechanize package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="oct.multimechanize.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="oct.multimechanize.utilities.html">oct.multimechanize.utilities package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="oct.multimechanize.utilities.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="oct.multimechanize.utilities.html#module-oct.multimechanize.utilities.gridgui">oct.multimechanize.utilities.gridgui module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="oct.multimechanize.utilities.html#module-oct.multimechanize.utilities.newproject">oct.multimechanize.utilities.newproject module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="oct.multimechanize.utilities.html#module-oct.multimechanize.utilities.run">oct.multimechanize.utilities.run module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="oct.multimechanize.utilities.html#module-oct.multimechanize.utilities">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="oct.multimechanize.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="oct.multimechanize.html#module-oct.multimechanize.core">oct.multimechanize.core module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="oct.multimechanize.html#module-oct.multimechanize.dependency_checker">oct.multimechanize.dependency_checker module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="oct.multimechanize.html#module-oct.multimechanize.graph">oct.multimechanize.graph module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="oct.multimechanize.html#module-oct.multimechanize.progressbar">oct.multimechanize.progressbar module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="oct.multimechanize.html#module-oct.multimechanize.reportwriter">oct.multimechanize.reportwriter module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="oct.multimechanize.html#module-oct.multimechanize.reportwriterxml">oct.multimechanize.reportwriterxml module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="oct.multimechanize.html#module-oct.multimechanize.results">oct.multimechanize.results module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="oct.multimechanize.html#oct-multimechanize-resultsloader-module">oct.multimechanize.resultsloader module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="oct.multimechanize.html#module-oct.multimechanize.resultswriter">oct.multimechanize.resultswriter module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="oct.multimechanize.html#module-oct.multimechanize.rpcserver">oct.multimechanize.rpcserver module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="oct.multimechanize.html#module-oct.multimechanize.script_loader">oct.multimechanize.script_loader module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="oct.multimechanize.html#module-oct.multimechanize">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="oct.testing.html">oct.testing package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="oct.testing.html#module-oct.testing">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="oct.tools.html">oct.tools package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="oct.tools.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="oct.tools.html#module-oct.tools.email_generator">oct.tools.email_generator module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="oct.tools.html#module-oct.tools.xmltocsv">oct.tools.xmltocsv module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="oct.tools.html#module-oct.tools">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="oct.utilities.html">oct.utilities package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="oct.utilities.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="oct.utilities.html#module-oct.utilities.celery">oct.utilities.celery module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="oct.utilities.html#module-oct.utilities.newproject">oct.utilities.newproject module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="oct.utilities.html#module-oct.utilities.run">oct.utilities.run module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="oct.utilities.html#module-oct.utilities">Module contents</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -71,9 +232,14 @@
   <h3><a href="#">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Welcome to oct&#8217;s documentation!</a></li>
+<li><a class="reference internal" href="#basics-module-information">Basics module information</a></li>
+<li><a class="reference internal" href="#contents">Contents</a></li>
 <li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
 </ul>
 
+  <h4>Next topic</h4>
+  <p class="topless"><a href="oct.html"
+                        title="next chapter">oct package</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/index.txt"
@@ -105,6 +271,9 @@
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="oct.html" title="oct package"
+             >next</a> |</li>
         <li><a href="#">oct 0.1 documentation</a> &raquo;</li> 
       </ul>
     </div>
