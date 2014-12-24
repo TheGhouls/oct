@@ -45,6 +45,32 @@ We already have done some update on the multi-mechanize modules like :
 But other improvements are on the way ! So stay tune on github !
 
 
+How to
+======
+
+For each functionality, we have tried to write a how to. In that way you should be able to do everything you need with this library,
+even customize it and add features to it !
+
+
+Installation
+============
+
+You can install the module with :
+
+.. code-block:: python
+
+   python setup.py install
+
+Or using pip :
+
+.. code-block:: python
+
+   pip install oct
+
+
+NB : You may encounter build error with pip or easy_install, you 
+
+
 Contents
 ========
 
@@ -53,6 +79,9 @@ Contents
 * :doc:`oct.testing`
 * :doc:`oct.tools`
 * :doc:`oct.utilities`
+
+Indices and tables
+==================
 
 .. toctree::
 
@@ -63,9 +92,6 @@ Contents
    oct.tools
    oct.utilities
 
-
-Indices and tables
-==================
 
 * :ref:`genindex`
 * :ref:`modindex`

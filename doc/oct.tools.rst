@@ -11,8 +11,8 @@ oct.tools contain two functions. One who can be called directly in the shell
 
     email_generator_func
 
-HOW TO:
-=======
+How to
+------
 
 octtools-user-generator
 -----------------------
