@@ -51,6 +51,8 @@ How to
 For each functionality, we have tried to write a how to. In that way you should be able to do everything you need with this library,
 even customize it and add features to it !
 
+See the :doc:`exemples`
+project page
 
 Installation
 ============
@@ -85,6 +87,7 @@ Indices and tables
 
 .. toctree::
 
+   exemples
    oct
    oct.core
    oct.multimechanize
