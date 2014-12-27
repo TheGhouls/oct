@@ -9,7 +9,7 @@ Creating a new project
 
 For starting a new project you have access to this command :
 
-.. code-block:: python
+.. code-block:: bash
 
     oct-newproject <project_name>
 
@@ -17,7 +17,7 @@ This command will create a new project inside the current directory named with t
 
 The created directory must look like this :
 
-.. code-block:: python
+.. code-block:: bash
 
     .
     ├── config.cfg
