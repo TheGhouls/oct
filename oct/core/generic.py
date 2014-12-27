@@ -10,6 +10,7 @@ from bs4 import BeautifulSoup
 from exceptions import OctGenericException
 from mechanize import FormNotFoundError
 import time
+import urllib
 import urllib2
 import random
 
@@ -229,6 +230,33 @@ class GenericTransaction(object):
             raise OctGenericException("Error accessing url: '{0}', error: {1}".format(self.base_url + url, e))
         except urllib2.URLError as e:
             raise OctGenericException("URL ERROR with url: '{0}', error: {1}".format(self.base_url + url, e))
+        return resp
+
+    def auth(self, auth_url, login_form, predicate, data):
+        """
+        Authenticate yourself in the website with the provided data
+
+        Data must have this form :
+
+        data {
+            'login_field_name': 'login',
+            'password_filed_name': 'password'
+        }
+
+        :param auth_url: the url of the page for authentication
+        :type auth_url: str
+        :param login_form: the name, class or id of the login form, set it to None if data must be sent to url directly
+        :type login_form: str
+        :param predicate: a lambda function for getting the form
+        :return: the response object from the submission
+        """
+        if not login_form:
+            resp = self.br.open(auth_url, urllib.urlencode(data))
+        else:
+            self.br.open(auth_url)
+            self.br.get_form(predicate=predicate)
+            self.fill_form(data)
+            resp = self.br.submit()
         return resp
 
     def run(self):
