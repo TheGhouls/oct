@@ -68,7 +68,7 @@ Or using pip :
    pip install oct
 
 
-NB : You may encounter build error with pip or easy_install, you 
+NB : You may encounter build error with pip or easy_install, you
 
 
 Contents
