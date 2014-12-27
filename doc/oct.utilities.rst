@@ -44,7 +44,7 @@ But for testing your scripts you can simply run them by using your standard pyth
 
 The file `config.cfg` contain all configuration variable for your project. By default it's look like this
 
-.. code-block:: python
+.. code-block:: cfg
 
     [global]
     run_time = 30
@@ -70,7 +70,7 @@ For explanations :
 
 This file give you two virtual user groups, each group has 3 user, and the user script is the `v_user.py` file.
 
-To see all configuration variables explained see the configuration section
+To see all configuration variables explained see the :doc:`config` section
 
 
 Module doc
