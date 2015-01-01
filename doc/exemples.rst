@@ -38,6 +38,7 @@ This folders contains the basic for running an OCT project.
 Configuration
 -------------
 
+For configuration explanation and examples see the :doc:`config` page
 
 Customizing your templates
 --------------------------
@@ -188,19 +189,108 @@ At the same time the command will copy all files insides the `img`, `scripts`, a
 be in the associated result directory. In that way you can add all the stuff you want to your results, and not reworking each result after each test
 
 
-Advanced configuration
-----------------------
-
-
 Writing your first script
 -------------------------
+
+It's time to write our first script and test it, so first let's take a look at the generated v_user.py file :
+
+.. code-block:: python
+
+    from oct.core.generic import GenericTransaction
+    import random
+    import time
+    import os
+
+
+    CONFIG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../')
+
+
+    class Transaction(GenericTransaction):
+    def __init__(self):
+        GenericTransaction.__init__(self, True, CONFIG_PATH)
+
+    def run(self):
+        r = random.uniform(1, 2)
+        time.sleep(r)
+        self.custom_timers['Example_Timer'] = r
+
+
+    if __name__ == '__main__':
+    trans = Transaction()
+    trans.run()
+    print trans.custom_timers
+
+So what does this script ? Since it's an example script, actually it just sleep for 1 or 2 seconds.
+
+Let's update this script a little, but first don't forget to update the configuration file to fit your configuration.
+
+Okay so let's write a simple script, just for accessing the index page of our web site and get the statics file of it
+
+.. code-block:: python
+
+    from oct.core.generic import GenericTransaction
+    import time
+    import os
+
+
+    CONFIG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../')
+
+
+    class Transaction(GenericTransaction):
+        def __init__(self):
+            GenericTransaction.__init__(self, True, CONFIG_PATH)
+
+        def run(self):
+            test_time = time.time()
+
+            resp = self.open_url('/')
+            self.get_statics(resp, 'index_statics')
+
+            self.custom_timers['test_time'] = time.time() - test_time
+
+
+    if __name__ == '__main__':
+        trans = Transaction()
+        trans.run()
+        print trans.custom_timers
+
+So that's it, we just open the index url of the website (based on the base_url configuration variable), get the response
+object returned by the `open_url` method and pass it to the `get_statics` method.
+
+So what does this test do ? well it accesses to the index page and retrieve all css, javascript and img files in it. Simple as this
 
 Testing your script
 -------------------
 
+So what's next ? Now you got your basic script retrieving your index page and associated statics files. But does it works ?
+
+Let's figure it out. To test your script 1 time, just to make sure all code work, you actually call the script with your python interpreter like this :
+
+.. code-block:: bash
+
+    python my_script.py
+
+With the previous script, if everything is ok, you must see the timer on the standard output.
+
+Everything work find ? Nice, let's now run our tests with lot of users, so update your configuration file and then you just have to run :
+
+.. code-block:: bash
+
+    multimech-run <myproject>
+
+Or if you're already inside the path of you're project, simply run :
+
+.. code-block:: bash
+
+    multimech-run .
+
+You must see the progress bar appears, you now just have to wait till the tests end. This action will create a results directory inside your project folder,
+and a sub-directory containing the results in csv or html format.
 
 Handle forms
 ------------
+
+
 
 Handle multiples url
 --------------------
