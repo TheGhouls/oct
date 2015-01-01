@@ -1,9 +1,6 @@
 examples
 ========
 
-Installing OCT
---------------
-
 Creating a new project
 ----------------------
 
