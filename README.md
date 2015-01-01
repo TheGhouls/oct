@@ -1,4 +1,53 @@
 oct
 ===
 
-open charge tester for website
+[![doc](https://readthedocs.org/projects/oct/badge/?version=latest)](http://oct.readthedocs.org/en/latest/)
+
+Description
+-----------
+
+OCT stand for Open Charge Tester and his goal is simple : make a library that give you the tools for writing performances tests on webiste.
+At this time of the developpement process OCT is based on mechanize for browsing, but we plan to replace it with a custom, more modern library.
+
+If you know multi-mechnanize as well, we use it too, but here we already made some change inside the core, like :
+
+* update render of graphics
+* update command for new projects
+* more information in config file
+* customisable templates
+* customisable configuration files
+* new commands
+* etc...
+
+Installation
+------------
+
+You can install OCT with pip :
+
+`pip install oct`
+
+Or using setuptools :
+
+`python setup.py install`
+
+What's next ?
+-------------
+
+For documentation and examples, please visit the official documentation here : [doc](http://oct.readthedocs.org/en/latest/)
+
+Roadmap
+-------
+
+Actually the project is in the alpha version, non-suitable for production, but will be under active developpement for some featurs like :
+
+* Full python3 support
+* New lib for replace Mechanize (based on html5lib ?)
+* Full celery integration for multi-processing
+* More generic tests in core module
+* More fancy templates
+* etc...
+
+Contribution
+------------
+
+Fork, pull requests, issues, we're open to any proposition !
