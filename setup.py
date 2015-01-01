@@ -15,6 +15,16 @@ setup(
               'oct.multimechanize.utilities', 'oct.utilities', 'oct.tools'],
     package_data={'oct.utilities': ['templates/css/*']},
     description='A library based on multi-mechanize for performances testing',
+    url='https://github.com/karec/oct',
+    download_url='https://github.com/karec/oct/archive/master.zip',
+    keywords=['testing', 'mechanize', 'perfs'],
+    classifiers=[
+        'Development Status :: 3 - Alpha',
+        'Environment :: Console',
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: MIT License',
+        
+    ],
     install_requires=[
         'argparse',
         'mechanize',
