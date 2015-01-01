@@ -1,0 +1,6 @@
+0.1 to 0.1.1
+============
+
+* add nr management for get_form method and auth method
+* auth method now passing kwargs to get_form
+
