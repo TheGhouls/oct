@@ -57,6 +57,14 @@ project page
 Installation
 ============
 
+You'll need some linux packages for the installation, To install the required development packages of these dependencies on Linux systems,
+use your distribution specific installation tool, e.g. apt-get on Debian/Ubuntu:
+
+.. code-block:: bash
+
+   sudo apt-get install libxml2-dev libxslt-dev python-dev
+
+
 You can install the module with :
 
 .. code-block:: python
