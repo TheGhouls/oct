@@ -23,7 +23,6 @@ setup(
         'Environment :: Console',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
-        
     ],
     install_requires=[
         'argparse',
