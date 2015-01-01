@@ -1,4 +1,5 @@
 oct
 ===
 
-open charge tester for website
+[![doc](https://readthedocs.org/projects/oct/badge/?version=latest)](http://oct.readthedocs.org/en/latest/)
+
