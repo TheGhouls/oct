@@ -192,6 +192,8 @@ class GenericTransaction(object):
         :type form_id: str
         :param form_class: the class attribute of the form
         :type form_class: str
+        :param nr: the position of the form inside the page
+        :type nr: int
         :return: None
         """
         if 'form_name' not in kwargs:
@@ -199,8 +201,11 @@ class GenericTransaction(object):
                 predicate = lambda f: 'id' in f.attrs and f.attrs['id'] == kwargs['form_id']
             elif 'form_class' in kwargs:
                 predicate = lambda f: 'class' in f.attrs and f.attrs['class'] == kwargs['form_class']
+            elif 'nr' in kwargs:
+                self.br.select_form(nr=kwargs['nr'])
+                return
             else:
-                raise FormNotFoundError("You have to at least give a name, a class or an id")
+                raise FormNotFoundError("You have to at least give a name, a class, a position or an id")
             self.br.select_form(predicate=predicate)
         else:
             self.br.select_form(name=kwargs['form_name'])
@@ -232,7 +237,7 @@ class GenericTransaction(object):
             raise OctGenericException("URL ERROR with url: '{0}', error: {1}".format(self.base_url + url, e))
         return resp
 
-    def auth(self, auth_url, login_form, predicate, data):
+    def auth(self, auth_url, data, use_form=True, **kwargs):
         """
         Authenticate yourself in the website with the provided data
 
@@ -245,16 +250,21 @@ class GenericTransaction(object):
 
         :param auth_url: the url of the page for authentication
         :type auth_url: str
-        :param login_form: the name, class or id of the login form, set it to None if data must be sent to url directly
-        :type login_form: str
-        :param predicate: a lambda function for getting the form
+        :param form_name: the name attribute of the form
+        :type form_name: str
+        :param form_id: the id attribute of the form
+        :type form_id: str
+        :param form_class: the class attribute of the form
+        :type form_class: str
+        :param nr: the position of the form inside the page
+        :type nr: int
         :return: the response object from the submission
         """
-        if not login_form:
+        if not use_form:
             resp = self.br.open(auth_url, urllib.urlencode(data))
         else:
             self.br.open(auth_url)
-            self.br.get_form(predicate=predicate)
+            self.get_form(**kwargs)
             self.fill_form(data)
             resp = self.br.submit()
         return resp
