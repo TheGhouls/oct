@@ -29,7 +29,7 @@ setup(
         'mechanize',
         'requests',
         'matplotlib',
-        'beautifulsoup4',
+        'lxml',
         'requests-cache',
         'celery'
     ],

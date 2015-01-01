@@ -6,7 +6,8 @@ from Queue import Queue
 import requests
 from threading import Thread
 import cookielib
-from bs4 import BeautifulSoup
+from lxml import etree
+from io import StringIO, BytesIO
 from exceptions import OctGenericException
 from mechanize import FormNotFoundError
 import time
@@ -135,10 +136,12 @@ class GenericTransaction(object):
         if include is None:
             include = self.statics_include
 
-        soup = BeautifulSoup(response.read())
-        img = [i['src'] for i in soup.findAll('img', src=True) if i['src'].startswith(include)]
-        scripts = [s['src'] for s in soup.findAll('scripts', src=True) if s['src'].startswith(include)]
-        stylesheets = [s['href'] for s in soup.findAll('link', href=True) if s['href'].startswith(include)]
+        html = response.read()
+        parser = etree.HTMLParser()
+        tree = etree.parse(BytesIO(html), parser)
+        img = [img for img in tree.xpath('//img/@src') if img.startswith(include)]
+        scripts = [s for s in tree.xpath('//script/@src') if s.startswith(include)]
+        stylesheets = [s for s in tree.xpath('//link/@href') if s.startswith(include)]
         statics = img + scripts + stylesheets
         for key, static in enumerate(statics):
             if static[0] == '/' and static[1] != '/':
