@@ -290,14 +290,58 @@ and a sub-directory containing the results in csv or html format.
 Handle forms
 ------------
 
+You now know how to access url and retrieve statics files, but this still basics actions right ? Let's handles some forms and submit some data.
+
+So we gonna take our previous script and update it a bit :
+
+.. code-block:: python
+
+    from oct.core.generic import GenericTransaction
+    from oct.testing.content import must_contain
+    import time
+    import os
 
 
-Handle multiples url
---------------------
+    CONFIG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../')
 
-Creating different virtual users
---------------------------------
 
-Updating the configuration of your project
-------------------------------------------
+    class Transaction(GenericTransaction):
+        def __init__(self):
+            GenericTransaction.__init__(self, True, CONFIG_PATH)
+
+        def run(self):
+            test_time = time.time()
+
+            # getting the url
+            resp = self.open_url('/')
+
+            # getting the form
+            self.get_form(form_id='searchForm')
+
+            # setting the data
+            self.fill_form({'q': 'test'})
+
+            # getting the response
+            resp = self.br.submit()
+
+            # checking response content
+            must_contain(resp, 'Results that must be found')
+
+            self.custom_timers['test_time'] = time.time() - test_time
+
+
+    if __name__ == '__main__':
+        trans = Transaction()
+        trans.run()
+        print trans.custom_timers
+
+We removed statics management for tests. So what do we do now ? Well let's resume that :
+
+* access the index url
+* getting the form with id attribute set to `searchForm`
+* considering this form has 1 input named `q`, we set the data for this field to `test`
+* submit the form
+* checking the content of the returned page.
+
+And that's all, we handle a simple search form, and checking the results !
 
