@@ -96,7 +96,6 @@ Indices and tables
 .. toctree::
 
    exemples
-   oct
    oct.core
    oct.multimechanize
    oct.testing
