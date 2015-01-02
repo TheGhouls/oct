@@ -18,7 +18,7 @@ import os
 import mock
 
 MOCK_MODULES = ['numpy', 'scipy', 'matplotlib', 'matplotlib.pyplot', 'scipy.interpolate', 'mechanize', 'requests',
-                'cssselect']
+                'cssselect', 'lxml']
 for mod_name in MOCK_MODULES:
     sys.modules[mod_name] = mock.Mock()
 
