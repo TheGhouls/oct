@@ -20,6 +20,14 @@ oct.core.generic module
     :undoc-members:
     :show-inheritance:
 
+oct.core.browser module
+-----------------------
+
+.. automodule:: oct.core.browser
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 
 Module contents
 ---------------
