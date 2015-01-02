@@ -2,6 +2,8 @@ oct
 ===
 
 [![doc](https://readthedocs.org/projects/oct/badge/?version=latest)](http://oct.readthedocs.org/en/latest/)
+[![pypi](https://pypip.in/status/oct/badge.svg)](https://pypi.python.org/pypi/oct/)
+[![pypi](https://pypip.in/license/oct/badge.svg)](https://pypi.python.org/pypi/oct/)
 
 Description
 -----------
