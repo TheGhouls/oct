@@ -4,8 +4,7 @@ Using the browser
 Basic usages
 ------------
 
-The browser is actually a part of the `oct.core` module, and it's instantiate by the `GenericTransaction` class in its
- `__init__` method.
+The browser is actually a part of the oct.core module, and it's instantiate by the `GenericTransaction` class in its `__init__` method.
 By the browser can be used as a stand-alone, and for advanced scripts it's good to know how to use it. So how to use it ?
 First simply instantiate it like that :
 
@@ -29,15 +28,13 @@ So wright now, what to do ? Well with simple usages, let's access some urls :
     response = br.open_url('http://localhost/other_page.html')
     print(response.status_code)
 
-This piece of code access two page, and for each print the `status_code` of the response object returned by
- the `open_url` method.
+This piece of code access two page, and for each print the `status_code` of the response object returned by the `open_url` method.
 
 Since the return is simply the return of `requests.get` or `requests.post` method, you can access all properties of
 a basic `requests.Response` object. But we add one thing to it, an `html` property, containing an
 `lxml.html` object, representing the opened page.
 
-The html property can be used for parsing or getting elements with the `lxml` syntax, since it's a standard object from
- `lxml.html` parsing.
+The html property can be used for parsing or getting elements with the `lxml` syntax, since it's a standard object from `lxml.html` parsing.
 
 For example you can access all forms object by using :
 
@@ -47,8 +44,7 @@ For example you can access all forms object by using :
 
 Or even the xpath syntax !
 
-And can you check the render of the page ? Of course, don't need other imports, we've implemented
- an `open_in_browser` static method, calling the `lxml.html.open_in_browser` method. You can use it like this :
+And can you check the render of the page ? Of course, don't need other imports, we've implemented an `open_in_browser` static method, calling the `lxml.html.open_in_browser` method. You can use it like this :
 
 .. code-block:: python
 
@@ -58,8 +54,7 @@ And can you check the render of the page ? Of course, don't need other imports, 
 This will open the page in your default system browser.
 
 A last thing you need to know. Each time the `.html` property is filled, the browser make a call to the
-`make_links_absolute` method of `lxml`. If you want to avoid that, simply don't provide a `base_url` for your browser instance,
- it's used only for this call
+`make_links_absolute` method of `lxml`. If you want to avoid that, simply don't provide a `base_url` for your browser instance, it's used only for this call
 
 Form manipulation
 -----------------
