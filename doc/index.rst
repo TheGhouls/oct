@@ -84,6 +84,8 @@ NB : You may encounter build error with pip or easy_install, you
 Contents
 ========
 
+* :doc:`scripts`
+* :doc:`browser`
 * :doc:`oct.core`
 * :doc:`oct.multimechanize`
 * :doc:`oct.testing`
@@ -95,7 +97,8 @@ Indices and tables
 
 .. toctree::
 
-   exemples
+   scripts
+   browser
    oct.core
    oct.multimechanize
    oct.testing

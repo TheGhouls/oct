@@ -1,5 +1,5 @@
-examples
-========
+Writing Scripts
+===============
 
 Creating a new project
 ----------------------
