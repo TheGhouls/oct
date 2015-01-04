@@ -310,16 +310,19 @@ So we gonna take our previous script and update it a bit :
             test_time = time.time()
 
             # getting the url
-            resp = self.open_url('/')
+            resp = self.open_url('/showcase/index')
 
-            # getting the form
-            self.get_form(form_id='searchForm')
+            # now we getting the form, using css selector
+            self.get_form(selector='#searchForm')
 
-            # setting the data
-            self.fill_form({'q': 'test'})
+            # we now have two properties for handling the form
+            # self.br.form, containing the lxml for object
+            # self.br.form_data, a dict containing all fields and values
+            # let's just set the value and submit it
+            self.br.form_data['q'] = 'test'
 
             # getting the response
-            resp = self.br.submit()
+            resp = self.br.submit_form()
 
             # checking response content
             must_contain(resp, 'Results that must be found')

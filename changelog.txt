@@ -23,3 +23,17 @@
     - better form management
     - multiple select
     - bad action value for form tag
+
+0.2.2 to 0.3
+============
+
+* Minimal browser ready
+* Added more features to the browser
+* resetting session for each thread at the end of the transaction forcing each user to have different session
+* improve results writer for multiples custom timers in same test
+* checked compatibility of the browser with python3.4
+* 2to3 passed for browser, no change needed
+* update GenericTransaction, now using custom browser
+* Old GenericTransaction methods still unchanged
+* Updated documentation examples for new browser
+* Global documentation update

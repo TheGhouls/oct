@@ -17,7 +17,7 @@ setup(
     description='A library based on multi-mechanize for performances testing',
     url='https://github.com/karec/oct',
     download_url='https://github.com/karec/oct/archive/master.zip',
-    keywords=['testing', 'mechanize', 'perfs'],
+    keywords=['testing', 'multi-mechanize', 'perfs', 'webscrapper', 'browser', 'web', 'performances'],
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Environment :: Console',
