@@ -158,4 +158,30 @@ More navigation
 
 A little more human navigation ? what about follow links and go back ? Of course you can do that !
 
- 
+For example you can follow links inside the html page like this :
+
+.. code-block:: python
+
+    from oct.core.browser import Browser
+
+    # instantiate the browser
+    br = Browser(base_url='http://localhost')
+
+    # open the url
+    br.open_url('http://localhost')
+
+    # now we can follow any link using css selector or a regex
+    # the regex will look at the text or the href attribute of the link
+    response = br.follow_link('a.my_links', '.*this link.*')
+
+    # oooops wrong link ! (yeah i know, that's doesn't append in script by try to imagine)
+    # let's go back
+    response = br.back() # after this we will be again at the index page
+
+And that's it ! The `follow_link` method is pretty simple actually, it's just find a link by regex and / or css selector,
+and then open the url contained in the `href` attribute of the link.
+
+What about the history ? Well it's not a big deal, only a small history management, no next management for now. But it allow you to
+go back and see all pages opened previously. What append actually when you go back ? It open the previous url in the history list
+property, and then delete the next page of it. So yeah, i know, pretty bad for now we can only go back. But stay tuned, better history
+management is coming !
