@@ -114,8 +114,8 @@ Now let's say that we want to get this form and submit it from the browser objec
 
 And yes, that's it ! Simple, no ?
 Thanks to the awesome cssselector python library, getting your forms are know simpler (unless you know nothing about css selectors)
-but even if we don't want and can use it, we can still use the `get_form` method, and use the `nr` parameter.
-The `nr` param simply represent the position of the form in our page. Here, simple we only have one form, so let's update our core :
+but even if we don't want or can't use it, we can still use the `get_form` method, and use the `nr` parameter.
+The `nr` param simply represent the position of the form in our page. Here, simple we only have one form, so let's update our script :
 
 .. code-block:: python
 
@@ -144,7 +144,7 @@ The `nr` param simply represent the position of the form in our page. Here, simp
 
 And here it is, same result !
 
-For more information about form manipulation, please see the `lxml`_. documentation
+For more information about form manipulation, please see the `lxml`_ documentation
 
 .. _lxml: http://lxml.de/lxmlhtml.html
 
