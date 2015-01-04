@@ -202,3 +202,14 @@ class Browser(object):
 
         if resp is None:
             raise Exception('Link not found')
+
+    @staticmethod
+    def open_in_browser(response):
+        """
+        Provide a simple interface for `lxml.html.open_in_browser` function.
+        Be careful, use this function only for debug purpose
+
+        :param response:
+        :return:
+        """
+        lh.open_in_browser(response.html)
