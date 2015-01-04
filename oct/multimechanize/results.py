@@ -263,7 +263,7 @@ class Results(object):
             self.uniq_user_group_names.add(user_group_name)
 
             custom_timers = {}
-            timers_string = ''.join(fields[6:]).replace('{', '').replace('}', '')
+            timers_string = ''.join(fields[6:]).replace('{', '').replace('}', '').replace('--', '')
             splat = timers_string.split("'")[1:]
             timers = []
             vals = []
