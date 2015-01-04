@@ -1,15 +1,13 @@
 import csv
 import ConfigParser
 import os
-from mechanize import Browser
+from oct.core.browser import Browser
 from Queue import Queue
 import requests
 from threading import Thread
-import cookielib
 from lxml import etree
-from io import StringIO, BytesIO
+from io import BytesIO
 from exceptions import OctGenericException
-from mechanize import FormNotFoundError
 import time
 import urllib
 import urllib2
@@ -27,7 +25,6 @@ class GenericTransaction(object):
     :param threads: number of threads for static files
     :type threads: int
     :param timeout: the timeout in second for static files requests
-    :param use_cookies: default to True, set to False if you don't want cookies with browser object
     """
 
     def __init__(self, handle_robots, pathtoini, **kwargs):
@@ -35,8 +32,7 @@ class GenericTransaction(object):
         self.config = ConfigParser.ConfigParser()
         self.config.read(os.path.join(pathtoini, 'config.cfg'))
         self.base_url = self.config.get('global', 'base_url')
-        self.br = Browser()
-        self.br.set_handle_robots(handle_robots)
+        self.br = Browser(base_url=self.base_url)
         self.id_choice = None
         self.random_url = None
         self.q = Queue()
@@ -51,14 +47,6 @@ class GenericTransaction(object):
             t = Thread(target=self.multi_process_statics)
             t.daemon = True
             t.start()
-
-        if kwargs.pop('use_cookie', True):
-            # Cookie Jar
-            cj = cookielib.LWPCookieJar()
-            self.br.set_cookiejar(cj)
-
-        if 'user_agent' in kwargs:
-            self.br.addheaders = [('User-agent', kwargs.pop('user_agent'))]
 
     @staticmethod
     def csv_to_list(csv_file):
@@ -173,7 +161,7 @@ class GenericTransaction(object):
         """
         start_time = time.time()
         try:
-            resp = self.br.open(url)
+            resp = self.br.open_url(self.base_url + url)
         except urllib2.HTTPError as err:
             raise (OctGenericException(err, "Error accessing url: '{0}', message: {1}".format(url, err)))
         except urllib2.URLError as err:
@@ -189,29 +177,13 @@ class GenericTransaction(object):
         This method help you for getting a form in a given response object
         The form will be set inside the br property of the class
 
-        :param form_name: the name attribute of the form
-        :type form_name: str
-        :param form_id: the id attribute of the form
-        :type form_id: str
-        :param form_class: the class attribute of the form
-        :type form_class: str
-        :param nr: the position of the form inside the page
+        :param selector: the css selector for getting the form
+        :type selector: str
+        :param nr: the position of the form inside the page, default to 0
         :type nr: int
         :return: None
         """
-        if 'form_name' not in kwargs:
-            if 'form_id' in kwargs:
-                predicate = lambda f: 'id' in f.attrs and f.attrs['id'] == kwargs['form_id']
-            elif 'form_class' in kwargs:
-                predicate = lambda f: 'class' in f.attrs and f.attrs['class'] == kwargs['form_class']
-            elif 'nr' in kwargs:
-                self.br.select_form(nr=kwargs['nr'])
-                return
-            else:
-                raise FormNotFoundError("You have to at least give a name, a class, a position or an id")
-            self.br.select_form(predicate=predicate)
-        else:
-            self.br.select_form(name=kwargs['form_name'])
+        self.br.get_form(kwargs.pop('selector', ''), kwargs.pop('nr', 0))
 
     def fill_form(self, form_data):
         """
@@ -221,7 +193,7 @@ class GenericTransaction(object):
         :type form_data: dict
         """
         for key, data in form_data.iteritems():
-            self.br[key] = data
+            self.br.form_data[key] = data
 
     def open_url(self, url, data=None):
         """
@@ -233,7 +205,7 @@ class GenericTransaction(object):
         :type data: dict
         """
         try:
-            resp = self.br.open(self.base_url + url, data)
+            resp = self.br.open_url(self.base_url + url, data)
         except urllib2.HTTPError as e:
             raise OctGenericException("Error accessing url: '{0}', error: {1}".format(self.base_url + url, e))
         except urllib2.URLError as e:
@@ -253,23 +225,19 @@ class GenericTransaction(object):
 
         :param auth_url: the url of the page for authentication
         :type auth_url: str
-        :param form_name: the name attribute of the form
-        :type form_name: str
-        :param form_id: the id attribute of the form
-        :type form_id: str
-        :param form_class: the class attribute of the form
-        :type form_class: str
+        :param selector: the css selector for the form
+        :type selector: str
         :param nr: the position of the form inside the page
         :type nr: int
         :return: the response object from the submission
         """
         if not use_form:
-            resp = self.br.open(auth_url, urllib.urlencode(data))
+            resp = self.br.open_url(self.base_url + auth_url, urllib.urlencode(data))
         else:
-            self.br.open(auth_url)
+            self.br.open_url(self.base_url + auth_url)
             self.get_form(**kwargs)
             self.fill_form(data)
-            resp = self.br.submit()
+            resp = self.br.submit_form()
         return resp
 
     def run(self):

@@ -30,7 +30,6 @@ setup(
         'requests',
         'matplotlib',
         'lxml',
-        'requests-cache',
         'celery'
     ],
     entry_points={'console_scripts': [

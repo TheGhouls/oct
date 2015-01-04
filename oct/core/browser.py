@@ -13,6 +13,7 @@ class Browser(object):
     :param base_url: The base url for the website, will append it for every link without a full url
     """
     def __init__(self, session=None, base_url=''):
+        self._sess_bak = session
         self.session = session or requests.Session()
         self._history = []
         self._html = None
@@ -21,6 +22,16 @@ class Browser(object):
         self._base_url = base_url
         self.form = None
         self.form_data = None
+
+    def clean_session(self):
+        """
+        This function is called by the core of multi-mechanize. It cleans the session for avoiding cache or cookies
+        errors, or giving false results based on cache
+
+        :return: None
+        """
+        del self.session
+        self.session = self._sess_bak or requests.Session()
 
     @property
     def _form_waiting(self):
