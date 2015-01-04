@@ -150,6 +150,14 @@ class GenericTransaction(object):
         You can pass existing or custom functions, but if you want to create custom
         test function, it must at least take a response object as first parameter
 
+        Example of testing function and calling it::
+
+            def my_test(response, other_param)
+                assert(other_param not in response.html)
+
+            # In Transaction run() method
+            self.run_generic_test('my_timer', url, my_test, other_param)
+
         :param timer_name: the name of the timer
         :type timer_name: str
         :param url: the url to test
@@ -189,6 +197,13 @@ class GenericTransaction(object):
         """
         Fill the form selected in self.br with form_data dict
 
+        The data dict must be of the form::
+
+            {
+                'field_name': 'field_value',
+                'field2': 'field_value'
+            }
+
         :param form_data: dict containing the data
         :type form_data: dict
         """
@@ -216,12 +231,12 @@ class GenericTransaction(object):
         """
         Authenticate yourself in the website with the provided data
 
-        Data must have this form :
+        Data must be of the form::
 
-        data {
-            'login_field_name': 'login',
-            'password_filed_name': 'password'
-        }
+            {
+                'login_field_name': 'login',
+                'password_filed_name': 'password'
+            }
 
         :param auth_url: the url of the page for authentication
         :type auth_url: str

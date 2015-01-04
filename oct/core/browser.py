@@ -2,6 +2,7 @@ import requests
 import re
 import lxml.html as lh
 from lxml.cssselect import CSSSelector
+from oct.core.exceptions import FormNotFoundException, NoUrlOpen, LinkNotFound, NoFormWaiting
 
 
 class Browser(object):
@@ -48,6 +49,15 @@ class Browser(object):
         """
         Parse the response object and set the html property to response and to itself
 
+        Html property is a lxml.Html object, needed for parsing the content, getting elements like form, etc...
+        If you want the raw html, you can use both::
+
+            response.read() # or .content for urllib response objects
+
+        Or use lxml::
+
+            lxml.html.tostring(response.html)
+
         :param response: Request or Urllib Response object
         :return: the upadted Response object
         """
@@ -67,13 +77,17 @@ class Browser(object):
         """
         Get the form selected by the selector and / or the nr param
 
+        Raise:
+            * oct.core.exceptions.FormNotFoundException
+            * oct.core.exceptions.NoUrlOpen
+
         :param selector: A css-like selector for finding the form
         :param nr: the index of the form, if selector is set to None, it will search on the hole page
         :param at_base: must be set to true in case of form action is on the base_url page
         :return: None
         """
         if self._html is None:
-            raise Exception('Cannot find form if no url open')
+            raise NoUrlOpen('No url open')
 
         if selector is None:
             self.form = self._html.forms[nr]
@@ -86,7 +100,7 @@ class Browser(object):
                     self.form_data = dict(el.forms[nr].fields)
 
         if self.form is None:
-            raise Exception('Form not found')
+            raise FormNotFoundException('Form not found with selector {0} and nr {1}'.format(selector, nr))
 
         # common case where action was empty before make_link_absolute call
         if (self.form.action == self._base_url and
@@ -110,10 +124,13 @@ class Browser(object):
         """
         Submit the form filled with form_data property dict
 
+        Raise:
+            oct.core.exceptions.NoFormWaiting
+
         :return: Response object after the submit
         """
         if not self._form_waiting:
-            raise Exception('No form waiting to be send')
+            raise NoFormWaiting('No form waiting to be send')
 
         self.form.fields = self.form_data
         self._history.append(self.form.action)
@@ -160,11 +177,12 @@ class Browser(object):
 
         :return: the Response object
         """
-        if self._history[-1]:
+        try:
             resp = self.open_url(self._history[-1], back=True)
             del self._history[-1]
             return resp
-        raise Exception("No history, cannot go back")
+        except IndexError:
+            raise Exception("No history, cannot go back")
 
     @property
     def history(self):
@@ -179,6 +197,9 @@ class Browser(object):
     def follow_link(self, selector, url_regex=None):
         """
         Will access the first link found with the selector
+
+        Raise:
+            oct.core.exceptions.LinkNotFound
 
         :param selector: a string representing a css selector
         :param url_regex: regex for finding the url, can represent the href attribute or the link content
@@ -201,7 +222,7 @@ class Browser(object):
                 return resp
 
         if resp is None:
-            raise Exception('Link not found')
+            raise LinkNotFound('Link not found')
 
     @staticmethod
     def open_in_browser(response):
