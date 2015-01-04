@@ -4,3 +4,22 @@
 * add nr management for get_form method and auth method
 * auth method now passing kwargs to get_form
 
+0.1.1 to 0.2
+============
+
+* replace beautifoulsoup4 by lxml for parsing statics files
+
+0.2 to 0.2.1
+============
+
+* added a minimal-browser for replacing mechanize
+
+0.2.1 to 0.2.2
+==============
+
+* Improve minimal-browser, now handles features like :
+    - auth
+    - full session support
+    - better form management
+    - multiple select
+    - bad action value for form tag

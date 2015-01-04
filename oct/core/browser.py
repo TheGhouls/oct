@@ -52,12 +52,13 @@ class Browser(object):
             self._html = tree
         return response
 
-    def get_form(self, selector=None, nr=0):
+    def get_form(self, selector=None, nr=0, at_base=False):
         """
         Get the form selected by the selector and / or the nr param
 
         :param selector: A css-like selector for finding the form
         :param nr: the index of the form, if selector is set to None, it will search on the hole page
+        :param at_base: must be set to true in case of form action is on the base_url page
         :return: None
         """
         if self._html is None:
@@ -71,7 +72,28 @@ class Browser(object):
             for el in sel(self._html):
                 if el.forms:
                     self.form = el.forms[nr]
-                    self.form_data = dict(el.forms[0].fields)
+                    self.form_data = dict(el.forms[nr].fields)
+
+        if self.form is None:
+            raise Exception('Form not found')
+
+        # common case where action was empty before make_link_absolute call
+        if (self.form.action == self._base_url and
+                self._url is not self._base_url and
+                not at_base):
+            self.form.action = self._url
+
+    def get_select_values(self):
+        """
+        Get the available values of all select and select multiple fields in form
+
+        :return: a dict containing all values for each fields
+        """
+        data = {}
+        for i in self.form.inputs:
+            if isinstance(i, lh.SelectElement):
+                data[i.name] = i.value_options
+        return data
 
     def submit_form(self):
         """
@@ -84,11 +106,22 @@ class Browser(object):
 
         self.form.fields = self.form_data
         self._history.append(self.form.action)
-        r = lh.submit_form(self.form)
+        r = lh.submit_form(self.form, open_http=self._open_session_http)
         resp = self._parse_html(r)
         self.form_data = None
         self.form = None
         return resp
+
+    def _open_session_http(self, method, url, values):
+        """
+        Custom method for form submission, send to lxml submit form method
+
+        :param method: the method of the form (POST, GET, PUT, DELETE)
+        :param url: the url of the action of the form
+        :param values: the values of the form
+        :return: Response object from requests.request method
+        """
+        return self.session.request(method, url, None, values)
 
     def open_url(self, url, data=None, back=False, **kwargs):
         """
