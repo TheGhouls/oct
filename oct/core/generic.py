@@ -152,7 +152,7 @@ class GenericTransaction(object):
 
         Example of testing function and calling it::
 
-            def my_test(response, other_param)
+            def my_test(response, other_param):
                 assert(other_param not in response.html)
 
             # In Transaction run() method
