@@ -62,3 +62,4 @@
 * added six to requirements
 * tested basic functionality, all ok for both python 2.7 and python 3.4
 * refactor most of the documentation
+* update graph render
