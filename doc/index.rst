@@ -28,6 +28,8 @@ The OCT module steel need many features at this point, here somme examples :
 Basics module information
 =========================
 
+.. image:: img/results.png
+
 OCT is based on multi-mechanize, a library for testing website. But this module is no longer under active development
 and the last commit was 3 years ago.
 

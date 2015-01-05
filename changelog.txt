@@ -52,3 +52,13 @@
 * now generating svg files for graph
 * clean up dependencies globaly
 * updated css file for graph size
+
+0.3.2 to 0.3.3
+==============
+
+* refactore multi-mechanize core for python3
+* compatibility for python3.4 started
+* keep compatibility for python >= 2.7 using six
+* added six to requirements
+* tested basic functionality, all ok for both python 2.7 and python 3.4
+* refactor most of the documentation
