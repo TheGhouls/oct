@@ -1,16 +1,16 @@
+
 import csv
-import ConfigParser
 import os
 from oct.core.browser import Browser
-from Queue import Queue
 import requests
 from threading import Thread
 from lxml import etree
 from io import BytesIO
-from exceptions import OctGenericException
+from .exceptions import OctGenericException
 import time
-import urllib
-import urllib2
+from six.moves import urllib, configparser
+from six.moves.queue import Queue
+import six
 import random
 
 
@@ -29,7 +29,7 @@ class GenericTransaction(object):
 
     def __init__(self, handle_robots, pathtoini, **kwargs):
 
-        self.config = ConfigParser.ConfigParser()
+        self.config = configparser.ConfigParser()
         self.config.read(os.path.join(pathtoini, 'config.cfg'))
         self.base_url = self.config.get('global', 'base_url')
         self.br = Browser(base_url=self.base_url)
@@ -88,7 +88,7 @@ class GenericTransaction(object):
                     url = "http://".join(url)
                 requests.get(url, allow_redirects=False, timeout=self.timeout)
             except Exception as e:
-                print("Unexpected error: {0}".format(e))
+                print(("Unexpected error: {0}".format(e)))
             self.q.task_done()
 
     def get_statics(self, response, timer_name, include=None):
@@ -106,8 +106,8 @@ class GenericTransaction(object):
         if self.statics_enabled is None:
             try:
                 self.statics_enabled = self.config.getboolean('global', 'statics_enabled')
-            except ConfigParser.NoOptionError:
-                print "No statics_enabled option in config file, set value to False (default value)"
+            except configparser.NoOptionError:
+                print("No statics_enabled option in config file, set value to False (default value)")
                 self.statics_enabled = False
         if not self.statics_enabled:
             return None
@@ -118,7 +118,7 @@ class GenericTransaction(object):
                 self.statics_include = tuple
                 for key, value in enumerate(items):
                     self.statics_include += value
-            except ConfigParser.NoSectionError:
+            except configparser.NoSectionError:
                 self.statics_include = ('', )
 
         if include is None:
@@ -170,10 +170,10 @@ class GenericTransaction(object):
         start_time = time.time()
         try:
             resp = self.br.open_url(self.base_url + url)
-        except urllib2.HTTPError as err:
-            raise (OctGenericException(err, "Error accessing url: '{0}', message: {1}".format(url, err)))
-        except urllib2.URLError as err:
-            raise (OctGenericException(err, "URL ERROR with url: '{0}', message: {1}".format(url, err)))
+        except urllib.error.HTTPError as err:
+            raise OctGenericException
+        except urllib.error.URLError as err:
+            raise OctGenericException
 
         test_func(*args)
 
@@ -207,7 +207,7 @@ class GenericTransaction(object):
         :param form_data: dict containing the data
         :type form_data: dict
         """
-        for key, data in form_data.iteritems():
+        for key, data in six.iteritems(form_data):
             self.br.form_data[key] = data
 
     def open_url(self, url, data=None):
@@ -221,9 +221,9 @@ class GenericTransaction(object):
         """
         try:
             resp = self.br.open_url(self.base_url + url, data)
-        except urllib2.HTTPError as e:
+        except urllib.error.HTTPError as e:
             raise OctGenericException("Error accessing url: '{0}', error: {1}".format(self.base_url + url, e))
-        except urllib2.URLError as e:
+        except urllib.error.URLError as e:
             raise OctGenericException("URL ERROR with url: '{0}', error: {1}".format(self.base_url + url, e))
         return resp
 
@@ -247,7 +247,7 @@ class GenericTransaction(object):
         :return: the response object from the submission
         """
         if not use_form:
-            resp = self.br.open_url(self.base_url + auth_url, urllib.urlencode(data))
+            resp = self.br.open_url(self.base_url + auth_url, urllib.parse.urlencode(data))
         else:
             self.br.open_url(self.base_url + auth_url)
             self.get_form(**kwargs)
@@ -264,4 +264,4 @@ class GenericTransaction(object):
         raise NotImplementedError("You must implement the run method in your class")
 
     def __repr__(self):
-        print "<Generic Transaction>"
+        print("<Generic Transaction>")
