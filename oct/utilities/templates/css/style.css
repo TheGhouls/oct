@@ -114,3 +114,7 @@ hr {
 	background-color: #f4f4f4;
 	border: none;
 }
+
+figure {
+	width: 50%;
+}

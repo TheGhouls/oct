@@ -27,10 +27,12 @@ setup(
     install_requires=[
         'argparse',
         'requests',
-        'matplotlib',
         'lxml',
         'celery',
         'cssselect',
+        'pygal',
+        'cairosvg',
+        'tinycss'
     ],
     entry_points={'console_scripts': [
         'multimech-run = oct.multimechanize.utilities.run:main',

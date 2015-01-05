@@ -62,7 +62,7 @@ def output_results(results_dir, results_file, run_time, rampup, ts_interval, use
         t = (resp_stats.elapsed_time, resp_stats.trans_time)
         trans_timer_points.append(t)
         trans_timer_vals.append(resp_stats.trans_time)
-    graph.resp_graph_raw(trans_timer_points, 'All_Transactions_response_times.png', results_dir)
+    graph.resp_graph_raw(trans_timer_points, 'All_Transactions_response_times.svg', results_dir)
 
     report.write_line('<h3>Transaction Response Summary (secs)</h3>')
     report.write_line('<table>')
@@ -123,15 +123,15 @@ def output_results(results_dir, results_file, run_time, rampup, ts_interval, use
 
     report.write_line('</table>')
     graph.resp_graph(avg_resptime_points, percentile_80_resptime_points, percentile_90_resptime_points,
-                     'All_Transactions_response_times_intervals.png', results_dir)
+                     'All_Transactions_response_times_intervals.svg', results_dir)
 
     report.write_line('<h3>Graphs</h3>')
     report.write_line('<h4>Response Time: %s sec time-series</h4>' % ts_interval)
-    report.write_line('<img src="All_Transactions_response_times_intervals.png"></img>')
+    report.write_line('<figure><embed ype="image/svg+xml" src="All_Transactions_response_times_intervals.svg" /></figure>')
     report.write_line('<h4>Response Time: raw data (all points)</h4>')
-    report.write_line('<img src="All_Transactions_response_times.png"></img>')
+    report.write_line('<figure><embed ype="image/svg+xml" src="All_Transactions_response_times.svg" /></figure>')
     report.write_line('<h4>Throughput: 5 sec time-series</h4>')
-    report.write_line('<img src="All_Transactions_throughput.png"></img>')
+    report.write_line('<figure><embed ype="image/svg+xml" src="All_Transactions_throughput.svg" /></figure>')
 
     # all transactions - throughput
     throughput_points = {}  # {intervalnumber: numberofrequests}
@@ -139,7 +139,7 @@ def output_results(results_dir, results_file, run_time, rampup, ts_interval, use
     splat_series = split_series(trans_timer_points, interval_secs)
     for i, bucket in enumerate(splat_series):
         throughput_points[int((i + 1) * interval_secs)] = (len(bucket) / interval_secs)
-    graph.tp_graph(throughput_points, 'All_Transactions_throughput.png', results_dir)
+    graph.tp_graph(throughput_points, 'All_Transactions_throughput.svg', results_dir)
 
     # custom timers
     for timer_name in sorted(results.uniq_timer_names):
@@ -152,14 +152,14 @@ def output_results(results_dir, results_file, run_time, rampup, ts_interval, use
                 custom_timer_vals.append(val)
             except KeyError:
                 pass
-        graph.resp_graph_raw(custom_timer_points, timer_name + '_response_times.png', results_dir)
+        graph.resp_graph_raw(custom_timer_points, timer_name + '_response_times.svg', results_dir)
 
         throughput_points = {}  # {intervalnumber: numberofrequests}
         interval_secs = ts_interval
         splat_series = split_series(custom_timer_points, interval_secs)
         for i, bucket in enumerate(splat_series):
             throughput_points[int((i + 1) * interval_secs)] = (len(bucket) / interval_secs)
-        graph.tp_graph(throughput_points, timer_name + '_throughput.png', results_dir)
+        graph.tp_graph(throughput_points, timer_name + '_throughput.svg', results_dir)
 
         report.write_line('<hr />')
         report.write_line('<h2>Custom Timer: %s</h2>' % timer_name)
@@ -217,15 +217,15 @@ def output_results(results_dir, results_file, run_time, rampup, ts_interval, use
                 percentile_90_resptime_points[interval_start] = pct_90
         report.write_line('</table>')
         graph.resp_graph(avg_resptime_points, percentile_80_resptime_points,
-                         percentile_90_resptime_points, timer_name + '_response_times_intervals.png', results_dir)
+                         percentile_90_resptime_points, timer_name + '_response_times_intervals.svg', results_dir)
 
         report.write_line('<h3>Graphs</h3>')
         report.write_line('<h4>Response Time: %s sec time-series</h4>' % ts_interval)
-        report.write_line('<img src="%s_response_times_intervals.png"></img>' % timer_name)
+        report.write_line('<figure><embed ype="image/svg+xml" src="%s_response_times_intervals.svg" /></figure>' % timer_name)
         report.write_line('<h4>Response Time: raw data (all points)</h4>')
-        report.write_line('<img src="%s_response_times.png"></img>' % timer_name)
+        report.write_line('<figure><embed ype="image/svg+xml" src="%s_response_times.svg" /></figure>' % timer_name)
         report.write_line('<h4>Throughput: %s sec time-series</h4>' % ts_interval)
-        report.write_line('<img src="%s_throughput.png"></img>' % timer_name)
+        report.write_line('<figure><embed ype="image/svg+xml" src="%s_throughput.svg" /></figure>' % timer_name)
 
     report.write_line('<hr />')
     report.write_closing_html()
