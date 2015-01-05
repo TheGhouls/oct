@@ -62,8 +62,7 @@ use your distribution specific installation tool, e.g. apt-get on Debian/Ubuntu:
 
 .. code-block:: bash
 
-   sudo apt-get install libxml2-dev libxslt-dev python-dev
-
+   sudo apt-get install libxml2-dev libxslt-dev python-dev zlib1g-dev libffi-dev
 
 You can install the module with :
 
@@ -76,10 +75,6 @@ Or using pip :
 .. code-block:: python
 
    pip install oct
-
-
-NB : You may encounter build error with pip or easy_install, you
-
 
 Contents
 ========
