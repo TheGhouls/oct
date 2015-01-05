@@ -42,3 +42,13 @@
 ============
 
 * Update requirements in setup for cssselect
+
+0.3.1 to 0.3.2
+==============
+
+* Remove matplotlib from setup dependencies
+* now using pygal for graphs renders
+* updated multimechanize graph and results file
+* now generating svg files for graph
+* clean up dependencies globaly
+* updated css file for graph size
