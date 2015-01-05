@@ -1,7 +1,7 @@
 Configuration
 =============
 
-This section explain all the configurations available with a project
+This section explain all the configurations available for a project
 
 Basic configuration
 -------------------
@@ -77,7 +77,7 @@ Logging
 
     console_logging = off
 
-Set the logging inside the terminal while running the tests
+Set the logging display inside the terminal while running the tests
 
 Base url
 ~~~~~~~~
@@ -104,12 +104,12 @@ Statics
 
     statics_enabled = 1
 
-Define if the tests scripts must load the statics or not
+Define if the tests scripts must load the statics files or not
 
 User group sections
 -------------------
 
-This sections define the virtual groups for testing
+This section defines the virtual groups for testing
 
 Threads
 ~~~~~~~
@@ -123,11 +123,11 @@ Define the number of users simulated in this group
 Statics section
 ---------------
 
-When testing, you don't always want to load all statics, some are from CDN, other are from third party, etc...
-Well, we let you choose each statics domain you want to include within a statics section. If not statics section is provided, then
+When running testing, you don't always want loads all static files, some are on CDN, other on third party, etc...
+Well, we let you choose each static files domain you want to include within a statics section. If not statics section is provided, then
 the tests scripts will include all of them, this is the default settings.
 
-If you want to add domain to add a white list of domain to include, just set a configuration section like this :
+If you want to add domain for a white list of domain to include, just set a configuration section like this :
 
 .. code-block:: cfg
 
@@ -136,16 +136,16 @@ If you want to add domain to add a white list of domain to include, just set a c
     include2=http://testing.my_serveur.net
 
 
-With this configuration, all statics with an url starting with one of those address will be load, and only if they start with
+With this configuration, all static files with an url starting with one of those address will be load, and only if they start with
 one of those. All others statics files will be ignored
 
 
 Custom configuration variables
 ------------------------------
 
-In some projects, you may need some custom configuration, well that's possible, just add all the section you need in the config.cfg file.
+In some projects, you may need to have some custom configuration, well that's possible, just add the needed section in the config.cfg file.
 
-Since the `GenericTransaction` class load the configuration file by default, you can access all the sections and variables you need inside your script.
+Since the `GenericTransaction` class loads the configuration file by default, you can access all the sections and variables you need inside your script.
 
 Let's take a basic configuration file for example :
 
@@ -182,4 +182,4 @@ Ok so now inside our test script we want to get the custom value, we just need t
         trans = Transaction()
         trans.run()
 
-And that's it, if you run the script, it will print the `spam`, since the custom variable value is `spam`
+If you run the script, it will display `spam`, since the custom variable value is `spam`
