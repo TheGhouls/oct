@@ -6,6 +6,9 @@ from oct import __version__
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
+with open('README.rst') as f:
+    long_description = f.read()
+
 setup(
     name='oct',
     version=__version__,
@@ -14,17 +17,8 @@ setup(
     packages=['oct', 'oct.core', 'oct.multimechanize', 'oct.testing',
               'oct.multimechanize.utilities', 'oct.utilities', 'oct.tools'],
     package_data={'oct.utilities': ['templates/css/*']},
-    description="""
-    A library based on multi-mechanize for performances testing, using custom browser for writing tests
-
-    See the documentation at http://oct.readthedocs.org/en/latest/_
-
-    Github repository : https://github.com/karec/oct_
-
-    .. _http://oct.readthedocs.org/en/latest/: http://oct.readthedocs.org/en/latest/
-    .. _https://github.com/karec/oct: https://github.com/karec/oct
-
-    """,
+    description="A library based on multi-mechanize for performances testing, using custom browser for writing tests",
+    long_description=long_description,
     url='https://github.com/karec/oct',
     download_url='https://github.com/karec/oct/archive/master.zip',
     keywords=['testing', 'multi-mechanize', 'perfs', 'webscrapper', 'browser', 'web', 'performances', 'lxml'],
