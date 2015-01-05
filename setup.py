@@ -26,11 +26,11 @@ setup(
     ],
     install_requires=[
         'argparse',
-        'mechanize',
         'requests',
         'matplotlib',
         'lxml',
-        'celery'
+        'celery',
+        'cssselect',
     ],
     entry_points={'console_scripts': [
         'multimech-run = oct.multimechanize.utilities.run:main',
