@@ -19,6 +19,7 @@ If you know multi-mechnanize as well, we use it too, but here we already made so
 * customisable templates
 * customisable configuration files
 * new commands
+* new browser replacing mechanize (python3 support)
 * etc...
 
 Installation
@@ -43,7 +44,6 @@ Roadmap
 Actually the project is in the alpha version, non-suitable for production, but will be under active developpement for some featurs like :
 
 * Full python3 support
-* New lib for replace Mechanize (based on html5lib ?)
 * Full celery integration for multi-processing
 * More generic tests in core module
 * More fancy templates
