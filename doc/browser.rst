@@ -4,9 +4,9 @@ Using the browser
 Basic usages
 ------------
 
-The browser is actually a part of the oct.core module, and it's instantiate by the `GenericTransaction` class in its `__init__` method.
-By the browser can be used as a stand-alone, and for advanced scripts it's good to know how to use it. So how to use it ?
-First simply instantiate it like that :
+The browser is a part of oct.core module, and is instantiate by the `GenericTransaction` class in its `__init__` method.
+The browser can be used as a stand-alone, and for advanced scripts it's good to know how to use it. So how to use it ?
+First, you need to instantiate a new Browser object:
 
 .. code-block:: python
 
@@ -14,12 +14,12 @@ First simply instantiate it like that :
 
     br = Browser()
 
-Browser object take two optional parameters :
+The `Browser` object takes two optional parameters :
 
-    * `sessions` if you want to use custom session manager, by default set to `requests.Session()`
-    * `base_url` for setting up you links when parsing, default to empty string
+    * `sessions` if you want to use custom session manager, default value : `requests.Session()`
+    * `base_url` for setting up your links when parsing, default to empty string
 
-So wright now, what to do ? Well with simple usages, let's access some urls :
+Now you can use the browser to access urls :
 
 .. code-block:: python
 
@@ -28,9 +28,9 @@ So wright now, what to do ? Well with simple usages, let's access some urls :
     response = br.open_url('http://localhost/other_page.html')
     print(response.status_code)
 
-This piece of code access two page, and for each print the `status_code` of the response object returned by the `open_url` method.
+This script opens two urls, and for each one display the `status_code` of the response object returned by the `open_url` method.
 
-Since the return is simply the return of `requests.get` or `requests.post` method, you can access all properties of
+Since the return value is simply the return of the `requests.get` or of the `requests.post` method, you can access all properties of
 a basic `requests.Response` object. But we add one thing to it, an `html` property, containing an
 `lxml.html` object, representing the opened page.
 
@@ -42,9 +42,9 @@ For example you can access all forms object by using :
 
     response.html.forms
 
-Or even the xpath syntax !
+Or even use the xpath syntax
 
-And can you check the render of the page ? Of course, don't need other imports, we've implemented an `open_in_browser` static method, calling the `lxml.html.open_in_browser` method. You can use it like this :
+And can you check the render of the page ? Of course, you don't need other imports, we've implemented an `open_in_browser` static method, calling the `lxml.html.open_in_browser` method. You can use it like this :
 
 .. code-block:: python
 
@@ -54,13 +54,13 @@ And can you check the render of the page ? Of course, don't need other imports, 
 This will open the page in your default system browser.
 
 A last thing you need to know. Each time the `.html` property is filled, the browser make a call to the
-`make_links_absolute` method of `lxml`. If you want to avoid that, simply don't provide a `base_url` for your browser instance, it's used only for this call
+`make_links_absolute` method of `lxml`. If you want to avoid that, simply do not provide a `base_url` for your browser instance, it's used only for this call
 
 Form manipulation
 -----------------
 
-Like we said in the previous part of this documentation, you can use all the `lxml` method for parsing your page. But again, we
-did a part of the job for you.
+Like we said in the previous part of this documentation, you can use all the `lxml` methods for parsing your page. But again, we
+have done a part of the job for you.
 
 Let's say that we have a simple html page like this at the index of your localhost favorite web server:
 
@@ -85,7 +85,7 @@ Let's say that we have a simple html page like this at the index of your localho
 
 A very simple page, but it's just for the example.
 
-Now let's say that we want to get this form and submit it from the browser object. Simple a this :
+Now let's say that we want to get this form and submit it from the browser object :
 
 .. code-block:: python
 
@@ -113,8 +113,8 @@ Now let's say that we want to get this form and submit it from the browser objec
     print(response.status_code)
 
 And yes, that's it ! Simple, no ?
-Thanks to the awesome cssselector python library, getting your forms are know simpler (unless you know nothing about css selectors)
-but even if we don't want or can't use it, we can still use the `get_form` method, and use the `nr` parameter.
+Thanks to the awesome cssselector python library, getting your forms are now simpler (unless you know nothing about css selectors)
+but even if we don't want or can not use it, we can still use the `get_form` method, and use the `nr` parameter.
 The `nr` param simply represent the position of the form in our page. Here, simple we only have one form, so let's update our script :
 
 .. code-block:: python
@@ -151,9 +151,7 @@ For more information about form manipulation, please see the `lxml`_ documentati
 More navigation
 ---------------
 
-A little more human navigation ? what about follow links and go back ? Of course you can do that !
-
-For example you can follow links inside the html page like this :
+You can follow links inside the html page like this :
 
 .. code-block:: python
 
@@ -173,10 +171,10 @@ For example you can follow links inside the html page like this :
     # let's go back
     response = br.back() # after this we will be again at the index page
 
-And that's it ! The `follow_link` method is pretty simple actually, it's just find a link by regex and / or css selector,
-and then open the url contained in the `href` attribute of the link.
+And that's it ! The `follow_link` method is pretty simple actually, it just finds a link by regex and / or css selector,
+and then opens the url contained in the `href` attribute of this link.
 
-What about the history ? Well it's not a big deal, only a small history management, no next management for now. But it allow you to
-go back and see all pages opened previously. What append actually when you go back ? It open the previous url in the history list
-property, and then delete the next page of it. So yeah, i know, pretty bad for now we can only go back. But stay tuned, better history
+What about the navigation history ? Well it's not a big deal, only a small history management, no next management for now. But it allow you to
+go back and see all pages opened previously. What appends actually when you go back ? It open the previous url in the history list
+property, and then delete the next page of it. So yeah, i know, pretty bad. But stay tuned, better history
 management is coming !

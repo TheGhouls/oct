@@ -6,20 +6,19 @@
 Welcome to oct's documentation!
 ===============================
 
-Oct stand for Open Charge Tester, the goal of this project is to give you the basics tools for write simple tests. The
+Oct stand for Open Charge Tester, the goal of this project is to give you the basics tools for writing simple tests. The
 tests are simple python scripts that make calls to web page or web service, submit data, login, etc...
-OCT will give you basics tools for easily writing your test.
+OCT will give you the tools for easily write your test.
 
-This documentation will provide you basics examples for writing tests, use oct-tools, lunch tests, get results or even customize the results to fit your needs
+This documentation will provide you basics examples for write your tests, use oct-tools, lunch tests, get the results or even customize the results to fit your needs
 
-Note that the OCT project is in early development and is not suitable for productions tests actually.
+Note that the OCT project is in early development and is not suitable for production.
 
 If you want to contribute you're welcome ! Check the git, fork the project, and submit your pull requests !
 
-The OCT module steel need many features at this point, here somme examples :
+The OCT module still needs many features at this point, here somme examples :
 
-* Full python3 support
-* New lib for replace Mechanize (based on html5lib ?)
+* Full python3 support (Experimental at the moment)
 * Full celery integration for multi-processing
 * More generic tests in core module
 * More fancy templates
@@ -28,12 +27,11 @@ The OCT module steel need many features at this point, here somme examples :
 Basics module information
 =========================
 
-OCT is based on multi-mechanize, a library for testing website. But this module is no longer under active development
-and the last commit was 3 years ago.
+OCT is based on multi-mechanize, a library for testing website. But this module is no longer under active development.
 
-So instead of a fork, for building OCT module we include multi-mechanize as a module, and we update it. For the moment
-modifications are minors and the main job of OCT module is inside the core submodules, which contains a `GenericTransaction` class
- which provide you useful methods for writing your tests scripts.
+So instead of a fork, for building OCT module we include multi-mechanize as a module, and we update it as needed. For the moment
+modifications are minors and the main job of OCT module is inside the core submodule, which contains a `GenericTransaction` class
+ providing you useful methods for writing your tests scripts.
 
 We already have done some update on the multi-mechanize modules like :
 
@@ -41,6 +39,7 @@ We already have done some update on the multi-mechanize modules like :
 * update command for new projects
 * more information in config file
 * customisable templates
+* replace matplotlib by pygal for graphics
 
 But other improvements are on the way ! So stay tune on github !
 
@@ -49,7 +48,7 @@ How to
 ======
 
 For each functionality, we have tried to write a how to. In that way you should be able to do everything you need with this library,
-even customize it and add features to it !
+even customize it and add features !
 
 See the :doc:`exemples`
 project page
@@ -57,7 +56,7 @@ project page
 Installation
 ============
 
-You'll need some linux packages for the installation, To install the required development packages of these dependencies on Linux systems,
+You'll need some linux packages for the installation, To install the required packages on Linux systems,
 use your distribution specific installation tool, e.g. apt-get on Debian/Ubuntu:
 
 .. code-block:: bash
@@ -65,20 +64,17 @@ use your distribution specific installation tool, e.g. apt-get on Debian/Ubuntu:
    sudo apt-get install libxml2-dev libxslt-dev python-dev
 
 
-You can install the module with :
+You can install the OCT module with :
 
 .. code-block:: python
 
    python setup.py install
 
-Or using pip :
+Or with pip :
 
 .. code-block:: python
 
    pip install oct
-
-
-NB : You may encounter build error with pip or easy_install, you
 
 
 Contents
