@@ -84,6 +84,7 @@ NB : You may encounter build error with pip or easy_install, you
 Contents
 ========
 
+* :doc:`config`
 * :doc:`scripts`
 * :doc:`browser`
 * :doc:`oct.core`
@@ -97,6 +98,7 @@ Indices and tables
 
 .. toctree::
 
+   config
    scripts
    browser
    oct.core
