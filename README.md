@@ -6,7 +6,12 @@ oct
 [![pypi](https://pypip.in/license/oct/badge.svg?style=flat)](https://pypi.python.org/pypi/oct/)
 
 [Documentation](http://oct.readthedocs.org/en/latest/)
+
 [OCT on pypi](https://pypi.python.org/pypi/oct)
+
+Python Version|
+--------------
+Python >= 2.7.x|
 
 Description
 -----------
