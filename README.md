@@ -5,11 +5,14 @@ oct
 [![pypi](https://pypip.in/status/oct/badge.svg?style=flat)](https://pypi.python.org/pypi/oct/)
 [![pypi](https://pypip.in/license/oct/badge.svg?style=flat)](https://pypi.python.org/pypi/oct/)
 
+[Documentation](http://oct.readthedocs.org/en/latest/)
+[OCT on pypi](https://pypi.python.org/pypi/oct)
+
 Description
 -----------
 
 OCT stand for Open Charge Tester and his goal is simple : make a library that give you the tools for writing performances tests on webiste.
-At this time of the developpement process OCT is based on mechanize for browsing, but we plan to replace it with a custom, more modern library.
+Writing your script for browsing a web site is done with a custon minimal browser, based on lxml.
 
 If you know multi-mechnanize as well, we use it too, but here we already made some change inside the core, like :
 
