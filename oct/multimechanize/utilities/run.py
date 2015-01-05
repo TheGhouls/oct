@@ -6,8 +6,8 @@
 #
 #  This file is part of Multi-Mechanize | Performance Test Framework
 #
-
-import ConfigParser
+from __future__ import print_function
+from six.moves import configparser as ConfigParser
 import multiprocessing
 import optparse
 import os
@@ -104,8 +104,8 @@ def run_test(project_name, cmd_opts, remote_starter=None):
         for user_group in user_groups:
             user_group.join()
     else:
-        print '\n  user_groups:  %i' % len(user_groups)
-        print '  threads: %i\n' % (ug_config.num_threads * len(user_groups))
+        print('\n  user_groups:  %i' % len(user_groups))
+        print('  threads: %i\n' % (ug_config.num_threads * len(user_groups)))
 
         if progress_bar:
             p = progressbar.ProgressBar(run_time)
@@ -113,38 +113,37 @@ def run_test(project_name, cmd_opts, remote_starter=None):
             while elapsed < (run_time + 1):
                 p.update_time(elapsed)
                 if sys.platform.startswith('win'):
-                    print '%s   transactions: %i  timers: %i  errors: %i\r' % (p, rw.trans_count, rw.timer_count,
-                                                                               rw.error_count),
+                    print('{0}   transactions: {1}  timers: {2}  errors: {3}\r'.format(p, rw.trans_count, rw.timer_count, rw.error_count), end=' ')
                 else:
-                    print '%s   transactions: %i  timers: %i  errors: %i' % (p, rw.trans_count, rw.timer_count,
-                                                                             rw.error_count)
+                    print('%s   transactions: %i  timers: %i  errors: %i' % (p, rw.trans_count, rw.timer_count,
+                                                                             rw.error_count))
                     sys.stdout.write(chr(27) + '[A')
                 time.sleep(1)
                 elapsed = time.time() - start_time
 
-            print p
+            print(p)
 
         while [user_group for user_group in user_groups if user_group.is_alive()]:
             if progress_bar:
                 if sys.platform.startswith('win'):
-                    print 'waiting for all requests to finish...\r',
+                    print('waiting for all requests to finish...\r', end=' ')
                 else:
-                    print 'waiting for all requests to finish...\r'
+                    print('waiting for all requests to finish...\r')
                     sys.stdout.write(chr(27) + '[A')
             time.sleep(.5)
 
         if not sys.platform.startswith('win'):
-            print
+            print()
 
     # all agents are done running at this point
     time.sleep(.2)  # make sure the writer queue is flushed
-    print '\n\nanalyzing results...\n'
+    print('\n\nanalyzing results...\n')
     results.output_results(output_dir, 'results.csv', run_time, rampup, results_ts_interval, user_group_configs,
                            xml_report)
-    print 'created: %sresults.html\n' % output_dir
+    print('created: %sresults.html\n' % output_dir)
     if xml_report:
-        print 'created: %sresults.jtl' % output_dir
-        print 'created: last_results.jtl\n'
+        print('created: %sresults.jtl' % output_dir)
+        print('created: last_results.jtl\n')
 
     # copy config file to results directory
     project_config = os.sep.join([cmd_opts.projects_dir, project_name, 'config.cfg'])
@@ -152,17 +151,17 @@ def run_test(project_name, cmd_opts, remote_starter=None):
     shutil.copy(project_config, saved_config)
 
     if results_database is not None:
-        print 'loading results into database: %s\n' % results_database
+        print('loading results into database: %s\n' % results_database)
         import multimechanize.resultsloader
         multimechanize.resultsloader.load_results_database(project_name,
                                                            run_localtime, output_dir, results_database,
                                                            run_time, rampup, results_ts_interval, user_group_configs)
 
     if post_run_script is not None:
-        print 'running post_run_script: %s\n' % post_run_script
+        print('running post_run_script: %s\n' % post_run_script)
         subprocess.call(post_run_script)
 
-    print 'done.\n'
+    print('done.\n')
 
     if remote_starter is not None:
         remote_starter.test_running = False
@@ -175,13 +174,13 @@ def rerun_results(project_name, cmd_opts, results_dir):
     output_dir = '%s/%s/results/%s/' % (cmd_opts.projects_dir, project_name, results_dir)
     saved_config = '%s/config.cfg' % output_dir
     run_time, rampup, results_ts_interval, console_logging, progress_bar, results_database, post_run_script, xml_report, user_group_configs = configure(project_name, cmd_opts, config_file=saved_config)
-    print '\n\nanalyzing results...\n'
+    print('\n\nanalyzing results...\n')
     results.output_results(output_dir, 'results.csv', run_time, rampup, results_ts_interval, user_group_configs,
                            xml_report)
-    print 'created: %sresults.html\n' % output_dir
+    print('created: %sresults.html\n' % output_dir)
     if xml_report:
-        print 'created: %sresults.jtl' % output_dir
-        print 'created: last_results.jtl\n'
+        print('created: %sresults.jtl' % output_dir)
+        print('created: last_results.jtl\n')
 
 
 def configure(project_name, cmd_opts, config_file=None):

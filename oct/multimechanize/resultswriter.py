@@ -8,8 +8,7 @@
 
 
 import os
-import sys
-import Queue
+from six.moves import queue as Queue
 import threading
 import time
 import sys
@@ -26,7 +25,7 @@ class ResultsWriter(threading.Thread):
         self.error_count = 0
 
         try:
-            os.makedirs(self.output_dir, 0755)
+            os.makedirs(self.output_dir, 0o755)
         except OSError:
             sys.stderr.write('ERROR: Can not create output directory\n')
             sys.exit(1)
@@ -48,8 +47,8 @@ class ResultsWriter(threading.Thread):
                                                           scriptrun_time, error, repr(custom_timers).replace(',', '--')))
                     f.flush()
                     if self.console_logging:
-                        print '%i| %.3f| %i| %s| %.3f| %s| %s' % (self.trans_count, elapsed, epoch,
+                        print(('%i| %.3f| %i| %s| %.3f| %s| %s' % (self.trans_count, elapsed, epoch,
                                                                   self.user_group_name, scriptrun_time,
-                                                                  error, repr(custom_timers).replace(',', '--'))
+                                                                  error, repr(custom_timers).replace(',', '--'))))
                 except Queue.Empty:
                     time.sleep(.05)

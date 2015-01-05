@@ -19,7 +19,7 @@ try:
     from sqlalchemy import Column, Integer, String, Float, DateTime
     from sqlalchemy import ForeignKey, UniqueConstraint
 except ImportError:
-    print "(optional: please install sqlalchemy to enable db logging)"
+    print("(optional: please install sqlalchemy to enable db logging)")
 
 
 Base = declarative_base()

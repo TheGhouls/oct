@@ -9,9 +9,9 @@
 
 import time
 from collections import defaultdict
-import graph
-import reportwriter
-import reportwriterxml
+from . import graph
+from . import reportwriter
+from . import reportwriterxml
 
 
 def output_results(results_dir, results_file, run_time, rampup, ts_interval, user_group_configs=None,
@@ -20,12 +20,12 @@ def output_results(results_dir, results_file, run_time, rampup, ts_interval, use
 
     report = reportwriter.Report(results_dir, parent)
 
-    print 'transactions: %i' % results.total_transactions
-    print 'errors: %i' % results.total_errors
-    print ''
-    print 'test start: %s' % results.start_datetime
-    print 'test finish: %s' % results.finish_datetime
-    print ''
+    print('transactions: %i' % results.total_transactions)
+    print('errors: %i' % results.total_errors)
+    print('')
+    print('test start: %s' % results.start_datetime)
+    print('test finish: %s' % results.finish_datetime)
+    print('')
 
     # write the results in XML
     if xml_reports:
@@ -248,7 +248,7 @@ class Results(object):
         self.finish_datetime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(self.epoch_finish))
 
     def __parse_file(self):
-        f = open(self.results_file_name, 'rb')
+        f = open(self.results_file_name, 'r')
         resp_stats_list = []
         for line in f:
             fields = line.strip().split('|')
@@ -307,7 +307,7 @@ def split_series(points, interval):
     vals = defaultdict(list)
     for key, value in points:
         vals[(key - offset) // interval].append(value)
-    series = [vals[i] for i in xrange(maxval + 1)]
+    series = [vals[i] for i in range(maxval + 1)]
     return series
 
 

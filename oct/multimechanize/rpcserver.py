@@ -7,17 +7,16 @@
 #
 
 
-import SimpleXMLRPCServer
+from six.moves import xmlrpc_server as SimpleXMLRPCServer, thread
 import socket
-import thread
 
 
 def launch_rpc_server(bind_addr, port, project_name, run_callback):
     server = SimpleXMLRPCServer.SimpleXMLRPCServer((bind_addr, port), logRequests=False)
     server.register_instance(RemoteControl(project_name, run_callback))
     server.register_introspection_functions()
-    print '\nMulti-Mechanize: %s listening on port %i' % (bind_addr, port)
-    print 'waiting for xml-rpc commands...\n'
+    print('\nMulti-Mechanize: %s listening on port %i' % (bind_addr, port))
+    print('waiting for xml-rpc commands...\n')
     try:
         server.serve_forever()
     except KeyboardInterrupt:

@@ -8,5 +8,4 @@ app = Celery('utilities',
              include=['oct', 'oct.utilities', 'oct.utilities.run'])
 
 if __name__ == '__main__':
-    print "tata"
     app.start()
