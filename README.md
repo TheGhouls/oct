@@ -9,9 +9,10 @@ oct
 
 [OCT on pypi](https://pypi.python.org/pypi/oct)
 
-Python Version|
---------------
-Python >= 2.7.x|
+Python Version | Tested |
+-------------- | -------|
+Python >= 2.7.x|Tested|
+Python >= 3.4|Expertimental|
 
 Description
 -----------
