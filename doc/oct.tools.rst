@@ -7,9 +7,6 @@ oct.tools contain two functions. One who can be called directly in the shell
 
     octtools-user-generator
 
-.. code-block:: python
-
-    email_generator_func
 
 How to
 ------
@@ -47,10 +44,10 @@ Exemple
 
 This command line will generate 25000 email/password with a lenght of 6 in "userfile.csv"
 
-email_generator_func()
-----------------------
+email_generator_func
+--------------------
 
-Is a function with multiple agruments some have a default value
+Is a function with multiple arguments, some have a default value
 
 
 .. code-block:: python
@@ -58,10 +55,10 @@ Is a function with multiple agruments some have a default value
     csvfile
     what = Define what you want to generate u = user, e = email.
     number = Define how many items you want to generate
-    size = Define the size of each items
+    size = Define the size of each item
     chars = Define with 'what' you want to generate you item
 
-Default value of each options
+Default value of each option
 
 
 .. code-block:: python
@@ -76,7 +73,7 @@ Exemple
 
     email_generator_func("csvfile.csv", "u", 15000, 7):
 
-This command line will generate 15000 user/password with a lenght of 7 in "csvfile.csv"
+This command line will generate 15000 user/password with a length of 7 in `csvfile.csv`
 
 
 oct.tools.email_generator module
