@@ -14,10 +14,10 @@ setup(
     packages=['oct', 'oct.core', 'oct.multimechanize', 'oct.testing',
               'oct.multimechanize.utilities', 'oct.utilities', 'oct.tools'],
     package_data={'oct.utilities': ['templates/css/*']},
-    description='A library based on multi-mechanize for performances testing',
+    description="A library based on multi-mechanize for performances testing, using custom browser for writing tests",
     url='https://github.com/karec/oct',
     download_url='https://github.com/karec/oct/archive/master.zip',
-    keywords=['testing', 'multi-mechanize', 'perfs', 'webscrapper', 'browser', 'web', 'performances'],
+    keywords=['testing', 'multi-mechanize', 'perfs', 'webscrapper', 'browser', 'web', 'performances', 'lxml'],
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Environment :: Console',
