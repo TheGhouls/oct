@@ -68,7 +68,7 @@
 ==============
 
 * Global code cleaning
-* improve python support
+* improve python3 support
 * update setup long_description
 * update documentation
 * starting unittest
