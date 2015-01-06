@@ -68,7 +68,7 @@ class ScriptLoader(object):
         :returns: Loaded script module-
         :raise: ImportError, when script module cannot be loaded.
         """
-        module_name    = inspect.getmodulename(path).replace("-", "_")
+        module_name = inspect.getmodulename(path).replace("-", "_")
         module_dirname = os.path.dirname(path)
         if not module_dirname:
             module_dirname = os.curdir
@@ -84,8 +84,7 @@ class ScriptLoader(object):
             # module.__name__ = module_name
             # module.__file__ = path
         except ImportError as e:
-            print("IMPORT-ERROR: %s (file=%s, curdir=%s)" % \
-                  (module_name, path, os.getcwd()))
+            print("IMPORT-ERROR: %s (file=%s, curdir=%s)" % (module_name, path, os.getcwd()))
             sys.stderr.write("Cannot import: %s\n" % e)
             for index, searchpath in enumerate(sys.path):
                 print("  %2s.  %s" % (index, searchpath))

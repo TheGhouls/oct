@@ -65,8 +65,7 @@ def create_project(
         script_name=SCRIPT_NAME,
         scripts_dir=SCRIPTS_DIR,
         config_content=CONFIG_CONTENT,
-        script_content=SCRIPT_CONTENT,
-    ):
+        script_content=SCRIPT_CONTENT):
     if os.path.exists(project_name):
         sys.stderr.write('\nERROR: project already exists: %s\n\n' % project_name)
         sys.exit(1)

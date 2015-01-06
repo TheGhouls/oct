@@ -23,6 +23,7 @@ class ResultsWriter(threading.Thread):
         self.trans_count = 0
         self.timer_count = 0
         self.error_count = 0
+        self.user_group_name = 'User group'
 
         try:
             os.makedirs(self.output_dir, 0o755)
@@ -44,11 +45,12 @@ class ResultsWriter(threading.Thread):
                         self.error_count += 1
                     f.write('%i|%.3f|%i|%s|%f|%s|%s\n' % (self.trans_count, elapsed, epoch,
                                                           self.user_group_name,
-                                                          scriptrun_time, error, repr(custom_timers).replace(',', '--')))
+                                                          scriptrun_time, error,
+                                                          repr(custom_timers).replace(',', '--')))
                     f.flush()
                     if self.console_logging:
                         print(('%i| %.3f| %i| %s| %.3f| %s| %s' % (self.trans_count, elapsed, epoch,
-                                                                  self.user_group_name, scriptrun_time,
-                                                                  error, repr(custom_timers).replace(',', '--'))))
+                                                                   self.user_group_name, scriptrun_time,
+                                                                   error, repr(custom_timers).replace(',', '--'))))
                 except Queue.Empty:
                     time.sleep(.05)

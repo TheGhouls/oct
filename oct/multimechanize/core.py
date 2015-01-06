@@ -85,7 +85,7 @@ class Agent(threading.Thread):
         self.run_time = run_time
         self.user_group_name = user_group_name
         self.script_module = script_module
-        self.script_file   = script_file
+        self.script_file = script_file
 
         # choose most accurate timer to use (time.clock has finer granularity
         # than time.time on windows, but shouldn't be used on other systems).

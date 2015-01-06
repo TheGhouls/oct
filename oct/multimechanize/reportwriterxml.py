@@ -33,8 +33,8 @@ def write_jmeter_output(mm_data, output_path):
         transaction_root.set('sc', '1')  # sample count
 
         if test_transaction.error:
-            transaction_root.set('ec', '1') # was an error
-            transaction_root.set('s', 'false') # was an error
+            transaction_root.set('ec', '1')  # was an error
+            transaction_root.set('s', 'false')  # was an error
             # errors don't have custom_timers
             continue
         else:

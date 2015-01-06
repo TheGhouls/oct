@@ -1,6 +1,7 @@
 # This file is fit for containing basic content check
 import lxml.html as lh
 
+
 def must_contain(resp, pattern):
     """
     Test if the pattern is in content

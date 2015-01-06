@@ -9,14 +9,6 @@ def email_generator():
     """
     Command line tool for generating csv file containing user / password pairs
 
-    :param xmlfile: name of XML file provided
-    :type xml file: xml formated text file
-    :param number_of_email: Number of random generated email
-    :type: int
-    :param size: number of char generated
-    :type: int
-    :param chars: lower the generated char
-    :type: string
     :return: None
     """
     parser = argparse.ArgumentParser(description="Check if user or email created")
@@ -51,8 +43,7 @@ def email_generator():
 
 def email_generator_func(csvfile, what, number_of_email=15, size=6, chars=string.ascii_lowercase):
     """
-    :param xmlfile: name of XML file provided
-    :type xml file: xml formated text file
+
     :param number_of_email: Number of random generated email
     :type: int
     :param size: number of char generated
@@ -61,8 +52,6 @@ def email_generator_func(csvfile, what, number_of_email=15, size=6, chars=string
     :type: string
     :return: None
     """
-
-
     i = 0
     with open(csvfile, 'a') as opencsv:
         while i is not number_of_email:

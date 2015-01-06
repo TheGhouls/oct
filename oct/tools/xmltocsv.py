@@ -3,6 +3,7 @@ import argparse
 from xml.dom.minidom import parse
 import csv
 
+
 def sitemap_to_csv():
     """
     Take as options: Xml file, CSV File

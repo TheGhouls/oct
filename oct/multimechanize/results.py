@@ -127,7 +127,8 @@ def output_results(results_dir, results_file, run_time, rampup, ts_interval, use
 
     report.write_line('<h3>Graphs</h3>')
     report.write_line('<h4>Response Time: %s sec time-series</h4>' % ts_interval)
-    report.write_line('<figure><embed ype="image/svg+xml" src="All_Transactions_response_times_intervals.svg" /></figure>')
+    report.write_line('<figure><embed ype="image/svg+xml" src="All_Transactions_response_times_intervals.svg" />'
+                      '</figure>')
     report.write_line('<h4>Response Time: raw data (all points)</h4>')
     report.write_line('<figure><embed ype="image/svg+xml" src="All_Transactions_response_times.svg" /></figure>')
     report.write_line('<h4>Throughput: 5 sec time-series</h4>')
@@ -221,7 +222,8 @@ def output_results(results_dir, results_file, run_time, rampup, ts_interval, use
 
         report.write_line('<h3>Graphs</h3>')
         report.write_line('<h4>Response Time: %s sec time-series</h4>' % ts_interval)
-        report.write_line('<figure><embed ype="image/svg+xml" src="%s_response_times_intervals.svg" /></figure>' % timer_name)
+        report.write_line('<figure><embed ype="image/svg+xml" src="%s_response_times_intervals.svg" />'
+                          '</figure>' % timer_name)
         report.write_line('<h4>Response Time: raw data (all points)</h4>')
         report.write_line('<figure><embed ype="image/svg+xml" src="%s_response_times.svg" /></figure>' % timer_name)
         report.write_line('<h4>Throughput: %s sec time-series</h4>' % ts_interval)

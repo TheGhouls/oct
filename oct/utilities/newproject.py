@@ -38,7 +38,7 @@ CONFIG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../')
 
 class Transaction(GenericTransaction):
     def __init__(self):
-        GenericTransaction.__init__(self, True, CONFIG_PATH)
+        GenericTransaction.__init__(self, CONFIG_PATH)
 
     def run(self):
         r = random.uniform(1, 2)
@@ -49,7 +49,7 @@ class Transaction(GenericTransaction):
 if __name__ == '__main__':
     trans = Transaction()
     trans.run()
-    print trans.custom_timers
+    print(trans.custom_timers)
 """
 
 CONFIG_CONTENT = """
@@ -99,7 +99,7 @@ def create_project(
         os.makedirs(os.path.join(project_name, template_dir, 'img'))
         shutil.copy(os.path.join(BASE_DIR, 'templates', 'css', 'style.css'),
                     os.path.join(project_name, template_dir, 'css'))
-    except OSError as e:
+    except OSError:
         sys.stderr.write('\nERROR: can not create directory for %r\n\n' % project_name)
         sys.exit(1)
     with open(os.path.join(project_name, config_name), 'w') as f:

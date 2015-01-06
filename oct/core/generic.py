@@ -27,7 +27,7 @@ class GenericTransaction(object):
     :param timeout: the timeout in second for static files requests
     """
 
-    def __init__(self, handle_robots, pathtoini, **kwargs):
+    def __init__(self, pathtoini, **kwargs):
 
         self.config = configparser.ConfigParser()
         self.config.read(os.path.join(pathtoini, 'config.cfg'))
@@ -88,7 +88,7 @@ class GenericTransaction(object):
                     url = "http://".join(url)
                 requests.get(url, allow_redirects=False, timeout=self.timeout)
             except Exception as e:
-                print(("Unexpected error: {0}".format(e)))
+                print("Unexpected error: {0}".format(e))
             self.q.task_done()
 
     def get_statics(self, response, timer_name, include=None):
@@ -170,9 +170,9 @@ class GenericTransaction(object):
         start_time = time.time()
         try:
             resp = self.br.open_url(self.base_url + url)
-        except urllib.error.HTTPError as err:
+        except urllib.error.HTTPError:
             raise OctGenericException
-        except urllib.error.URLError as err:
+        except urllib.error.URLError:
             raise OctGenericException
 
         test_func(*args)

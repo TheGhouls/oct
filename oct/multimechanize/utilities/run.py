@@ -20,12 +20,12 @@ from datetime import datetime
 
 try:
     # installed
-    import multimechanize
+    import oct.multimechanize
 except ImportError:
     # from dev/source
     this_dir = os.path.abspath(os.path.dirname(__file__))
     sys.path.append(os.path.join(this_dir, '../../'))
-    import multimechanize
+    import oct.multimechanize
 
 import oct.multimechanize.core as core
 import oct.multimechanize.results as results
@@ -61,8 +61,8 @@ def main():
     if cmd_opts.results_dir:  # don't run a test, just re-process results
         rerun_results(project_name, cmd_opts, cmd_opts.results_dir)
     elif cmd_opts.port:
-        import multimechanize.rpcserver
-        multimechanize.rpcserver.launch_rpc_server(cmd_opts.bind_addr, cmd_opts.port, project_name, run_test)
+        import oct.multimechanize.rpcserver
+        oct.multimechanize.rpcserver.launch_rpc_server(cmd_opts.bind_addr, cmd_opts.port, project_name, run_test)
     else:
         run_test(project_name, cmd_opts)
     return
@@ -113,7 +113,10 @@ def run_test(project_name, cmd_opts, remote_starter=None):
             while elapsed < (run_time + 1):
                 p.update_time(elapsed)
                 if sys.platform.startswith('win'):
-                    print('{0}   transactions: {1}  timers: {2}  errors: {3}\r'.format(p, rw.trans_count, rw.timer_count, rw.error_count), end=' ')
+                    print('{0}   transactions: {1}  timers: {2}  errors: {3}\r'.format(p,
+                                                                                       rw.trans_count,
+                                                                                       rw.timer_count,
+                                                                                       rw.error_count), end=' ')
                 else:
                     print('%s   transactions: %i  timers: %i  errors: %i' % (p, rw.trans_count, rw.timer_count,
                                                                              rw.error_count))
@@ -152,10 +155,11 @@ def run_test(project_name, cmd_opts, remote_starter=None):
 
     if results_database is not None:
         print('loading results into database: %s\n' % results_database)
-        import multimechanize.resultsloader
-        multimechanize.resultsloader.load_results_database(project_name,
-                                                           run_localtime, output_dir, results_database,
-                                                           run_time, rampup, results_ts_interval, user_group_configs)
+        import oct.multimechanize.resultsloader
+        oct.multimechanize.resultsloader.load_results_database(project_name,
+                                                               run_localtime, output_dir, results_database,
+                                                               run_time, rampup,
+                                                               results_ts_interval, user_group_configs)
 
     if post_run_script is not None:
         print('running post_run_script: %s\n' % post_run_script)
