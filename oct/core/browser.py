@@ -169,6 +169,7 @@ class Browser(object):
             response = self.session.get(url, **kwargs)
             self._url = url
         response = self._parse_html(response)
+        response.connection.close()
         return response
 
     def back(self):

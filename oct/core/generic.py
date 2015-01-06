@@ -1,8 +1,3 @@
-
-import csv
-import os
-from oct.core.browser import Browser
-import requests
 from threading import Thread
 from lxml import etree
 from io import BytesIO
@@ -10,8 +5,12 @@ from .exceptions import OctGenericException
 import time
 from six.moves import urllib, configparser
 from six.moves.queue import Queue
+from oct.core.browser import Browser
+import requests
 import six
 import random
+import csv
+import os
 
 
 class GenericTransaction(object):

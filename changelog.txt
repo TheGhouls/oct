@@ -71,4 +71,5 @@
 * improve python support
 * update setup long_description
 * update documentation
-
+* starting unittest
+* fix warning for browser, manually close connection for after a request
