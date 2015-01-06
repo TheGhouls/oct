@@ -1,23 +1,23 @@
 oct.utilities package
 =====================
 
-This module provide you basics shell commands to easily use the OCT module.
+This module provides you basics shell commands to easily use the OCT module.
 
 newproject module
 -----------------
 
-This module provide you a command to create a new project directory. Once the library is installed you can use :
+This module provide you a command to create a new project. Once the library is installed you can use :
 
-.. code-block:: python
+.. code-block:: bash
 
     oct-newproject <project-name>
 
 
-It will create a new directory named `project-name` with basic stuff inside.
+It will create a new directory named `project-name`.
 
 The project structure must look like this :
 
-.. code-block:: python
+.. code-block:: bash
 
     .
     ├── config.cfg
@@ -36,13 +36,13 @@ With this basic project structure you can start writing your scripts, customize 
 
 This project can be run with the command
 
-.. code-block:: python
+.. code-block:: bash
 
     multimech-run <project>
 
-But for testing your scripts you can simply run them by using your standard python interpreter
+But for test your scripts you can simply run them by using your standard python interpreter
 
-The file `config.cfg` contain all configuration variable for your project. By default it's look like this
+The file `config.cfg` contain all configuration variables for your project. By default it's look like this
 
 .. code-block:: cfg
 
@@ -68,7 +68,7 @@ The file `config.cfg` contain all configuration variable for your project. By de
 
 For explanations :
 
-This file give you two virtual user groups, each group has 3 user, and the user script is the `v_user.py` file.
+This file give you two virtual user groups, each group has 3 users, and the user script is the `v_user.py` file.
 
 To see all configuration variables explained see the :doc:`config` section
 
@@ -114,6 +114,10 @@ celery module
 -------------
 
 The configuration for running celery
+
+TODO
+
+NOT IMPLEMENTED YET
 
 .. automodule:: oct.utilities.celery
     :members:

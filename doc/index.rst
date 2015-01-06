@@ -27,6 +27,8 @@ The OCT module still needs many features at this point, here somme examples :
 Basics module information
 =========================
 
+.. image:: img/results.png
+
 OCT is based on multi-mechanize, a library for testing website. But this module is no longer under active development.
 
 So instead of a fork, for building OCT module we include multi-mechanize as a module, and we update it as needed. For the moment
