@@ -5,7 +5,6 @@
 #
 #  This file is part of Multi-Mechanize | Performance Test Framework
 #
-import sys
 import pygal
 
 
