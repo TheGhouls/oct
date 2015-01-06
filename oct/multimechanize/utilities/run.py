@@ -7,7 +7,7 @@
 #  This file is part of Multi-Mechanize | Performance Test Framework
 #
 from __future__ import print_function
-from six.moves import configparser as ConfigParser
+from six.moves import configparser
 import multiprocessing
 import optparse
 import os
@@ -31,7 +31,7 @@ import oct.multimechanize.core as core
 import oct.multimechanize.results as results
 import oct.multimechanize.resultswriter as resultswriter
 import oct.multimechanize.progressbar as progressbar
-from oct.multimechanize import __version__ as VERSION
+from oct.multimechanize import __version__ as version
 
 
 def main():
@@ -40,7 +40,7 @@ def main():
     """
 
     usage = 'Usage: %prog <project name> [options]'
-    parser = optparse.OptionParser(usage=usage, version=VERSION)
+    parser = optparse.OptionParser(usage=usage, version=version)
     parser.add_option('-p', '--port', dest='port', type='int', help='rpc listener port')
     parser.add_option('-r', '--results', dest='results_dir', help='results directory to reprocess')
     parser.add_option('-b', '--bind-addr', dest='bind_addr', help='rpc bind address', default='localhost')
@@ -73,7 +73,9 @@ def run_test(project_name, cmd_opts, remote_starter=None):
         remote_starter.test_running = True
         remote_starter.output_dir = None
 
-    run_time, rampup, results_ts_interval, console_logging, progress_bar, results_database, post_run_script, xml_report, user_group_configs = configure(project_name, cmd_opts)
+    (run_time, rampup, results_ts_interval, console_logging,
+     progress_bar, results_database, post_run_script, xml_report,
+     user_group_configs) = configure(project_name, cmd_opts)
 
     run_localtime = time.localtime()
     milisec = datetime.now().microsecond
@@ -177,7 +179,8 @@ def run_test(project_name, cmd_opts, remote_starter=None):
 def rerun_results(project_name, cmd_opts, results_dir):
     output_dir = '%s/%s/results/%s/' % (cmd_opts.projects_dir, project_name, results_dir)
     saved_config = '%s/config.cfg' % output_dir
-    run_time, rampup, results_ts_interval, console_logging, progress_bar, results_database, post_run_script, xml_report, user_group_configs = configure(project_name, cmd_opts, config_file=saved_config)
+    (run_time, rampup, results_ts_interval, console_logging, progress_bar, results_database,
+     post_run_script, xml_report, user_group_configs) = configure(project_name, cmd_opts, config_file=saved_config)
     print('\n\nanalyzing results...\n')
     results.output_results(output_dir, 'results.csv', run_time, rampup, results_ts_interval, user_group_configs,
                            xml_report)
@@ -188,8 +191,12 @@ def rerun_results(project_name, cmd_opts, results_dir):
 
 
 def configure(project_name, cmd_opts, config_file=None):
+    """
+
+    :rtype : object
+    """
     user_group_configs = []
-    config = ConfigParser.ConfigParser()
+    config = configparser.ConfigParser()
     if config_file is None:
         config_file = '%s/%s/config.cfg' % (cmd_opts.projects_dir, project_name)
     config.read(config_file)
@@ -200,27 +207,27 @@ def configure(project_name, cmd_opts, config_file=None):
             results_ts_interval = config.getint(section, 'results_ts_interval')
             try:
                 console_logging = config.getboolean(section, 'console_logging')
-            except ConfigParser.NoOptionError:
+            except configparser.NoOptionError:
                 console_logging = False
             try:
                 progress_bar = config.getboolean(section, 'progress_bar')
-            except ConfigParser.NoOptionError:
+            except configparser.NoOptionError:
                 progress_bar = True
             try:
                 results_database = config.get(section, 'results_database')
                 if results_database == 'None':
                     results_database = None
-            except ConfigParser.NoOptionError:
+            except configparser.NoOptionError:
                 results_database = None
             try:
                 post_run_script = config.get(section, 'post_run_script')
                 if post_run_script == 'None':
                     post_run_script = None
-            except ConfigParser.NoOptionError:
+            except configparser.NoOptionError:
                 post_run_script = None
             try:
                 xml_report = config.getboolean(section, 'xml_report')
-            except ConfigParser.NoOptionError:
+            except configparser.NoOptionError:
                 xml_report = False
         else:
             threads = config.getint(section, 'threads')
@@ -229,7 +236,8 @@ def configure(project_name, cmd_opts, config_file=None):
             ug_config = UserGroupConfig(threads, user_group_name, script)
             user_group_configs.append(ug_config)
 
-    return (run_time, rampup, results_ts_interval, console_logging, progress_bar, results_database, post_run_script, xml_report, user_group_configs)
+    return (run_time, rampup, results_ts_interval, console_logging,
+            progress_bar, results_database, post_run_script, xml_report, user_group_configs)
 
 
 class UserGroupConfig(object):

@@ -7,7 +7,7 @@
 #
 
 
-from xml.etree import ElementTree as ET
+from xml.etree import ElementTree as Etree
 
 
 def write_jmeter_output(mm_data, output_path):
@@ -18,12 +18,12 @@ def write_jmeter_output(mm_data, output_path):
     JMeter JTL file documentation:
     http://jakarta.apache.org/jmeter/usermanual/listeners.html
     """
-    root = ET.Element('testResults')
+    root = Etree.Element('testResults')
     root.set('version', "1.2")
 
     for test_transaction in mm_data:
         # each transaction might have multiple timers
-        transaction_root = ET.SubElement(root, 'sample')
+        transaction_root = Etree.SubElement(root, 'sample')
         # JMeter uses ms for time
         ms_trans_time = test_transaction.trans_time * 1000
         transaction_root.set('t', '%d' % ms_trans_time)
@@ -44,7 +44,7 @@ def write_jmeter_output(mm_data, output_path):
         # parse the custom_timers and add each as a JMeter sub-sample
         for timer_name, timer_duration in test_transaction.custom_timers.items():
             timer_duration = float(timer_duration)
-            timer_element = ET.SubElement(transaction_root, 'sample')
+            timer_element = Etree.SubElement(transaction_root, 'sample')
             ms_trans_time = timer_duration * 1000
             timer_element.set('t', '%d' % ms_trans_time)
             # subtimers don't have timestamps, so use the Transaction ts
@@ -54,6 +54,6 @@ def write_jmeter_output(mm_data, output_path):
             timer_element.set('ec', '0')
             timer_element.set('s', 'true')
 
-    tree = ET.ElementTree(root)
+    tree = Etree.ElementTree(root)
     tree.write(output_path + '/results.jtl')
     tree.write('last_results.jtl')

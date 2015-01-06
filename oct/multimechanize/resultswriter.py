@@ -8,7 +8,7 @@
 
 
 import os
-from six.moves import queue as Queue
+from six.moves import queue
 import threading
 import time
 import sys
@@ -52,5 +52,5 @@ class ResultsWriter(threading.Thread):
                         print(('%i| %.3f| %i| %s| %.3f| %s| %s' % (self.trans_count, elapsed, epoch,
                                                                    self.user_group_name, scriptrun_time,
                                                                    error, repr(custom_timers).replace(',', '--'))))
-                except Queue.Empty:
+                except queue.Empty:
                     time.sleep(.05)
