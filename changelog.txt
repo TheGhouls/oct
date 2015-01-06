@@ -63,3 +63,12 @@
 * tested basic functionality, all ok for both python 2.7 and python 3.4
 * refactor most of the documentation
 * update graph render
+
+0.3.3 to 0.3.4
+==============
+
+* Global code cleaning
+* improve python support
+* update setup long_description
+* update documentation
+
