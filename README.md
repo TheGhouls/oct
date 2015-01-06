@@ -14,7 +14,7 @@ oct
 Python Version | Tested |
 -------------- | -------|
 Python >= 2.7.x|Tested|
-Python >= 3.4|Expertimental|
+Python >= 3.4|Testing in progress|
 
 Description
 -----------
