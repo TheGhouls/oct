@@ -72,4 +72,4 @@
 * update setup long_description
 * update documentation
 * starting unittest
-* fix warning for browser, manually close connection for after a request
+* fix warning for browser, manually close connection after a request
