@@ -54,11 +54,11 @@ Roadmap
 
 Actually the project is in the alpha version, non-suitable for production, but will be under active developpement for some featurs like :
 
-* Full python3 support
-* Full celery integration for multi-processing
+* Full python3 support (testing)
+* Full celery integration for multi-processing (in progress)
 * More generic tests in core module
 * More fancy templates
-* etc...
+* Stand-alone browser
 
 Contribution
 ------------
