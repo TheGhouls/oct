@@ -123,7 +123,10 @@ class GenericTransaction(object):
         if include is None:
             include = self.statics_include
 
-        html = response.read()
+        try:
+            html = response.read()
+        except AttributeError:
+            html = response.content
         parser = etree.HTMLParser()
         tree = etree.parse(BytesIO(html), parser)
         img = [img for img in tree.xpath('//img/@src') if img.startswith(include)]
