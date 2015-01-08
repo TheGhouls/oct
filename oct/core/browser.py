@@ -15,14 +15,49 @@ class Browser(object):
     """
     def __init__(self, session=None, base_url=''):
         self._sess_bak = session
-        self.session = session or requests.Session()
         self._history = []
         self._html = None
         self._url = None
         self._back_index = False
         self._base_url = base_url
+        self._headers = {}
         self.form = None
         self.form_data = None
+        self.session = session or requests.Session()
+
+    def add_header(self, name, value):
+        """
+        Allow you to add custom header, one by one.
+        Specify existing name for update
+        Headers will be used by every request
+
+        :param name: the key of the header
+        :type name: str
+        :param value: the associated value
+        :type value: str
+        :return: None
+        """
+        self._headers[name] = value
+
+    def del_header(self, key):
+        """
+        Try to delete the 'key' of headers property
+
+        :param key: the key to delete
+        :type key: mixed
+        :return: None
+        """
+        self._headers.pop(key, None)
+
+    def set_headers(self, headers):
+        """
+        Setter for headers property
+
+        :param headers: a dict containing all headers
+        :type headers: dict
+        :return: None
+        """
+        self._headers = headers
 
     def clean_session(self):
         """

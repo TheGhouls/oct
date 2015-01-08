@@ -73,3 +73,10 @@
 * update documentation
 * starting unittest
 * fix warning for browser, manually close connection after a request
+
+0.3.4 to 0.3.5
+==============
+
+* fix bug in get statics
+* update stating and set head request instead of get
+* update browser and add headers feature. Can add header or set all headers
