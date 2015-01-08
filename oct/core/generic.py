@@ -21,9 +21,8 @@ class GenericTransaction(object):
     :type handle_robots: bool
     :param pathtoini: the path to the ini file
     :type pathtoini: str
-    :param threads: number of threads for static files
-    :type threads: int
     :param timeout: the timeout in second for static files requests
+    :type timeout: int
     """
 
     def __init__(self, pathtoini, **kwargs):
@@ -38,14 +37,7 @@ class GenericTransaction(object):
         self.custom_timers = {}
         self.timeout = kwargs.pop('timeout', 10)
         self.req = requests.Session()
-        self.statics_include = None
-        self.statics_enabled = None
         self.sleep_time = self.config.getfloat('global', 'default_sleep_time')
-
-        for i in range(kwargs.pop('threads', 5)):
-            t = Thread(target=self.multi_process_statics)
-            t.daemon = True
-            t.start()
 
     @staticmethod
     def csv_to_list(csv_file):
@@ -72,78 +64,6 @@ class GenericTransaction(object):
         """
         random_url = random.choice(csv_list)
         return random_url
-
-    def multi_process_statics(self):
-        """
-        Multi threading static getter.
-        This function will be call inside a Thread by the get_statics method
-
-        :return: None
-        """
-        while True:
-            url = self.q.get()
-            try:
-                if url.startswith('//'):
-                    url = "http://".join(url)
-                requests.get(url, allow_redirects=False, timeout=self.timeout)
-            except Exception as e:
-                print("Unexpected error: {0}".format(e))
-            self.q.task_done()
-
-    def get_statics(self, response, timer_name, include=None):
-        """
-        Get all static files for given response object. It will exclude all files in the exclude list
-
-        :param response: The response object from browser
-        :type response: MechanizeResponse
-        :param timer_name: The timer name to increment
-        :type timer_name: str
-        :param include: The list of statics to exclude
-        :type include: tuple
-        :return: None
-        """
-        if self.statics_enabled is None:
-            try:
-                self.statics_enabled = self.config.getboolean('global', 'statics_enabled')
-            except configparser.NoOptionError:
-                print("No statics_enabled option in config file, set value to False (default value)")
-                self.statics_enabled = False
-        if not self.statics_enabled:
-            return None
-
-        if self.statics_include is None:
-            try:
-                items = self.config.items('statics')
-                self.statics_include = tuple
-                for key, value in enumerate(items):
-                    self.statics_include += value
-            except configparser.NoSectionError:
-                self.statics_include = ('', )
-
-        if include is None:
-            include = self.statics_include
-
-        try:
-            html = response.read()
-        except AttributeError:
-            html = response.content
-        parser = etree.HTMLParser()
-        tree = etree.parse(BytesIO(html), parser)
-        img = [img for img in tree.xpath('//img/@src') if img.startswith(include)]
-        scripts = [s for s in tree.xpath('//script/@src') if s.startswith(include)]
-        stylesheets = [s for s in tree.xpath('//link/@href') if s.startswith(include)]
-        statics = img + scripts + stylesheets
-        for key, static in enumerate(statics):
-            if static[0] == '/' and static[1] != '/':
-                statics[key] = self.base_url + static
-            if not static.startswith('/') and not static.startswith('http'):
-                statics[key] = self.base_url + "/" + static
-        start_time = time.time()
-        for static in statics:
-            self.q.put(static)
-        self.q.join()
-        self.custom_timers[timer_name] = time.time() - start_time
-        pass
 
     def run_generic_test(self, timer_name, url, test_func, *args):
         """

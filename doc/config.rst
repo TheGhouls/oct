@@ -18,7 +18,6 @@ The default configuration file look like this
     console_logging = off
     base_url = http://localhost
     default_sleep_time = 2
-    statics_enabled = 1
 
 
     [user_group-1]
@@ -97,15 +96,6 @@ Sleep time
 
 The default sleep time in second, used will calling the `user_sleep` method
 
-Statics
-~~~~~~~
-
-.. code-block:: cfg
-
-    statics_enabled = 1
-
-Define if the tests scripts must load the statics files or not
-
 User group sections
 -------------------
 
@@ -119,26 +109,6 @@ Threads
     threads = 3
 
 Define the number of users simulated in this group
-
-Statics section
----------------
-
-When running testing, you don't always want loads all static files, some are on CDN, other on third party, etc...
-Well, we let you choose each static files domain you want to include within a statics section. If not statics section is provided, then
-the tests scripts will include all of them, this is the default settings.
-
-If you want to add domain for a white list of domain to include, just set a configuration section like this :
-
-.. code-block:: cfg
-
-    [statics]
-    include1=http://my_serveur.net
-    include2=http://testing.my_serveur.net
-
-
-With this configuration, all static files with an url starting with one of those address will be load, and only if they start with
-one of those. All others statics files will be ignored
-
 
 Custom configuration variables
 ------------------------------
@@ -159,7 +129,6 @@ Let's take a basic configuration file for example :
     console_logging = off
     base_url = http://localhost
     default_sleep_time = 2
-    statics_enabled = 1
 
     [user_group-1]
     threads = 3

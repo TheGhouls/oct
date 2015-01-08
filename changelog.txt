@@ -77,6 +77,6 @@
 0.3.4 to 0.3.5
 ==============
 
-* fix bug in get statics
-* update stating and set head request instead of get
-* update browser and add headers feature. Can add header or set all headers
+* update browser and add headers feature. Can add or delete a header or set all headers
+* abandon get_statics method from generic transaction, not representative of real case
+* get_statics -> use csv_file and load each url as user will be more performant...

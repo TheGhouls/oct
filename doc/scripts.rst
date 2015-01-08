@@ -241,7 +241,6 @@ Okay so let's write a simple script, just for accessing the index page of our we
             test_time = time.time()
 
             resp = self.open_url('/')
-            self.get_statics(resp, 'index_statics')
 
             self.custom_timers['test_time'] = time.time() - test_time
 
@@ -251,8 +250,8 @@ Okay so let's write a simple script, just for accessing the index page of our we
         trans.run()
         print trans.custom_timers
 
-So that's it, we just open the index url of the website (based on the base_url configuration variable), get the response
-object returned by the `open_url` method and pass it to the `get_statics` method.
+So that's it, we just open the index url of the website (based on the base_url configuration variable)and get the response
+object returned by the `open_url` method, then set a `test_time' timer.
 
 So what does this test do ? well it accesses to the index page and retrieve all css, javascript and img files in it. Simple as this
 

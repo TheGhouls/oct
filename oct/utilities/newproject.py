@@ -62,7 +62,6 @@ console_logging = off
 xml_report = off
 base_url = http://localhost
 default_sleep_time = 2
-statics_enabled = 1
 
 
 [user_group-1]
