@@ -183,7 +183,7 @@ def run_test(project_name, cmd_opts):
                     r = csv.reader(f, delimiter='|')
                     rows = [row for row in r]
                     row_count = len(rows)
-                    errors = sum(1 for row in rows if row[5] != '')
+                    errors = sum(1 for row in rows if row[4] != '')
                     print('time : {0}/{1} seconds transactions: {2} errors : {3}'.format(
                         st, config.run_time, row_count, errors), end='\r')
                 time.sleep(1)

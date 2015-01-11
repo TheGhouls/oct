@@ -43,14 +43,14 @@ class ResultsWriter(threading.Thread):
                         error = '\\n'.join(error.splitlines())
 
                         self.error_count += 1
-                    f.write('%i|%.3f|%i|%s|%f|%s|%s\n' % (self.trans_count, elapsed, epoch,
-                                                          self.user_group_name,
-                                                          scriptrun_time, error,
-                                                          repr(custom_timers).replace(',', '--')))
+                    f.write('%.3f|%i|%s|%f|%s|%s\n' % (elapsed, epoch,
+                                                       self.user_group_name,
+                                                       scriptrun_time, error,
+                                                       repr(custom_timers).replace(',', '--')))
                     f.flush()
                     if self.console_logging:
-                        print(('%i| %.3f| %i| %s| %.3f| %s| %s' % (self.trans_count, elapsed, epoch,
-                                                                   self.user_group_name, scriptrun_time,
-                                                                   error, repr(custom_timers).replace(',', '--'))))
+                        print(('%.3f| %i| %s| %.3f| %s| %s' % (elapsed, epoch,
+                                                               self.user_group_name, scriptrun_time,
+                                                               error, repr(custom_timers).replace(',', '--'))))
                 except queue.Empty:
                     time.sleep(.05)

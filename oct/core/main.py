@@ -1,4 +1,4 @@
-from celery import Task, Celery
+from celery import Celery
 from celery.utils.log import get_task_logger
 from oct.multimechanize.core import load_script
 import threading
@@ -10,7 +10,6 @@ import logging
 app = Celery('oct', broker=None, backend=None)
 
 logger = get_task_logger(__name__)
-logger.trans_count = 0
 
 
 class Agent(threading.Thread):
@@ -78,14 +77,14 @@ class Agent(threading.Thread):
                 # Convert line breaks to literal \n so the CSV will be readable.
                 error = '\\n'.join(error.splitlines())
                 self.error_count += 1
-            logger.info('%d|%.3f|%i|%s|%f|%s|%s' % (logger.trans_count, elapsed, epoch,
-                                                    self.user_group_name,
-                                                    scriptrun_time, error,
-                                                    repr(trans.custom_timers).replace(',', '--')))
+            logger.info('%.3f|%i|%s|%f|%s|%s' % (elapsed, epoch,
+                                                 self.user_group_name,
+                                                 scriptrun_time, error,
+                                                 repr(trans.custom_timers).replace(',', '--')))
             if self.console_logging:
-                print(('%i| %.3f| %i| %s| %.3f| %s| %s' % (logger.trans_count, elapsed, epoch,
-                                                           self.user_group_name, scriptrun_time,
-                                                           error, repr(trans.custom_timers).replace(',', '--'))))
+                print(('%.3f| %i| %s| %.3f| %s| %s' % (elapsed, epoch,
+                                                       self.user_group_name, scriptrun_time,
+                                                       error, repr(trans.custom_timers).replace(',', '--'))))
 
 
 class UserGroup(object):
@@ -101,7 +100,7 @@ class UserGroup(object):
     :param group_name: the name of the virtual user group
     :param queue: the queue for child threads
     """
-    def __init__(self, *args, **kwargs):
+    def __init__(self, **kwargs):
         self.start_time = time.time()
         self.process_num = kwargs.pop('process_num', None)
         self.thread_num = kwargs.pop('thread_num', None)

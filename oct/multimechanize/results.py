@@ -254,13 +254,11 @@ class Results(object):
         resp_stats_list = []
         for line in f:
             fields = line.strip().split('|')
-
-            request_num = int(fields[0])
-            elapsed_time = float(fields[1])
-            epoch_secs = int(fields[2])
-            user_group_name = fields[3]
-            trans_time = float(fields[4])
-            error = fields[5]
+            elapsed_time = float(fields[0])
+            epoch_secs = int(fields[1])
+            user_group_name = fields[2]
+            trans_time = float(fields[3])
+            error = fields[4]
 
             self.uniq_user_group_names.add(user_group_name)
 
@@ -279,7 +277,7 @@ class Results(object):
             for timer, val in zip(timers, vals):
                 custom_timers[timer] = val
 
-            r = ResponseStats(request_num, elapsed_time, epoch_secs, user_group_name, trans_time, error, custom_timers)
+            r = ResponseStats(elapsed_time, epoch_secs, user_group_name, trans_time, error, custom_timers)
 
             if elapsed_time < self.run_time:
                 resp_stats_list.append(r)
@@ -293,8 +291,7 @@ class Results(object):
 
 
 class ResponseStats(object):
-    def __init__(self, request_num, elapsed_time, epoch_secs, user_group_name, trans_time, error, custom_timers):
-        self.request_num = request_num
+    def __init__(self, elapsed_time, epoch_secs, user_group_name, trans_time, error, custom_timers):
         self.elapsed_time = elapsed_time
         self.epoch_secs = epoch_secs
         self.user_group_name = user_group_name

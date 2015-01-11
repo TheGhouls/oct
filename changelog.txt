@@ -80,3 +80,12 @@
 * update browser and add headers feature. Can add or delete a header or set all headers
 * abandon get_statics method from generic transaction, not representative of real case
 * get_statics -> use csv_file and load each url as user will be more performant...
+* fix a bug inside check_status_response function
+* update command oct-run
+* update newproject for adding celery configuration
+* added full celery support for running test through the oct-run command
+* keep multimech-run command
+* results.csv file now updated via logger object with oct-run
+* transaction number no longer displayed in results
+* oct-run will now clean all tasks running if KeyBoardInterrupt exception occur
+
