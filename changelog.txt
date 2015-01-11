@@ -88,4 +88,5 @@
 * results.csv file now updated via logger object with oct-run
 * transaction number no longer displayed in results
 * oct-run will now clean all tasks running if KeyBoardInterrupt exception occur
+* update browser for headers support
 

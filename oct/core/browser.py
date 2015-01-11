@@ -198,10 +198,10 @@ class Browser(object):
         if not back:
             self._history.append(self._url)
         if data:
-            response = self.session.post(url, data, **kwargs)
+            response = self.session.post(url, data, headers=self._headers, **kwargs)
             self._url = url
         else:
-            response = self.session.get(url, **kwargs)
+            response = self.session.get(url, headers=self._headers, **kwargs)
             self._url = url
         response = self._parse_html(response)
         response.connection.close()
