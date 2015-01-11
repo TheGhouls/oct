@@ -26,6 +26,12 @@ FOOTER_CONTENT = """
 </html>
 """
 
+CELERY_CONTENT = """
+from celery import Celery
+import oct.core.main
+
+"""
+
 SCRIPT_CONTENT = """
 from oct.core.generic import GenericTransaction
 import random

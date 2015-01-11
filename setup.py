@@ -45,7 +45,7 @@ setup(
         'multimech-run = oct.multimechanize.utilities.run:main',
         'multimech-newproject = oct.multimechanize.utilities.newproject:main',
         'multimech-gridgui = oct.multimechanize.utilities.gridgui:main',
-        'oct-run = oct.utilities.run:oct_main',
+        'oct-run = oct.utilities.run:main',
         'oct-newproject = oct.utilities.newproject:main',
         'octtools-sitemap-to-csv = oct.tools.xmltocsv:sitemap_to_csv',
         'octtools-user-generator = oct.tools.email_generator:email_generator'
