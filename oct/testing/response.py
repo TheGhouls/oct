@@ -13,8 +13,8 @@ def check_response_status(resp, status):
     :raise: AssertionError
     """
     try:
-        assert(resp.status_code == status), "Bad Response: HTTP %s, expected %s, URL : %s" % (resp.code,
-                                                                                              status, resp.geturl())
+        assert(resp.status_code == status), "Bad Response: HTTP %s, expected %s, URL : %s" % (resp.status_code,
+                                                                                              status, resp.url)
     except AttributeError:
         assert(resp.code == status), "Bad Response: HTTP %s, expected %s, URL : %s" % (resp.code,
                                                                                        status, resp.geturl())
