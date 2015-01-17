@@ -1,15 +1,74 @@
-from celery import Celery
+from __future__ import print_function
+from celery import Celery, group, current_task
 from celery.utils.log import get_task_logger
 from oct.multimechanize.core import load_script
+from multiprocessing.sharedctypes import Array
 import threading
 import time
 import sys
 import logging
+import os
 
-# This is the main app, update it if you need to inside your project
+# This is the main app, update it inside your project if you need to
 app = Celery('oct', broker=None, backend=None)
 
 logger = get_task_logger(__name__)
+buff = Array("i", range(2))
+buff[0] = 0
+buff[1] = 0
+
+
+def main_loop(project_name, cmd_opts, config, output_dir):
+    """
+    Main run loop, will run all the tests.
+
+    :param project_name: the name of the project
+    :param cmd_opts: all parsed commands
+    :return: None
+    """
+    script_prefix = os.path.join(cmd_opts.projects_dir, project_name, "test_scripts")
+    script_prefix = os.path.normpath(script_prefix)
+
+    user_groups = []
+    threads = 0
+    for i, ug_config in enumerate(config.user_group_configs):
+        script_file = os.path.join(script_prefix, ug_config.script_file)
+        ug = UserGroup(process_num=i, group_name=ug_config.name, thread_num=ug_config.num_threads,
+                       script_file=script_file, output_dir=output_dir,
+                       run_time=config.run_time, rampup=config.rampup, console_logging=config.console_logging)
+        user_groups.append(ug)
+        threads += ug_config.num_threads
+
+    res = group(run_ug.s(ug) for ug in user_groups)()
+
+    if config.console_logging:
+        res.get(timeout=config.run_time + 5)
+    else:
+        print('\nuser_groups: {0}'.format(len(user_groups)), end='')
+        print('\tthreads: {0}'.format(threads))
+
+        st = 0
+        info_str = 'time : {0}/{1} seconds transactions: {2} errors: {3}'
+        while not res.ready():
+            try:
+                info = res.results[0].info
+                if not info and not res.ready:
+                    print(info_str.format(st, config.run_time, 0, 0), end='\r')
+                elif info is not None:
+                    print(info_str.format(st, config.run_time, info['trans'], info['errors']), end='\r')
+                time.sleep(1)
+                st += 1
+            except KeyboardInterrupt:
+                # purge all tasks in case of user interruption
+                print('\nPurging all tasks...')
+                app.control.purge()
+                # revoke all tasks in case of KeyBoardInterrupt
+                res.revoke(terminate=True)
+                sys.exit(1)
+            except EnvironmentError:
+                if st <= 1:
+                    # pass if we just start the test and the worker need a warmup
+                    pass
 
 
 class Agent(threading.Thread):
@@ -37,6 +96,7 @@ class Agent(threading.Thread):
         self.script_file = script_file
         self.console_logging = console_logging
         self.error_count = 0
+        self.trans_count = 0
 
         # choose most accurate timer to use (time.clock has finer granularity
         # than time.time on windows, but shouldn't be used on other systems).
@@ -67,9 +127,13 @@ class Agent(threading.Thread):
 
             scriptrun_time = finish - start
             elapsed = time.time() - self.start_time
+            self.trans_count += 1
 
             # don't include cleaning time into reports
             trans.br.clean_session()
+
+            # update shared buffer
+            buff[0] += 1
 
             epoch = time.mktime(time.localtime())
 
@@ -77,6 +141,7 @@ class Agent(threading.Thread):
                 # Convert line breaks to literal \n so the CSV will be readable.
                 error = '\\n'.join(error.splitlines())
                 self.error_count += 1
+                buff[1] += 1
             logger.info('%.3f|%i|%s|%f|%s|%s' % (elapsed, epoch,
                                                  self.user_group_name,
                                                  scriptrun_time, error,
@@ -120,10 +185,13 @@ def run_ug(user_group):
     :param user_group: User group object containing all options
     :return: None
     """
+    buff[0] = 0
+    buff[1] = 0
     script_module = load_script(user_group.script_file)
     threads = []
     fh = logging.FileHandler(user_group.output_dir + 'results.csv')
     logger.addHandler(fh)
+    current_task.update_state(state='RUNNING', meta={'trans': buff[0], 'errors': buff[1]})
     for i in range(user_group.thread_num):
         space = float(user_group.rampup) / float(user_group.thread_num)
         if i > 0:
@@ -136,5 +204,11 @@ def run_ug(user_group):
         agent_thread.daemon = True
         threads.append(agent_thread)
         agent_thread.start()
-    for agent_thread in threads:
-        agent_thread.join()
+    while len([t for t in threads if t.is_alive()]) > 0:
+        current_task.update_state(state='RUNNING', meta={'trans': buff[0], 'errors': buff[1]})
+        time.sleep(1)
+
+
+@app.task
+def run_ag():
+    pass

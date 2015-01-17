@@ -5,14 +5,12 @@ from oct.multimechanize.core import init
 from oct.multimechanize.results import output_results
 from six.moves import configparser
 from datetime import datetime
-from oct.core.main import UserGroup, run_ug, app
-from celery import group
+from oct.core.main import main_loop
 import optparse
 import sys
 import os
 import time
 import shutil
-import csv
 
 
 class Configuration(object):
@@ -143,11 +141,12 @@ def run_test(project_name, cmd_opts):
     :return: None
     """
     config = Configuration(project_name, cmd_opts)
-
     run_localtime = time.localtime()
     milisecond = datetime.now().microsecond
+
     output_dir = '%s/%s/results/results_%s' % (cmd_opts.projects_dir, project_name,
-                                               time.strftime('%Y.%m.%d_%H.%M.%S_'+str(milisecond)+'/', run_localtime))
+                                               time.strftime('%Y.%m.%d_%H.%M.%S_' + str(milisecond) + '/',
+                                                             run_localtime))
 
     try:
         os.makedirs(output_dir, 0o755)
@@ -155,50 +154,7 @@ def run_test(project_name, cmd_opts):
         sys.stderr.write('ERROR: Can not create output directory\n')
         sys.exit(1)
 
-    script_prefix = os.path.join(cmd_opts.projects_dir, project_name, "test_scripts")
-    script_prefix = os.path.normpath(script_prefix)
-
-    user_groups = []
-    threads = 0
-    for i, ug_config in enumerate(config.user_group_configs):
-        script_file = os.path.join(script_prefix, ug_config.script_file)
-        ug = UserGroup(process_num=i, group_name=ug_config.name, thread_num=ug_config.num_threads,
-                       script_file=script_file, output_dir=output_dir,
-                       run_time=config.run_time, rampup=config.rampup, console_logging=config.console_logging)
-        user_groups.append(ug)
-        threads += ug_config.num_threads
-
-    res = group(run_ug.s(ug) for ug in user_groups)()
-
-    if config.console_logging:
-        res.get(timeout=config.run_time + 5)
-    else:
-        print('\nuser_groups: {0}'.format(len(user_groups)), end='')
-        print('\tthreads: {0}'.format(threads))
-
-        st = 0
-        while not res.ready():
-            try:
-                with open(output_dir + 'results.csv') as f:
-                    r = csv.reader(f, delimiter='|')
-                    rows = [row for row in r]
-                    row_count = len(rows)
-                    errors = sum(1 for row in rows if row[4] != '')
-                    print('time : {0}/{1} seconds transactions: {2} errors : {3}'.format(
-                        st, config.run_time, row_count, errors), end='\r')
-                time.sleep(1)
-                st += 1
-            except KeyboardInterrupt:
-                # purge all tasks in case of user interruption
-                print('\nPurging all tasks...')
-                app.control.purge()
-                # revoke all tasks in case of KeyBoardInterrupt
-                res.revoke(terminate=True)
-                sys.exit(1)
-            except EnvironmentError:
-                if st <= 1:
-                    # pass if we just start the test and the worker need a warmup
-                    pass
+    main_loop(project_name, cmd_opts, config, output_dir)
 
     # all celery tasks are done at this point
     print('\n\nanalyzing results...\n')
