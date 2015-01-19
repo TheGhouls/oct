@@ -230,11 +230,15 @@ def configure(project_name, cmd_opts, config_file=None):
             except configparser.NoOptionError:
                 xml_report = False
         else:
-            threads = config.getint(section, 'threads')
-            script = config.get(section, 'script')
-            user_group_name = section
-            ug_config = UserGroupConfig(threads, user_group_name, script)
-            user_group_configs.append(ug_config)
+            try:
+                threads = config.getint(section, 'threads')
+                script = config.get(section, 'script')
+                user_group_name = section
+                ug_config = UserGroupConfig(threads, user_group_name, script)
+                user_group_configs.append(ug_config)
+            except configparser.NoOptionError:
+                # silent fail for custom user configuration section
+                pass
 
     return (run_time, rampup, results_ts_interval, console_logging,
             progress_bar, results_database, post_run_script, xml_report, user_group_configs)

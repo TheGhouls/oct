@@ -56,12 +56,18 @@ class Configuration(object):
                     self.xml_report = self.config.getboolean(section, 'xml_report')
                 except configparser.NoOptionError:
                     self.xml_report = False
+            elif section == 'celery':
+                self.celery_config = self.config.get(section, 'config_file')
             else:
-                self.threads = self.config.getint(section, 'threads')
-                self.script = self.config.get(section, 'script')
-                self.user_group_name = section
-                self.ug_config = UserGroupConfig(self.threads, self.user_group_name, self.script)
-                self.user_group_configs.append(self.ug_config)
+                try:
+                    self.threads = self.config.getint(section, 'threads')
+                    self.script = self.config.get(section, 'script')
+                    self.user_group_name = section
+                    self.ug_config = UserGroupConfig(self.threads, self.user_group_name, self.script)
+                    self.user_group_configs.append(self.ug_config)
+                except configparser.NoOptionError:
+                    # silently fail if we have custom user config
+                    pass
 
 
 class UserGroupConfig(object):
