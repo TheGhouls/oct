@@ -3,9 +3,9 @@ __author__ = 'manu'
 
 from oct.multimechanize.core import init
 from oct.multimechanize.results import output_results
+from oct.core.main import main_loop
 from six.moves import configparser
 from datetime import datetime
-from oct.core.main import main_loop
 import optparse
 import sys
 import os
@@ -57,7 +57,8 @@ class Configuration(object):
                 except configparser.NoOptionError:
                     self.xml_report = False
             elif section == 'celery':
-                self.celery_config = self.config.get(section, 'config_file')
+                self.celery_config = os.path.abspath(os.path.join(cmd_opts.projects_dir, project_name,
+                                                     self.config.get(section, 'config_file')))
             else:
                 try:
                     self.threads = self.config.getint(section, 'threads')

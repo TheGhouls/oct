@@ -89,4 +89,5 @@
 * transaction number no longer displayed in results
 * oct-run will now clean all tasks running if KeyBoardInterrupt exception occur
 * update browser for headers support
+* fix a bug if custom configuration section is used
 

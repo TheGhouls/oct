@@ -10,7 +10,7 @@ import logging
 import os
 
 # This is the main app, update it inside your project if you need to
-app = Celery('oct', broker=None, backend=None)
+app = Celery('oct', backend=None, broker=None)
 
 logger = get_task_logger(__name__)
 buff = Array("i", range(2))
@@ -207,8 +207,3 @@ def run_ug(user_group):
     while len([t for t in threads if t.is_alive()]) > 0:
         current_task.update_state(state='RUNNING', meta={'trans': buff[0], 'errors': buff[1]})
         time.sleep(1)
-
-
-@app.task
-def run_ag():
-    pass

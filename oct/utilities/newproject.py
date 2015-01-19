@@ -26,14 +26,8 @@ FOOTER_CONTENT = """
 </html>
 """
 
-CELERY_CONTENT = """
-from celery import Celery
-import oct.core.main
-
-"""
-
-SCRIPT_CONTENT = """
-from oct.core.generic import GenericTransaction
+SCRIPT_CONTENT = """from oct.core.generic import GenericTransaction
+from octapp import app
 import random
 import time
 import os
@@ -58,8 +52,7 @@ if __name__ == '__main__':
     print(trans.custom_timers)
 """
 
-CONFIG_CONTENT = """
-[global]
+CONFIG_CONTENT = """[global]
 run_time = 30
 rampup = 0
 results_ts_interval = 10
@@ -80,6 +73,16 @@ script = %s
 
 """ % (SCRIPT_NAME, SCRIPT_NAME)
 
+CELERY_CONTENT = """from oct.core.main import app
+
+app.conf.update(
+    CELERY_RESULT_BACKEND='amqp',
+    BROKER_URL='amqp://guest@localhost//'
+)
+"""
+
+CELERY_SCRIPT = 'octapp.py'
+
 
 def create_project(
         project_name,
@@ -90,7 +93,9 @@ def create_project(
         script_content=SCRIPT_CONTENT,
         template_dir=TEMPLATE_DIR,
         head_content=HEAD_CONTENT,
-        footer_content=FOOTER_CONTENT):
+        footer_content=FOOTER_CONTENT,
+        celery_content=CELERY_CONTENT,
+        celery_script=CELERY_SCRIPT):
 
     if os.path.exists(project_name):
         sys.stderr.write('\nERROR: project already exists: %s\n\n' % project_name)
@@ -111,6 +116,8 @@ def create_project(
         f.write(config_content)
     with open(os.path.join(project_name, scripts_dir, script_name), 'w') as f:
         f.write(script_content)
+    with open(os.path.join(project_name, scripts_dir, celery_script), 'w') as f:
+        f.write(celery_content)
     with open(os.path.join(project_name, template_dir, 'head.html'), 'w') as f:
         f.write(head_content)
     with open(os.path.join(project_name, template_dir, 'footer.html'), 'w') as f:
@@ -130,4 +137,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-

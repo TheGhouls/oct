@@ -103,6 +103,8 @@ class ScriptLoader(object):
         pattern = "%s/*.py" % scripts_path
         modules = dict()
         for script in glob.glob(pattern):  # < import all scripts as modules
+            if 'octapp' in script:
+                continue
             basename = os.path.basename(script)
             if basename.startswith("_"):
                 continue  # < SKIP: __init__.py, ...
