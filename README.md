@@ -1,14 +1,14 @@
- oct
+oct
 ===
--[![doc](https://readthedocs.org/projects/oct/badge/?version=latest)](http://oct.readthedocs.org/en/latest/)
--[![Latest Version](https://pypip.in/version/oct/badge.svg?style=flat)](https://pypi.python.org/pypi/oct/)
--[![Supported Python versions](https://pypip.in/py_versions/oct/badge.svg?style=flat)](https://pypi.python.org/pypi/oct/)
--[![pypi](https://pypip.in/status/oct/badge.svg?style=flat)](https://pypi.python.org/pypi/oct/)
--[![pypi](https://pypip.in/license/oct/badge.svg?style=flat)](https://pypi.python.org/pypi/oct/)
--
--[Documentation](http://oct.readthedocs.org/en/latest/)
--
--[OCT on pypi](https://pypi.python.org/pypi/oct)
+[![doc](https://readthedocs.org/projects/oct/badge/?version=latest)](http://oct.readthedocs.org/en/latest/)
+[![Latest Version](https://pypip.in/version/oct/badge.svg?style=flat)](https://pypi.python.org/pypi/oct/)
+[![Supported Python versions](https://pypip.in/py_versions/oct/badge.svg?style=flat)](https://pypi.python.org/pypi/oct/)
+[![pypi](https://pypip.in/status/oct/badge.svg?style=flat)](https://pypi.python.org/pypi/oct/)
+[![pypi](https://pypip.in/license/oct/badge.svg?style=flat)](https://pypi.python.org/pypi/oct/)
+
+[Documentation](http://oct.readthedocs.org/en/latest/)
+
+[OCT on pypi](https://pypi.python.org/pypi/oct)
 
 Python Version | Tested |
 -------------- | -------|
