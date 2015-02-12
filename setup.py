@@ -1,7 +1,7 @@
 __author__ = 'manu'
 
 import os
-from setuptools import setup, find_packages
+from setuptools import setup
 from oct import __version__
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
@@ -38,16 +38,6 @@ setup(
         'cssselect',
         'pygal',
         'cairosvg',
-        'tinycss',
-        'six'
-    ],
-    entry_points={'console_scripts': [
-        'multimech-run = oct.multimechanize.utilities.run:main',
-        'multimech-newproject = oct.multimechanize.utilities.newproject:main',
-        'multimech-gridgui = oct.multimechanize.utilities.gridgui:main',
-        'oct-run = oct.utilities.run:main',
-        'oct-newproject = oct.utilities.newproject:main',
-        'octtools-sitemap-to-csv = oct.tools.xmltocsv:sitemap_to_csv',
-        'octtools-user-generator = oct.tools.email_generator:email_generator'
-    ]},
+        'tinycss'
+    ]
 )
