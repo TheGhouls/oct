@@ -34,10 +34,10 @@ setup(
         'argparse',
         'requests',
         'lxml',
-        'celery',
         'cssselect',
         'pygal',
         'cairosvg',
-        'tinycss'
+        'tinycss',
+        'pyzmq'
     ]
 )
