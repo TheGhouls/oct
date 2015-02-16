@@ -3,7 +3,7 @@ __author__ = 'manu'
 
 from oct.multimechanize.core import init
 from oct.multimechanize.results import output_results
-from oct.core.main import main_loop
+from oct.core.turret import main_loop
 from six.moves import configparser
 from datetime import datetime
 import optparse
