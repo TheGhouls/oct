@@ -18,6 +18,8 @@ def main_loop(project_name, cmd_opts, config, output_dir):
     script_prefix = os.path.join(cmd_opts.projects_dir, project_name, "test_scripts")
     script_prefix = os.path.normpath(script_prefix)
 
+    # remove old logic here
+
     turrets = []
     for i, ug_config in enumerate(config.user_group_configs):
         # now we sending messages here, no more instance of anything except the report manager
