@@ -38,7 +38,8 @@ setup(
         'cssselect',
         'pygal',
         'cairosvg',
-        'tinycss'
+        'tinycss',
+        'jinja2'
     ],
     entry_points={'console_scripts': [
         'multimech-run = oct.multimechanize.utilities.run:main',

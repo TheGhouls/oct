@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>OCT | Results</title>
+</head>
+<body>
+
+<h1>Performance Results Report</h1>
+
+<h2>Summary</h2>
+
+<div class="summary">
+    <b>transactions:</b> {{ results.total_transactions }}
+    <br />
+    <b>errors:</b> {{ results.total_errors }}
+    <br />
+    <b>run time:</b> {{ run_time }}
+    <br />
+    <b>rampup:</b> {{ rampup }}
+    <br />
+    <b>test starts:</b> {{ results.start_datetime }}
+    <br />
+    <b>test finish:</b> {{ results.finish_datetime }}
+    <br />
+    <b>time-series interval:</b> {{ ts_interval }}
+
+    {% if user_group_configs %}
+        <b>workload configuration:</b>
+        <br />
+        <table>
+        <tr>
+            <th>group name</th>
+            <th>threads</th>
+            <th>script name</th>
+        </tr>
+        {% for ug in user_group_configs %}
+            <tr>
+                <td>
+                    {{ ug.name }}
+                </td>
+                <td>
+                    {{ ug.num_threads }}
+                </td>
+                <td>
+                    {{ ug.script_file }}
+                </td>
+            </tr>
+        {% endfor %}
+        </table>
+    {% endif %}
+</div>
+
+<h2>All Transactions</h2>
+
+<h3>Transaction Response Summary (secs)</h3>
+
+<table>
+    <tr>
+        <th>count</th>
+        <th>min</th>
+        <th>avg</th>
+        <th>80pct</th>
+        <th>90pct</th>
+        <th>95pct</th>
+        <th>max</th>
+        <th>stdev</th>
+    </tr>
+    <tr>
+        <td>{{ results.total_transaction }}</td>
+        <td>{{ summary.min }}</td>
+        <td>{{ summary.avg }}</td>
+        <td>{{ summary.80_pct }}</td>
+        <td>{{ summary.90_pct }}</td>
+        <td>{{ summary.95_pct }}</td>
+        <td>{{ summary.max }}</td>
+        <td>{{ summary.stdev }}</td>
+    </tr>
+</table>
+
+<h3>Interval Details (secs)</h3>
+
+<table>
+    <tr>
+        <th>count</th>
+        <th>min</th>
+        <th>avg</th>
+        <th>80pct</th>
+        <th>90pct</th>
+        <th>95pct</th>
+        <th>max</th>
+        <th>stdev</th>
+    </tr>
+</table>
+
+</body>
+</html>
