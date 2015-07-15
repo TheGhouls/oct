@@ -8,6 +8,7 @@
 
 
 import time
+import json
 from collections import defaultdict
 from . import graph
 from . import reportwriter
@@ -250,42 +251,16 @@ class Results(object):
         self.finish_datetime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(self.epoch_finish))
 
     def __parse_file(self):
-        f = open(self.results_file_name, 'r')
+        with open(self.results_file_name, 'r') as f:
+            datas = json.load(f)
         resp_stats_list = []
-        for line in f:
-            fields = line.strip().split('|')
-            elapsed_time = float(fields[0])
-            epoch_secs = int(fields[1])
-            user_group_name = fields[2]
-            trans_time = float(fields[3])
-            error = fields[4]
-
-            self.uniq_user_group_names.add(user_group_name)
-
-            custom_timers = {}
-            timers_string = ''.join(fields[6:]).replace('{', '').replace('}', '').replace('--', '')
-            splat = timers_string.split("'")[1:]
-            timers = []
-            vals = []
-            for x in splat:
-                if ':' in x:
-                    x = float(x.replace(': ', ''))
-                    vals.append(x)
-                else:
-                    timers.append(x)
-                    self.uniq_timer_names.add(x)
-            for timer, val in zip(timers, vals):
-                custom_timers[timer] = val
-
-            r = ResponseStats(elapsed_time, epoch_secs, user_group_name, trans_time, error, custom_timers)
-
-            if elapsed_time < self.run_time:
-                resp_stats_list.append(r)
-
-            if error != '':
+        for item in datas:
+            if item['error']:
                 self.total_errors += 1
-
             self.total_transactions += 1
+            r = ResponseStats(item['elapsed'], item['epoch'], item['turret_name'], item['scriptrun_time'],
+                              item['error'], item['custom_timers'])
+            resp_stats_list.append(r)
 
         return resp_stats_list
 
