@@ -15,7 +15,7 @@ setup(
     author='Emmanuel Valette',
     author_email='manu.valette@gmail.com',
     packages=['oct', 'oct.core', 'oct.multimechanize', 'oct.testing',
-              'oct.multimechanize.utilities', 'oct.utilities', 'oct.tools'],
+              'oct.multimechanize.utilities', 'oct.utilities', 'oct.tools', 'oct.results'],
     package_data={'oct.utilities': ['templates/css/*']},
     description="A library based on multi-mechanize for performances testing, using custom browser for writing tests",
     long_description=long_description,

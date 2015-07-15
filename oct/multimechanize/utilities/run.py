@@ -29,7 +29,7 @@ except ImportError:
 
 import oct.multimechanize.core as core
 import oct.multimechanize.results as results
-import oct.core.resultswriter as resultswriter
+import oct.results.resultswriter as resultswriter
 import oct.multimechanize.progressbar as progressbar
 from oct.multimechanize import __version__ as version
 
