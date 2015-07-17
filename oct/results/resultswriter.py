@@ -33,11 +33,11 @@ class ResultsWriter(threading.Thread):
     def init_file(self):
         """Init the result's file
         """
-        with open(self.output_dir + "results.json", 'w', encoding='utf-8') as f:
+        with open(self.output_dir + "results.json", 'w') as f:
             json.dump([], f)
 
     def write_result(self, datas):
-        with open(self.output_dir + "results.json", 'w', encoding='utf-8') as f:
+        with open(self.output_dir + "results.json", 'w') as f:
             self.trans_count += 1
             self.timer_count += len(datas['custom_timers'])
             if datas['error']:
