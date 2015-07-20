@@ -4,7 +4,6 @@ oct
 [![Latest Version](https://img.shields.io/pypi/v/oct.svg?style=flat)](https://pypi.python.org/pypi/oct/)
 [![Supported Python versions](https://img.shields.io/pypi/pyversions/oct.svg?style=flat)](https://pypi.python.org/pypi/oct/)
 [![pypi](https://img.shields.io/pypi/status/oct.svg?style=flat)](https://pypi.python.org/pypi/oct/)
-[![pypi](https://img.shields.io/pypi/l/oct.svg?style=flat)](https://pypi.python.org/pypi/oct/)
 
 [Documentation](http://oct.readthedocs.org/en/latest/)
 
