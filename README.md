@@ -1,10 +1,10 @@
 oct
 ===
 [![doc](https://readthedocs.org/projects/oct/badge/?version=latest)](http://oct.readthedocs.org/en/latest/)
-[![Latest Version](https://pypip.in/version/oct/badge.svg?style=flat)](https://pypi.python.org/pypi/oct/)
-[![Supported Python versions](https://pypip.in/py_versions/oct/badge.svg?style=flat)](https://pypi.python.org/pypi/oct/)
-[![pypi](https://pypip.in/status/oct/badge.svg?style=flat)](https://pypi.python.org/pypi/oct/)
-[![pypi](https://pypip.in/license/oct/badge.svg?style=flat)](https://pypi.python.org/pypi/oct/)
+[![Latest Version](https://img.shields.io/pypi/v/oct.svg?style=flat)](https://pypi.python.org/pypi/oct/)
+[![Supported Python versions](https://img.shields.io/pypi/pyversions/oct.svg?style=flat)](https://pypi.python.org/pypi/oct/)
+[![pypi](https://img.shields.io/pypi/status/oct.svg?style=flat)](https://pypi.python.org/pypi/oct/)
+[![pypi](https://img.shields.io/pypi/l/oct.svg?style=flat)](https://pypi.python.org/pypi/oct/)
 
 [Documentation](http://oct.readthedocs.org/en/latest/)
 
