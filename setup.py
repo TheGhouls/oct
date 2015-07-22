@@ -15,7 +15,7 @@ setup(
     author='Emmanuel Valette',
     author_email='manu.valette@gmail.com',
     packages=['oct', 'oct.core', 'oct.multimechanize', 'oct.testing',
-              'oct.multimechanize.utilities', 'oct.utilities', 'oct.tools'],
+              'oct.multimechanize.utilities', 'oct.utilities', 'oct.tools', 'oct.results'],
     package_data={'oct.utilities': ['templates/css/*']},
     description="A library based on multi-mechanize for performances testing, using custom browser for writing tests",
     long_description=long_description,
@@ -47,6 +47,7 @@ setup(
         'oct-run = oct.utilities.run:main',
         'oct-newproject = oct.utilities.newproject:main',
         'octtools-sitemap-to-csv = oct.tools.xmltocsv:sitemap_to_csv',
-        'octtools-user-generator = oct.tools.email_generator:email_generator'
+        'octtools-user-generator = oct.tools.email_generator:email_generator',
+        'oct-tocsv = oct.utilities.results_to_csv:results_to_csv'
     ]},
 )

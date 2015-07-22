@@ -29,7 +29,7 @@ except ImportError:
 
 import oct.multimechanize.core as core
 import oct.multimechanize.results as results
-import oct.multimechanize.resultswriter as resultswriter
+import oct.results.resultswriter as resultswriter
 import oct.multimechanize.progressbar as progressbar
 from oct.multimechanize import __version__ as version
 
@@ -84,7 +84,7 @@ def run_test(project_name, cmd_opts, remote_starter=None):
 
     # this queue is shared between all processes/threads
     queue = multiprocessing.Queue()
-    rw = resultswriter.ResultsWriter(queue, output_dir, console_logging)
+    rw = resultswriter.ResultsWriter(queue, output_dir)
     rw.daemon = True
     rw.start()
 
@@ -143,7 +143,7 @@ def run_test(project_name, cmd_opts, remote_starter=None):
     # all agents are done running at this point
     time.sleep(.2)  # make sure the writer queue is flushed
     print('\n\nanalyzing results...\n')
-    results.output_results(output_dir, 'results.csv', run_time, rampup, results_ts_interval, user_group_configs,
+    results.output_results(output_dir, 'results.json', run_time, rampup, results_ts_interval, user_group_configs,
                            xml_report)
     print('created: %sresults.html\n' % output_dir)
     if xml_report:

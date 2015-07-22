@@ -8,10 +8,12 @@
 
 
 import time
+import json
 from collections import defaultdict
 from . import graph
 from . import reportwriter
 from . import reportwriterxml
+from oct.results.results import Results
 
 
 def output_results(results_dir, results_file, run_time, rampup, ts_interval, user_group_configs=None,
@@ -231,73 +233,6 @@ def output_results(results_dir, results_file, run_time, rampup, ts_interval, use
 
     report.write_line('<hr />')
     report.write_closing_html()
-
-
-class Results(object):
-    def __init__(self, results_file_name, run_time):
-        self.results_file_name = results_file_name
-        self.run_time = run_time
-        self.total_transactions = 0
-        self.total_errors = 0
-        self.uniq_timer_names = set()
-        self.uniq_user_group_names = set()
-
-        self.resp_stats_list = self.__parse_file()
-
-        self.epoch_start = self.resp_stats_list[0].epoch_secs
-        self.epoch_finish = self.resp_stats_list[-1].epoch_secs
-        self.start_datetime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(self.epoch_start))
-        self.finish_datetime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(self.epoch_finish))
-
-    def __parse_file(self):
-        f = open(self.results_file_name, 'r')
-        resp_stats_list = []
-        for line in f:
-            fields = line.strip().split('|')
-            elapsed_time = float(fields[0])
-            epoch_secs = int(fields[1])
-            user_group_name = fields[2]
-            trans_time = float(fields[3])
-            error = fields[4]
-
-            self.uniq_user_group_names.add(user_group_name)
-
-            custom_timers = {}
-            timers_string = ''.join(fields[6:]).replace('{', '').replace('}', '').replace('--', '')
-            splat = timers_string.split("'")[1:]
-            timers = []
-            vals = []
-            for x in splat:
-                if ':' in x:
-                    x = float(x.replace(': ', ''))
-                    vals.append(x)
-                else:
-                    timers.append(x)
-                    self.uniq_timer_names.add(x)
-            for timer, val in zip(timers, vals):
-                custom_timers[timer] = val
-
-            r = ResponseStats(elapsed_time, epoch_secs, user_group_name, trans_time, error, custom_timers)
-
-            if elapsed_time < self.run_time:
-                resp_stats_list.append(r)
-
-            if error != '':
-                self.total_errors += 1
-
-            self.total_transactions += 1
-
-        return resp_stats_list
-
-
-class ResponseStats(object):
-    def __init__(self, elapsed_time, epoch_secs, user_group_name, trans_time, error, custom_timers):
-        self.elapsed_time = elapsed_time
-        self.epoch_secs = epoch_secs
-        self.user_group_name = user_group_name
-        self.trans_time = trans_time
-        self.error = error
-        self.custom_timers = custom_timers
 
 
 def split_series(points, interval):
