@@ -21,7 +21,7 @@ def results_to_csv():
                 headers.append(k)
                 headers_row[k] = k
 
-    with open(args.output_file, "wb+") as f:
+    with open(args.output_file, "w+") as f:
         writer = csv.DictWriter(f, fieldnames=headers, delimiter=args.delimiter)
         headers_row.update({
             'elapsed': 'elapsed time',
