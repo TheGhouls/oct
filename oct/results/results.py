@@ -1,3 +1,4 @@
+import six
 import time
 import json
 
@@ -26,7 +27,7 @@ class Results(object):
             if item['error']:
                 self.total_errors += 1
             self.total_transactions += 1
-            for name, value in item['custom_timers'].iteritems():
+            for name, value in six.iteritems(item['custom_timers']):
                 self.uniq_timer_names.add(name)
             r = ResponseStats(item['elapsed'], item['epoch'], item['turret_name'], item['scriptrun_time'],
                               item['error'], item['custom_timers'])

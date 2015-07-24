@@ -109,7 +109,7 @@ class Agent(threading.Thread):
 
             try:
                 trans.run()
-                trans.br.clean_session()
+                trans.tear_down()
             except Exception as e:  # test runner catches all script exceptions here
                 error = str(e).replace(',', '')
 

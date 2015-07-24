@@ -84,7 +84,6 @@ Contents
 
 * :doc:`config`
 * :doc:`scripts`
-* :doc:`browser`
 * :doc:`oct.core`
 * :doc:`oct.multimechanize`
 * :doc:`oct.testing`
@@ -98,7 +97,6 @@ Indices and tables
 
    config
    scripts
-   browser
    oct.core
    oct.multimechanize
    oct.testing

@@ -38,7 +38,8 @@ setup(
         'cssselect',
         'pygal',
         'cairosvg',
-        'tinycss'
+        'tinycss',
+        'octbrowser'
     ],
     entry_points={'console_scripts': [
         'multimech-run = oct.multimechanize.utilities.run:main',
