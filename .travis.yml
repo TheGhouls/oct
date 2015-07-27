@@ -4,5 +4,7 @@ python:
     - "3.4"
 install:
     - pip install -r requirements.txt
+    - pip install nose
 script:
     - python setup.py install
+    - nosetests -vdx tests/ -a '!no_test'
