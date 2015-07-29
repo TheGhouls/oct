@@ -23,7 +23,7 @@ def email_generator():
 
     chars = string.ascii_lowercase
     i = 0
-    with open(args.csvfile[0], 'a') as opencsv:
+    with open(args.csvfile[0], 'w+') as opencsv:
         sys.stdout.write('\n')
         while i <= args.nb_item:
             sys.stdout.write("{0}/{1}\r".format(i, args.nb_item))
@@ -53,7 +53,7 @@ def email_generator_func(csvfile, what, number_of_email=15, size=6, chars=string
     :return: None
     """
     i = 0
-    with open(csvfile, 'a') as opencsv:
+    with open(csvfile, 'w+') as opencsv:
         while i is not number_of_email:
             rand = ''.join(random.choice(chars) for _ in range(size))
             pwd = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(size))
