@@ -24,6 +24,7 @@ class MainTest(unittest.TestCase):
     def setUp(self):
         self.project_path = '/tmp/oct-test'
         self.cmd_opts = CmdOpts(self.project_path + "/results", self.project_path)
+        self.bad_cmd_opts = CmdOpts('/bad/project/path', '/bad/project/path')
         create_project(self.project_path)
 
         # update the runtime for the project
@@ -33,7 +34,15 @@ class MainTest(unittest.TestCase):
         with open(self.project_path + "/config.cfg", 'w') as f:
             config.write(f)
 
-    def test_run_project(self):
+    def test_create_project_errors(self):
+        """Test errors for create project"""
+        with self.assertRaises(OSError):
+            create_project('/bad/path/for/project')
+
+        with self.assertRaises(OSError):
+            create_project('/tmp')
+
+    def test_run_project_success(self):
         """Test a simple 10sec run of the project"""
         run('.', self.cmd_opts)
 
