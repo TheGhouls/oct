@@ -4,7 +4,7 @@ from xml.dom.minidom import parse
 import csv
 
 
-def sitemap_to_csv():
+def main():
     """
     Take as options: Xml file, CSV File
 
@@ -12,17 +12,21 @@ def sitemap_to_csv():
     :return: None
     """
     parser = argparse.ArgumentParser(description="Convert XML file to CSV file")
-    parser.add_argument("xml", metavar='xml', type=str, nargs=1, help="The XML file to parse")
-    parser.add_argument("csv", metavar='csv', type=str, nargs=1, help="The CSV file to generate")
+    parser.add_argument("xml", metavar='xml', type=str, help="The XML file to parse")
+    parser.add_argument("csv", metavar='csv', type=str, help="The CSV file to generate")
     args = parser.parse_args()
 
+    sitemap_to_csv(args.xml, args.csv)
+
+
+def sitemap_to_csv(xml_file, csv_file):
     try:
-        datasource = open(args.xml[0], "r")
+        datasource = open(xml_file, "r")
         dom = parse(datasource)
     except IOError:
         raise IOError("Bad XML file provided")
 
-    with open(args.csv[0], 'wb') as opencsv:
+    with open(csv_file, 'wb') as opencsv:
         urls = dom.getElementsByTagName('url')
         for url in urls:
             writer = csv.writer(opencsv, delimiter=';', quotechar='|', quoting=csv.QUOTE_MINIMAL)
