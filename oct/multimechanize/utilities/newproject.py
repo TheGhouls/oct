@@ -68,13 +68,13 @@ def create_project(
         script_content=SCRIPT_CONTENT):
     if os.path.exists(project_name):
         sys.stderr.write('\nERROR: project already exists: %s\n\n' % project_name)
-        sys.exit(1)
+        raise OSError("Folder already exists")
     try:
         os.makedirs(project_name)
         os.makedirs(os.path.join(project_name, scripts_dir))
-    except OSError as e:
+    except OSError:
         sys.stderr.write('\nERROR: can not create directory for %r\n\n' % project_name)
-        sys.exit(1)
+        raise OSError()
     with open(os.path.join(project_name, config_name), 'w') as f:
         f.write(config_content)
     with open(os.path.join(project_name, scripts_dir, script_name), 'w') as f:
@@ -87,7 +87,7 @@ def main():
     except IndexError:
         sys.stderr.write('\nERROR: no project specified\n\n')
         sys.stderr.write('Usage: multimech-newproject <project name>\n\n')
-        sys.exit(1)
+        raise
 
     create_project(project_name)
 
