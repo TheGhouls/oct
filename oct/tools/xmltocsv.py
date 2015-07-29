@@ -21,12 +21,12 @@ def main():
 
 def sitemap_to_csv(xml_file, csv_file):
     try:
-        datasource = open(xml_file, "r")
+        datasource = open(xml_file, "r+")
         dom = parse(datasource)
     except IOError:
         raise IOError("Bad XML file provided")
 
-    with open(csv_file, 'wb') as opencsv:
+    with open(csv_file, 'w+') as opencsv:
         urls = dom.getElementsByTagName('url')
         for url in urls:
             writer = csv.writer(opencsv, delimiter=';', quotechar='|', quoting=csv.QUOTE_MINIMAL)
