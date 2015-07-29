@@ -99,7 +99,7 @@ def create_project(
 
     if os.path.exists(project_name):
         sys.stderr.write('\nERROR: project already exists: %s\n\n' % project_name)
-        sys.exit(1)
+        raise OSError()
     try:
         os.makedirs(project_name)
         os.makedirs(os.path.join(project_name, scripts_dir))
@@ -111,7 +111,7 @@ def create_project(
                     os.path.join(project_name, template_dir, 'css'))
     except OSError:
         sys.stderr.write('\nERROR: can not create directory for %r\n\n' % project_name)
-        sys.exit(1)
+        raise
     with open(os.path.join(project_name, config_name), 'w') as f:
         f.write(config_content)
     with open(os.path.join(project_name, scripts_dir, script_name), 'w') as f:
@@ -130,7 +130,7 @@ def main():
     except IndexError:
         sys.stderr.write('\nERROR: no project specified\n\n')
         sys.stderr.write('Usage: oct-newproject <project name>\n\n')
-        sys.exit(1)
+        raise
 
     create_project(project_name)
 
