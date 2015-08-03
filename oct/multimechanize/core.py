@@ -14,8 +14,7 @@ import sys
 import threading
 import time
 
-from oct.multimechanize.script_loader import ScriptLoader
-import os.path
+from oct.core.test_loader import load_all, load_file
 
 
 def init(projects_dir, project_name):
@@ -27,19 +26,7 @@ def init(projects_dir, project_name):
         sys.stderr.write('\nERROR: can not find project: %s\n\n' % project_name)
         sys.exit(1)
     # -- NORMAL-CASE: Ensure that all scripts can be loaded (at program start).
-    ScriptLoader.load_all(scripts_path, validate=True)
-
-
-def load_script(script_file):
-    """
-    Load a test scripts as Python module.
-
-    :returns: Imported script as python module.
-    """
-    module = ScriptLoader.load(script_file)
-    # -- SKIP-HERE: ScriptValidator.ensure_module_valid(module)
-    # NOTE: Performed above in ScriptLoader.load_all() at process start.
-    return module
+    load_all(scripts_path)
 
 
 class UserGroup(multiprocessing.Process):
@@ -57,7 +44,7 @@ class UserGroup(multiprocessing.Process):
 
     def run(self):
         # -- ENSURE: (Re-)Import script_module in forked Process
-        script_module = load_script(self.script_file)
+        script_module = load_file(self.script_file)
         threads = []
         for i in range(self.num_threads):
             spacing = float(self.rampup) / float(self.num_threads)
