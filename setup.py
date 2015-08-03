@@ -16,7 +16,9 @@ setup(
     author_email='manu.valette@gmail.com',
     packages=['oct', 'oct.core', 'oct.multimechanize', 'oct.testing',
               'oct.multimechanize.utilities', 'oct.utilities', 'oct.tools', 'oct.results'],
-    package_data={'oct.utilities': ['templates/css/*']},
+    package_data={
+        'oct.utilities': ['templates/css/*', 'templates/configuration/*', 'templates/html/*', 'templates/scripts/*']
+    },
     description="A library based on multi-mechanize for performances testing, using custom browser for writing tests",
     long_description=long_description,
     url='https://github.com/karec/oct',
