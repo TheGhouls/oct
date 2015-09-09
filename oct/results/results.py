@@ -1,6 +1,7 @@
 import six
 import time
 import json
+import sqlite3
 import numpy as np
 from collections import defaultdict
 
@@ -15,6 +16,13 @@ def split_series(points, interval):
     return series
 
 
+def dict_factory(cursor, row):
+    d = {}
+    for idx, col in enumerate(cursor.description):
+        d[col[0]] = row[idx]
+    return d
+
+
 class Results(object):
     def __init__(self, results_file_name, run_time):
         self.results_file_name = results_file_name
@@ -24,6 +32,11 @@ class Results(object):
         self.uniq_timer_names = set()
         self.uniq_user_group_names = set()
 
+        self.conn = sqlite3.connect(results_file_name)
+        self.conn.text_factory = str
+        self.conn.row_factory = dict_factory
+        self.cur = self.conn.cursor()
+
         self.resp_stats_list = self.__parse_file()
 
         self.epoch_start = self.resp_stats_list[0].epoch_secs
@@ -32,17 +45,17 @@ class Results(object):
         self.finish_datetime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(self.epoch_finish))
 
     def __parse_file(self):
-        with open(self.results_file_name, 'r') as f:
-            datas = json.load(f)
+        datas = self.cur.execute("SELECT * FROM results")
         resp_stats_list = []
         for item in datas:
             if item['error']:
                 self.total_errors += 1
             self.total_transactions += 1
-            for name, value in six.iteritems(item['custom_timers']):
+            custom_timers = json.loads(item['custom_timers'])
+            for name, value in six.iteritems(custom_timers):
                 self.uniq_timer_names.add(name)
             r = ResponseStats(item['elapsed'], item['epoch'], item['turret_name'], item['scriptrun_time'],
-                              item['error'], item['custom_timers'])
+                              item['error'], custom_timers)
             resp_stats_list.append(r)
 
         return resp_stats_list

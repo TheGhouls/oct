@@ -4,6 +4,7 @@ import time
 import json
 from six.moves import queue
 import threading
+import sqlite3
 
 
 class ResultsWriter(threading.Thread):
@@ -28,23 +29,27 @@ class ResultsWriter(threading.Thread):
             sys.stderr.write("ERROR: Can not create output directory\n")
             sys.exit(1)
 
-        self.init_file()
-
-    def init_file(self):
-        """Init the result's file
-        """
-        with open(self.output_dir + "results.json", 'w') as f:
-            json.dump([], f)
+        self.conn = sqlite3.connect(self.output_dir + "results.sqlite", check_same_thread=False)
+        self.conn.text_factory = str
+        self.cur = self.conn.cursor()
+        self.cur.execute('''CREATE TABLE results (error text, scriptrun_time real, elapsed real, epoch real,
+            custom_timers text, turret_name text)
+        ''')
+        self.conn.commit()
 
     def write_result(self, datas):
-        with open(self.output_dir + "results.json", 'w') as f:
-            self.trans_count += 1
-            self.timer_count += len(datas['custom_timers'])
-            if datas['error']:
-                self.error_count += 1
+        self.trans_count += 1
+        self.timer_count += len(datas['custom_timers'])
+        if datas['error']:
+            self.error_count += 1
+        self.cur.execute('''INSERT INTO results
+            (error, scriptrun_time, elapsed, epoch, custom_timers, turret_name)
+            VALUES (?, ?, ?, ?, ?, ?)
+        ''', (datas['error'], datas['scriptrun_time'], datas['elapsed'], datas['epoch'], json.dumps(datas['custom_timers']), datas['turret_name']))
+        self.conn.commit()
 
-            self.results.append(datas)
-            json.dump(self.results, f)
+    def end_file(self):
+        self.conn.close()
 
     def run(self):
         while True:
