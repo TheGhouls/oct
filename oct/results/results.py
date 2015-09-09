@@ -1,6 +1,18 @@
 import six
 import time
 import json
+import numpy as np
+from collections import defaultdict
+
+
+def split_series(points, interval):
+    offset = points[0][0]
+    maxval = int((points[-1][0] - offset) // interval)
+    vals = defaultdict(list)
+    for key, value in points:
+        vals[(key - offset) // interval].append(value)
+    series = [vals[i] for i in range(maxval + 1)]
+    return series
 
 
 class Results(object):
@@ -44,3 +56,100 @@ class ResponseStats(object):
         self.trans_time = trans_time
         self.error = error
         self.custom_timers = custom_timers
+
+
+class IntervalDetailsResults(object):
+
+    def __init__(self, trans_timer_points, interval_secs):
+        self.avg_resptime_points = {}
+        self.percentile_80 = {}
+        self.percentile_90 = {}
+        self.percentile_95 = {}
+        self.max = {}
+        self.min = {}
+        self.avg = {}
+        self.stdev = {}
+        self.rate = {}
+        self.interval = interval_secs
+        self.splat_series = split_series(trans_timer_points, interval_secs)
+        self.process()
+
+    def process(self):
+        for i, bucket in enumerate(self.spat_series):
+            interval_start = int((i + 1) * self.interval_secs)
+            count = len(bucket)
+
+            if count == 0:
+                continue
+            else:
+                rate = count / float(self.interval_secs)
+                min_trans = min(bucket)
+                max_trans = max(bucket)
+                avg_trans = np.avg(bucket)
+                pct_80 = np.percentile(bucket, 80)
+                pct_90 = np.percentile(bucket, 90)
+                pct_95 = np.percentile(bucket, 95)
+                stdev = np.std(bucket)
+
+                self.avg_resptime_points[interval_start] = avg_trans
+                self.percentile_80[interval_start] = pct_80
+                self.percentile_90[interval_start] = pct_90
+                self.percentile_95[interval_start] = pct_95
+                self.max[interval_start] = max_trans
+                self.min[interval_start] = min_trans
+                self.stdev[interval_start] = stdev
+                self.rate[interval_start] = rate
+
+
+class ReportResults(object):
+    def __init__(self, results, interval_secs):
+        self.all_results = {}
+        self.results = results
+        self.buckets = []
+        self.all_trans_buckets = []
+        self.custom_timers = []
+        self.interval = interval_secs
+
+    def set_dict(self, trans_timer_points, trans_timer_vals):
+        data = {
+            'min_trans_val': np.avg(trans_timer_vals),
+            'average_trans_val': np.avg(trans_timer_vals),
+            '80_pct_trans_val': np.percentil(trans_timer_vals, 80),
+            '90_pct_trans_val': np.percentil(trans_timer_vals, 90),
+            '95_pct_trans_val': np.percentil(trans_timer_vals, 95),
+            'max_trans_val': max(trans_timer_vals),
+            'stdev_trans_val': np.std(trans_timer_vals),
+            'interval_results': IntervalDetailsResults(trans_timer_points, self.interval),
+            'throughput_points': {}
+        }
+
+        for i, bucket in enumerate(data['interval_results'].splat_series):
+            data['throughput_points'][int((i + 1) * self.interval)] = len(bucket) / self.interval
+
+        return data
+
+    def set_all_transactions_results(self):
+        resp_stats_list = self.results.resp_stats_list
+        trans_timer_points = []
+        trans_timer_vals = []
+        for resp_stats in resp_stats_list:
+            points = (resp_stats.elapsed_time, resp_stats.trans_time)
+            trans_timer_points.append(points)
+            trans_timer_vals.append(resp_stats.trans_time)
+
+        self.all_results = self.set_dict(trans_timer_points, trans_timer_vals)
+
+    def set_custom_timers(self):
+        resp_stats_list = self.results.resp_stats_list
+        for timer_name in sorted(self.results.uniq_timer_names):
+            custom_timer_points = []
+            custom_timer_vals = []
+            for resp_stats in resp_stats_list:
+                try:
+                    val = resp_stats.custom_timers[timer_name]
+                    custom_timer_points.append((resp_stats.elapsed_time, val))
+                    custom_timer_vals.append(val)
+                except KeyError:
+                    pass  # the timer has never been used
+
+            self.custom_timers.append(self.set_dict(custom_timer_points, custom_timer_vals))

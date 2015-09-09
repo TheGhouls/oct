@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>OCT Results report</title>
+</head>
+<body>
+
+<h1>Performance results report</h1>
+
+<h2>Summary</h2>
+
+<div class="summary">
+    transaction: {{ report.results.total_transactions }}
+    <br>
+    errors: {{ report.results.total_errors }}
+    <br>
+    run time: {{ run_time }}
+    <br>
+    rampup: {{ rampup }}
+    <br>
+    test start: {{ report.results.start_datetime }}
+    <br>
+    test finish: {{ report.report.results.finish_datetime }}
+    <br>
+    time-series interval: {{ ts_interval }} seconds
+    {% if user_group_configs %}
+        workload configuration
+        <table>
+            <tr>
+                <th>turret name</th>
+                <th>threads</th>
+                <th>script name</th>
+            </tr>
+            {% for turret in user_group_configs %}
+            <tr>
+                <td>{{ turret.name }}</td>
+                <td>{{ turret.num_threads }}</td>
+                <td>{{ turret.script_file }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+</div>
+
+<h2>All transactions</h2>
+
+</body>
+</html>
