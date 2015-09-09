@@ -105,8 +105,6 @@ class ReportResults(object):
     def __init__(self, results, interval_secs):
         self.all_results = {}
         self.results = results
-        self.buckets = []
-        self.all_trans_buckets = []
         self.custom_timers = []
         self.interval = interval_secs
 
