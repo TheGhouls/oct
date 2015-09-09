@@ -20,3 +20,4 @@ six==1.9.0
 tinycss==0.3
 zmq==0.0.0
 octbrowser
+numpy

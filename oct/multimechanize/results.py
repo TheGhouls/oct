@@ -55,9 +55,16 @@ def output_results(results_dir, results_file, run_time, rampup, ts_interval, use
 
     # report.write_line('<h2>All Transactions</h2>')
 
-    report_results = ReportResults(results, interval_secs)
+    report_results = ReportResults(results, ts_interval)
     report_results.set_all_transactions_results()
     report_results.set_custom_timers()
+
+    graph.resp_graph_raw(report_results.all_results['trans_timer_points'], 'All_Transactions_response_times.svg', results_dir)
+    graph.resp_graph(report_results.all_results['interval_results'].avg_resptime_points,
+                     report_results.all_results['interval_results'].percentile_80,
+                     report_results.all_results['interval_results'].percentile_90,
+                     'All_Transactions_response_times_intervals.svg', results_dir)
+
 
     # # all transactions - response times
     # trans_timer_points = []  # (elapsed, timervalue)

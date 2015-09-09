@@ -1,7 +1,7 @@
 from __future__ import print_function
 from celery import Celery, group, current_task
 from celery.utils.log import get_task_logger
-from oct.multimechanize.core import load_script
+from oct.core.test_loader import load_file
 from multiprocessing.sharedctypes import Array
 import threading
 import time
@@ -187,7 +187,7 @@ def run_ug(user_group):
     """
     buff[0] = 0
     buff[1] = 0
-    script_module = load_script(user_group.script_file)
+    script_module = load_file(user_group.script_file)
     threads = []
     fh = logging.FileHandler(user_group.output_dir + 'results.csv')
     logger.addHandler(fh)

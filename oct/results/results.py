@@ -75,17 +75,17 @@ class IntervalDetailsResults(object):
         self.process()
 
     def process(self):
-        for i, bucket in enumerate(self.spat_series):
-            interval_start = int((i + 1) * self.interval_secs)
+        for i, bucket in enumerate(self.splat_series):
+            interval_start = int((i + 1) * self.interval)
             count = len(bucket)
 
             if count == 0:
                 continue
             else:
-                rate = count / float(self.interval_secs)
+                rate = count / float(self.interval)
                 min_trans = min(bucket)
                 max_trans = max(bucket)
-                avg_trans = np.avg(bucket)
+                avg_trans = np.average(bucket)
                 pct_80 = np.percentile(bucket, 80)
                 pct_90 = np.percentile(bucket, 90)
                 pct_95 = np.percentile(bucket, 95)
@@ -110,15 +110,17 @@ class ReportResults(object):
 
     def set_dict(self, trans_timer_points, trans_timer_vals):
         data = {
-            'min_trans_val': np.avg(trans_timer_vals),
-            'average_trans_val': np.avg(trans_timer_vals),
-            '80_pct_trans_val': np.percentil(trans_timer_vals, 80),
-            '90_pct_trans_val': np.percentil(trans_timer_vals, 90),
-            '95_pct_trans_val': np.percentil(trans_timer_vals, 95),
+            'min_trans_val': np.average(trans_timer_vals),
+            'average_trans_val': np.average(trans_timer_vals),
+            '80_pct_trans_val': np.percentile(trans_timer_vals, 80),
+            '90_pct_trans_val': np.percentile(trans_timer_vals, 90),
+            '95_pct_trans_val': np.percentile(trans_timer_vals, 95),
             'max_trans_val': max(trans_timer_vals),
             'stdev_trans_val': np.std(trans_timer_vals),
             'interval_results': IntervalDetailsResults(trans_timer_points, self.interval),
-            'throughput_points': {}
+            'throughput_points': {},
+            'trans_timer_points': trans_timer_points,
+            'trans_timer_vals': trans_timer_vals
         }
 
         for i, bucket in enumerate(data['interval_results'].splat_series):
