@@ -13,7 +13,7 @@ from collections import defaultdict
 from . import graph
 from . import reportwriter
 from . import reportwriterxml
-from oct.results.results import Results, ReportResults
+from oct.results.reportresults import Results, ReportResults
 
 
 def output_results(results_dir, results_file, run_time, rampup, ts_interval, user_group_configs=None,
