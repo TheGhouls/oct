@@ -17,18 +17,10 @@ import subprocess
 import sys
 import time
 from datetime import datetime
+from oct.results.resultsoutput import output as output_results
 
-try:
-    # installed
-    import oct.multimechanize
-except ImportError:
-    # from dev/source
-    this_dir = os.path.abspath(os.path.dirname(__file__))
-    sys.path.append(os.path.join(this_dir, '../../'))
-    import oct.multimechanize
 
 import oct.multimechanize.core as core
-import oct.multimechanize.results as results
 import oct.results.resultswriter as resultswriter
 import oct.multimechanize.progressbar as progressbar
 from oct.multimechanize import __version__ as version
@@ -143,8 +135,9 @@ def run_test(project_name, cmd_opts, remote_starter=None):
     # all agents are done running at this point
     time.sleep(.2)  # make sure the writer queue is flushed
     print('\n\nanalyzing results...\n')
-    results.output_results(output_dir, 'results.json', run_time, rampup, results_ts_interval, user_group_configs,
-                           xml_report)
+    print("Here bitch")
+    output_results(output_dir, 'results.sqlite', run_time, rampup, results_ts_interval, user_group_configs,
+                   xml_report)
     print('created: %sresults.html\n' % output_dir)
     if xml_report:
         print('created: %sresults.jtl' % output_dir)
@@ -182,8 +175,8 @@ def rerun_results(project_name, cmd_opts, results_dir):
     (run_time, rampup, results_ts_interval, console_logging, progress_bar, results_database,
      post_run_script, xml_report, user_group_configs) = configure(project_name, cmd_opts, config_file=saved_config)
     print('\n\nanalyzing results...\n')
-    results.output_results(output_dir, 'results.csv', run_time, rampup, results_ts_interval, user_group_configs,
-                           xml_report)
+    # results.output_results(output_dir, 'results.csv', run_time, rampup, results_ts_interval, user_group_configs,
+    #                       xml_report)
     print('created: %sresults.html\n' % output_dir)
     if xml_report:
         print('created: %sresults.jtl' % output_dir)

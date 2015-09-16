@@ -83,7 +83,9 @@ class IntervalDetailsResults(object):
         self.avg = {}
         self.stdev = {}
         self.rate = {}
+        self.count = {}
         self.interval = interval_secs
+        self.interval_list = []
         self.splat_series = split_series(trans_timer_points, interval_secs)
         self.process()
 
@@ -112,6 +114,8 @@ class IntervalDetailsResults(object):
                 self.min[interval_start] = min_trans
                 self.stdev[interval_start] = stdev
                 self.rate[interval_start] = rate
+                self.count[interval_start] = count
+                self.interval_list.append(interval_start)
 
 
 class ReportResults(object):
@@ -121,13 +125,13 @@ class ReportResults(object):
         self.custom_timers = []
         self.interval = interval_secs
 
-    def set_dict(self, trans_timer_points, trans_timer_vals):
+    def set_dict(self, trans_timer_points, trans_timer_vals, name=None):
         data = {
             'min_trans_val': np.average(trans_timer_vals),
             'average_trans_val': np.average(trans_timer_vals),
-            '80_pct_trans_val': np.percentile(trans_timer_vals, 80),
-            '90_pct_trans_val': np.percentile(trans_timer_vals, 90),
-            '95_pct_trans_val': np.percentile(trans_timer_vals, 95),
+            'pct_80_trans_val': np.percentile(trans_timer_vals, 80),
+            'pct_90_trans_val': np.percentile(trans_timer_vals, 90),
+            'pct_95_trans_val': np.percentile(trans_timer_vals, 95),
             'max_trans_val': max(trans_timer_vals),
             'stdev_trans_val': np.std(trans_timer_vals),
             'interval_results': IntervalDetailsResults(trans_timer_points, self.interval),
@@ -138,6 +142,9 @@ class ReportResults(object):
 
         for i, bucket in enumerate(data['interval_results'].splat_series):
             data['throughput_points'][int((i + 1) * self.interval)] = len(bucket) / self.interval
+
+        if name is not None:
+            data['name'] = name
 
         return data
 
@@ -152,6 +159,9 @@ class ReportResults(object):
 
         self.all_results = self.set_dict(trans_timer_points, trans_timer_vals)
 
+    def clear_all_transactions(self):
+        del self.all_results
+
     def set_custom_timers(self):
         resp_stats_list = self.results.resp_stats_list
         for timer_name in sorted(self.results.uniq_timer_names):
@@ -165,4 +175,4 @@ class ReportResults(object):
                 except KeyError:
                     pass  # the timer has never been used
 
-            self.custom_timers.append(self.set_dict(custom_timer_points, custom_timer_vals))
+            self.custom_timers.append(self.set_dict(custom_timer_points, custom_timer_vals, timer_name))
