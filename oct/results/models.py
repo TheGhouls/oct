@@ -15,6 +15,9 @@ class Result(Model):
         database = db
 
 
-def set_database(db_path, proxy):
-    database = SqliteDatabase(db_path, check_same_thread=False)
+def set_database(db_path, proxy, config):
+    if 'testing' in config and config['testing'] is True:
+        database = SqliteDatabase('file:results?mode=memory&cache=shared', check_same_thread=False, uri=True)
+    else:
+        database = SqliteDatabase(db_path, check_same_thread=False)
     proxy.initialize(database)

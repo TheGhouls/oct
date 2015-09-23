@@ -14,7 +14,7 @@ class ResultsWriter(threading.Thread):
     :param output_dir: the output directory for the results
     :type output_dir: str
     """
-    def __init__(self, queue, output_dir):
+    def __init__(self, queue, output_dir, config):
         threading.Thread.__init__(self)
         self.output_dir = output_dir
         self.trans_count = 0
@@ -30,7 +30,7 @@ class ResultsWriter(threading.Thread):
             sys.stderr.write("ERROR: Can not create output directory\n")
             sys.exit(1)
 
-        set_database(self.output_dir + "results.sqlite", db)
+        set_database(self.output_dir + "results.sqlite", db, config)
         db.connect()
         db.create_tables([Result])
 

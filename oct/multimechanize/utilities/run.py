@@ -7,7 +7,6 @@
 #  This file is part of Multi-Mechanize | Performance Test Framework
 #
 from __future__ import print_function
-from six.moves import configparser
 import multiprocessing
 import optparse
 import os
@@ -77,7 +76,7 @@ def run_test(project_name, cmd_opts, remote_starter=None):
 
     # this queue is shared between all processes/threads
     queue = multiprocessing.Queue()
-    rw = resultswriter.ResultsWriter(queue, output_dir)
+    rw = resultswriter.ResultsWriter(queue, output_dir, config)
     rw.daemon = True
     rw.start()
 
@@ -139,8 +138,8 @@ def run_test(project_name, cmd_opts, remote_starter=None):
     print('created: %sresults.html\n' % output_dir)
 
     # copy config file to results directory
-    project_config = os.sep.join([cmd_opts.projects_dir, project_name, 'config.cfg'])
-    saved_config = os.sep.join([output_dir, 'config.cfg'])
+    project_config = os.sep.join([cmd_opts.projects_dir, project_name, 'config.json'])
+    saved_config = os.sep.join([output_dir, 'config.json'])
     shutil.copy(project_config, saved_config)
 
     print('done.\n')
@@ -164,60 +163,6 @@ def rerun_results(project_name, cmd_opts, results_dir):
     if xml_report:
         print('created: %sresults.jtl' % output_dir)
         print('created: last_results.jtl\n')
-
-
-# def configure(project_name, cmd_opts, config_file=None):
-#     """
-
-#     :rtype : object
-#     """
-#     user_group_configs = []
-#     config = configparser.ConfigParser()
-#     if config_file is None:
-#         config_file = '%s/%s/config.cfg' % (cmd_opts.projects_dir, project_name)
-#     config.read(config_file)
-#     for section in config.sections():
-#         if section == 'global':
-#             run_time = config.getint(section, 'run_time')
-#             rampup = config.getint(section, 'rampup')
-#             results_ts_interval = config.getint(section, 'results_ts_interval')
-#             try:
-#                 console_logging = config.getboolean(section, 'console_logging')
-#             except configparser.NoOptionError:
-#                 console_logging = False
-#             try:
-#                 progress_bar = config.getboolean(section, 'progress_bar')
-#             except configparser.NoOptionError:
-#                 progress_bar = True
-#             try:
-#                 results_database = config.get(section, 'results_database')
-#                 if results_database == 'None':
-#                     results_database = None
-#             except configparser.NoOptionError:
-#                 results_database = None
-#             try:
-#                 post_run_script = config.get(section, 'post_run_script')
-#                 if post_run_script == 'None':
-#                     post_run_script = None
-#             except configparser.NoOptionError:
-#                 post_run_script = None
-#             try:
-#                 xml_report = config.getboolean(section, 'xml_report')
-#             except configparser.NoOptionError:
-#                 xml_report = False
-#         else:
-#             try:
-#                 threads = config.getint(section, 'threads')
-#                 script = config.get(section, 'script')
-#                 user_group_name = section
-#                 ug_config = UserGroupConfig(threads, user_group_name, script)
-#                 user_group_configs.append(ug_config)
-#             except configparser.NoOptionError:
-#                 # silent fail for custom user configuration section
-#                 pass
-
-#     return (run_time, rampup, results_ts_interval, console_logging,
-#             progress_bar, results_database, post_run_script, xml_report, user_group_configs)
 
 
 class UserGroupConfig(object):
