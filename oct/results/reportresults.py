@@ -4,7 +4,7 @@ import json
 import sqlite3
 import numpy as np
 from collections import defaultdict
-from oct.results.models import db, Result
+from oct.results.models import Result, set_database, db
 
 
 def split_series(points, interval):
@@ -46,13 +46,16 @@ class Results(object):
         self.finish_datetime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(self.epoch_finish))
 
     def __parse_file(self):
-        datas = db.execute("SELECT * FROM results")
+        # set_database(self.results_file_name, db)
         resp_stats_list = []
         for item in Result.select():
-            if item['error']:
+            if item.error:
                 self.total_errors += 1
             self.total_transactions += 1
-            custom_timers = json.loads(item.custom_timers)
+            if item.custom_timers:
+                custom_timers = json.loads(item.custom_timers)
+            else:
+                custom_timers = {}
             for name, value in six.iteritems(custom_timers):
                 self.uniq_timer_names.add(name)
             r = ResponseStats(item.elapsed, item.epoch, item.turret_name, item.scriptrun_time,

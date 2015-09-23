@@ -31,7 +31,7 @@ class ResultsWriter(threading.Thread):
             sys.exit(1)
 
         set_database(self.output_dir + "results.sqlite", db)
-        db.connect(check_same_thread=False)
+        db.connect()
         db.create_tables([Result])
 
     def write_result(self, datas):
@@ -40,8 +40,9 @@ class ResultsWriter(threading.Thread):
         if datas['error']:
             self.error_count += 1
 
-        result = Result(error = datas['error'], script_runtime = datas['scriptrun_time'],elapsed = datas['elapsed'], epoch = datas['epoch'],
-                        custom_timer = json.dumps(datas['custom_timers']),turrent_name = datas['turret_name'])
+        result = Result(error=datas['error'], scriptrun_time=datas['scriptrun_time'], elapsed=datas['elapsed'],
+                        epoch=datas['epoch'],
+                        custom_timers=json.dumps(datas['custom_timers']), turret_name=datas['turret_name'])
         result.save()
 
     def end_file(self):
