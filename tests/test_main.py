@@ -42,9 +42,9 @@ class MainTest(unittest.TestCase):
 
     def test_run_project_success(self):
         """Test a simple 5sec run of the project"""
-        print("in run")
         run('.', self.cmd_opts)
-        print("run end")
 
     def tearDown(self):
         shutil.rmtree(self.project_path)
+        if os.path.isfile('/tmp/results.sqlite'):
+            os.remove('/tmp/results.sqlite')
