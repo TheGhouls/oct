@@ -17,26 +17,26 @@
     <br>
     run time: {{ run_time }}
     <br>
-    rampup: {{ rampup }}
-    <br>
     test start: {{ report.results.start_datetime }}
     <br>
     test finish: {{ report.results.finish_datetime }}
     <br>
     time-series interval: {{ ts_interval }} seconds
-    {% if user_group_configs %}
+    {% if turrets_config %}
         workload configuration
         <table>
             <tr>
                 <th>turret name</th>
-                <th>threads</th>
+                <th>canons</th>
                 <th>script name</th>
+                <th>rampup</th>
             </tr>
-            {% for turret in user_group_configs %}
+            {% for turret in turrets_config %}
             <tr>
                 <td>{{ turret.name }}</td>
-                <td>{{ turret.num_threads }}</td>
-                <td>{{ turret.script_file }}</td>
+                <td>{{ turret.canons }}</td>
+                <td>{{ turret.script }}</td>
+                <td>{{ turret.rampup }}</td>
             </tr>
             {% endfor %}
         </table>

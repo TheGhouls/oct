@@ -4,7 +4,7 @@ from oct.multimechanize import graph, reportwriter
 from oct.results.reportresults import Results, ReportResults
 
 
-def output(results_dir, results_file, run_time, rampup, ts_interval, turrets=None, parent='../../'):
+def output(results_dir, results_file, config, parent='../../'):
     """Write the results output for the given test
 
     :param results_dir str: the directory for the results
@@ -15,7 +15,7 @@ def output(results_dir, results_file, run_time, rampup, ts_interval, turrets=Non
     :param turrets: the turrets configuration
     :param parents str: the parent directory
     """
-    results = Results(os.path.join(results_dir, results_file), run_time)
+    results = Results(os.path.join(results_dir, results_file), config['run_time'])
 
     print('transactions: %i' % results.total_transactions)
     print('errors: %i' % results.total_errors)
@@ -24,15 +24,14 @@ def output(results_dir, results_file, run_time, rampup, ts_interval, turrets=Non
     print('test finish: %s' % results.finish_datetime)
     print('')
 
-    report_results = ReportResults(results, ts_interval)
+    report_results = ReportResults(results, config['results_ts_interval'])
     report_results.set_all_transactions_results()
 
     data = {
         'report': report_results,
-        'rampup': rampup,
-        'run_time': run_time,
-        'ts_interval': ts_interval,
-        'user_group_configs': turrets,
+        'run_time': config['run_time'],
+        'ts_interval': config['results_ts_interval'],
+        'turrets_config': config['turrets'],
         'all_results': report_results.all_results,
     }
 

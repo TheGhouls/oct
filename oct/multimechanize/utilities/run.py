@@ -13,7 +13,6 @@ import optparse
 import os
 # -- NOT-NEEDED: import Queue
 import shutil
-import subprocess
 import sys
 import time
 from datetime import datetime
@@ -24,6 +23,7 @@ import oct.multimechanize.core as core
 import oct.results.resultswriter as resultswriter
 import oct.multimechanize.progressbar as progressbar
 from oct.multimechanize import __version__ as version
+from oct.utilities.configuration import configure
 
 
 def main():
@@ -65,9 +65,10 @@ def run_test(project_name, cmd_opts, remote_starter=None):
         remote_starter.test_running = True
         remote_starter.output_dir = None
 
-    (run_time, rampup, results_ts_interval, console_logging,
-     progress_bar, results_database, post_run_script, xml_report,
-     user_group_configs) = configure(project_name, cmd_opts)
+    # (run_time, rampup, results_ts_interval, console_logging,
+    #  progress_bar, results_database, post_run_script, xml_report,
+    #  user_group_configs) = configure(project_name, cmd_opts)
+    config = configure(project_name, cmd_opts)
 
     run_localtime = time.localtime()
     milisec = datetime.now().microsecond
@@ -84,27 +85,26 @@ def run_test(project_name, cmd_opts, remote_starter=None):
     script_prefix = os.path.normpath(script_prefix)
 
     user_groups = []
-    for i, ug_config in enumerate(user_group_configs):
-        script_file = os.path.join(script_prefix, ug_config.script_file)
-        ug = core.UserGroup(queue, i, ug_config.name, ug_config.num_threads,
-                            script_file, run_time, rampup)
+    for i, turret in enumerate(config['turrets']):
+        script_file = os.path.join(script_prefix, turret['script'])
+        ug = core.UserGroup(queue, i, turret['name'], turret['canons'],
+                            script_file, config['run_time'], turret['rampup'])
         user_groups.append(ug)
     for user_group in user_groups:
         user_group.start()
 
     start_time = time.time()
 
-    if console_logging:
+    if config['console_logging']:
         for user_group in user_groups:
             user_group.join()
     else:
-        print('\n  user_groups:  %i' % len(user_groups))
-        print('  threads: %i\n' % (ug_config.num_threads * len(user_groups)))
+        print('\n  turrets:  %i' % len(user_groups))
 
-        if progress_bar:
-            p = progressbar.ProgressBar(run_time)
+        if config['progress_bar']:
+            p = progressbar.ProgressBar(config['run_time'])
             elapsed = 0
-            while elapsed < (run_time + 1):
+            while elapsed < (config['run_time'] + 1):
                 p.update_time(elapsed)
                 if sys.platform.startswith('win'):
                     print('{0}   transactions: {1}  timers: {2}  errors: {3}\r'.format(p,
@@ -121,7 +121,7 @@ def run_test(project_name, cmd_opts, remote_starter=None):
             print(p)
 
         while [user_group for user_group in user_groups if user_group.is_alive()]:
-            if progress_bar:
+            if config['progress_bar']:
                 if sys.platform.startswith('win'):
                     print('waiting for all requests to finish...\r', end=' ')
                 else:
@@ -135,30 +135,13 @@ def run_test(project_name, cmd_opts, remote_starter=None):
     # all agents are done running at this point
     time.sleep(.2)  # make sure the writer queue is flushed
     print('\n\nanalyzing results...\n')
-    print("Here bitch")
-    output_results(output_dir, 'results.sqlite', run_time, rampup, results_ts_interval, user_group_configs,
-                   xml_report)
+    output_results(output_dir, 'results.sqlite', config)
     print('created: %sresults.html\n' % output_dir)
-    if xml_report:
-        print('created: %sresults.jtl' % output_dir)
-        print('created: last_results.jtl\n')
 
     # copy config file to results directory
     project_config = os.sep.join([cmd_opts.projects_dir, project_name, 'config.cfg'])
     saved_config = os.sep.join([output_dir, 'config.cfg'])
     shutil.copy(project_config, saved_config)
-
-    if results_database is not None:
-        print('loading results into database: %s\n' % results_database)
-        import oct.multimechanize.resultsloader
-        oct.multimechanize.resultsloader.load_results_database(project_name,
-                                                               run_localtime, output_dir, results_database,
-                                                               run_time, rampup,
-                                                               results_ts_interval, user_group_configs)
-
-    if post_run_script is not None:
-        print('running post_run_script: %s\n' % post_run_script)
-        subprocess.call(post_run_script)
 
     print('done.\n')
 
@@ -183,58 +166,58 @@ def rerun_results(project_name, cmd_opts, results_dir):
         print('created: last_results.jtl\n')
 
 
-def configure(project_name, cmd_opts, config_file=None):
-    """
+# def configure(project_name, cmd_opts, config_file=None):
+#     """
 
-    :rtype : object
-    """
-    user_group_configs = []
-    config = configparser.ConfigParser()
-    if config_file is None:
-        config_file = '%s/%s/config.cfg' % (cmd_opts.projects_dir, project_name)
-    config.read(config_file)
-    for section in config.sections():
-        if section == 'global':
-            run_time = config.getint(section, 'run_time')
-            rampup = config.getint(section, 'rampup')
-            results_ts_interval = config.getint(section, 'results_ts_interval')
-            try:
-                console_logging = config.getboolean(section, 'console_logging')
-            except configparser.NoOptionError:
-                console_logging = False
-            try:
-                progress_bar = config.getboolean(section, 'progress_bar')
-            except configparser.NoOptionError:
-                progress_bar = True
-            try:
-                results_database = config.get(section, 'results_database')
-                if results_database == 'None':
-                    results_database = None
-            except configparser.NoOptionError:
-                results_database = None
-            try:
-                post_run_script = config.get(section, 'post_run_script')
-                if post_run_script == 'None':
-                    post_run_script = None
-            except configparser.NoOptionError:
-                post_run_script = None
-            try:
-                xml_report = config.getboolean(section, 'xml_report')
-            except configparser.NoOptionError:
-                xml_report = False
-        else:
-            try:
-                threads = config.getint(section, 'threads')
-                script = config.get(section, 'script')
-                user_group_name = section
-                ug_config = UserGroupConfig(threads, user_group_name, script)
-                user_group_configs.append(ug_config)
-            except configparser.NoOptionError:
-                # silent fail for custom user configuration section
-                pass
+#     :rtype : object
+#     """
+#     user_group_configs = []
+#     config = configparser.ConfigParser()
+#     if config_file is None:
+#         config_file = '%s/%s/config.cfg' % (cmd_opts.projects_dir, project_name)
+#     config.read(config_file)
+#     for section in config.sections():
+#         if section == 'global':
+#             run_time = config.getint(section, 'run_time')
+#             rampup = config.getint(section, 'rampup')
+#             results_ts_interval = config.getint(section, 'results_ts_interval')
+#             try:
+#                 console_logging = config.getboolean(section, 'console_logging')
+#             except configparser.NoOptionError:
+#                 console_logging = False
+#             try:
+#                 progress_bar = config.getboolean(section, 'progress_bar')
+#             except configparser.NoOptionError:
+#                 progress_bar = True
+#             try:
+#                 results_database = config.get(section, 'results_database')
+#                 if results_database == 'None':
+#                     results_database = None
+#             except configparser.NoOptionError:
+#                 results_database = None
+#             try:
+#                 post_run_script = config.get(section, 'post_run_script')
+#                 if post_run_script == 'None':
+#                     post_run_script = None
+#             except configparser.NoOptionError:
+#                 post_run_script = None
+#             try:
+#                 xml_report = config.getboolean(section, 'xml_report')
+#             except configparser.NoOptionError:
+#                 xml_report = False
+#         else:
+#             try:
+#                 threads = config.getint(section, 'threads')
+#                 script = config.get(section, 'script')
+#                 user_group_name = section
+#                 ug_config = UserGroupConfig(threads, user_group_name, script)
+#                 user_group_configs.append(ug_config)
+#             except configparser.NoOptionError:
+#                 # silent fail for custom user configuration section
+#                 pass
 
-    return (run_time, rampup, results_ts_interval, console_logging,
-            progress_bar, results_database, post_run_script, xml_report, user_group_configs)
+#     return (run_time, rampup, results_ts_interval, console_logging,
+#             progress_bar, results_database, post_run_script, xml_report, user_group_configs)
 
 
 class UserGroupConfig(object):
