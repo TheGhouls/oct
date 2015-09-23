@@ -27,6 +27,8 @@ def create_project(project_name):
         os.makedirs(os.path.join(project_name, 'templates', 'img'))
         shutil.copy(os.path.join(BASE_DIR, 'templates', 'css', 'style.css'),
                     os.path.join(project_name, 'templates', 'css'))
+        shutil.copy(os.path.join(BASE_DIR, 'templates', 'html', 'report.html'),
+                    os.path.join(project_name, 'templates'))
     except OSError:
         sys.stderr.write('\nERROR: can not create directory for %r\n\n' % project_name)
         raise

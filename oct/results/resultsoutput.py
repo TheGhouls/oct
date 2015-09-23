@@ -60,7 +60,7 @@ def output(results_dir, results_file, config, parent='../../'):
                          results_dir)
 
     # generate the jinja template
-    j_env = Environment(loader=FileSystemLoader('/home/manu/projects/oct/oct/utilities/templates/html/'))
+    j_env = Environment(loader=FileSystemLoader(os.path.join(results_dir, parent, 'templates')))
     template = j_env.get_template('report.html')
 
     report = Report(results_dir, parent)
