@@ -1,7 +1,8 @@
 import os
 from jinja2 import Environment, FileSystemLoader
-from oct.multimechanize import graph, reportwriter
+from oct.multimechanize import graph
 from oct.results.reportresults import Results, ReportResults
+from oct.results.reportwriter import Report
 
 
 def output(results_dir, results_file, config, parent='../../'):
@@ -62,5 +63,5 @@ def output(results_dir, results_file, config, parent='../../'):
     j_env = Environment(loader=FileSystemLoader('/home/manu/projects/oct/oct/utilities/templates/html/'))
     template = j_env.get_template('report.html')
 
-    report = reportwriter.Report(results_dir, parent)
+    report = Report(results_dir, parent)
     report.write_report(template.render(data))

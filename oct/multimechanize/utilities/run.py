@@ -51,22 +51,16 @@ def main():
     # -- ORIGINAL-MAIN:
     if cmd_opts.results_dir:  # don't run a test, just re-process results
         rerun_results(project_name, cmd_opts, cmd_opts.results_dir)
-    elif cmd_opts.port:
-        import oct.multimechanize.rpcserver
-        oct.multimechanize.rpcserver.launch_rpc_server(cmd_opts.bind_addr, cmd_opts.port, project_name, run_test)
     else:
-        run_test(project_name, cmd_opts)
+        run(project_name, cmd_opts)
     return
 
 
-def run_test(project_name, cmd_opts, remote_starter=None):
+def run(project_name, cmd_opts, remote_starter=None):
     if remote_starter is not None:
         remote_starter.test_running = True
         remote_starter.output_dir = None
 
-    # (run_time, rampup, results_ts_interval, console_logging,
-    #  progress_bar, results_database, post_run_script, xml_report,
-    #  user_group_configs) = configure(project_name, cmd_opts)
     config = configure(project_name, cmd_opts)
 
     run_localtime = time.localtime()

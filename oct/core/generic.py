@@ -1,4 +1,4 @@
-from six.moves import configparser
+import json
 import random
 import csv
 import os
@@ -18,12 +18,12 @@ class GenericTransaction(object):
 
     def __init__(self, pathtoini, **kwargs):
 
-        self.config = configparser.ConfigParser()
-        self.config.read(os.path.join(pathtoini, 'config.cfg'))
+        with open(os.path.join(pathtoini, 'config.json'), 'r') as f:
+            self.config = json.load(f)
         self.id_choice = None
         self.random_url = None
         self.custom_timers = {}
-        self.sleep_time = self.config.getfloat('global', 'default_sleep_time')
+        self.sleep_time = 1
 
     @staticmethod
     def csv_to_list(csv_file):
