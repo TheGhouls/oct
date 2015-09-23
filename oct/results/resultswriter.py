@@ -4,7 +4,7 @@ import time
 import json
 from six.moves import queue
 import threading
-import sqlite3
+
 from oct.results.models import Result, set_database, db
 
 
@@ -44,9 +44,6 @@ class ResultsWriter(threading.Thread):
                         epoch=datas['epoch'],
                         custom_timers=json.dumps(datas['custom_timers']), turret_name=datas['turret_name'])
         result.save()
-
-    def end_file(self):
-        self.conn.close()
 
     def run(self):
         while True:

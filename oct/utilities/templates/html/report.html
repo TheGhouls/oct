@@ -121,5 +121,85 @@
     <embed src="All_Transactions_throughput.svg" type="image/svg+xml" />
 </figure>
 
+{% for timer in report.custom_timers %}
+<hr />
+<h2>Custom Timer: {{ timer.name }}</h2>
+
+<h3>Timer Summary (secs)</h3>
+<table>
+    <tr>
+        <th>count</th>
+        <th>min</th>
+        <th>avg</th>
+        <th>80pct</th>
+        <th>90pct</th>
+        <th>95pct</th>
+        <th>max</th>
+        <th>stdev</th>
+    </tr>
+    <tr>
+        <td>{{ timer.trans_timer_vals|length }} </td>
+        <td>{{ timer.min_trans_val }}</td>
+        <td>{{ timer.average_trans_val }}</td>
+        <td>{{ timer.pct_80_trans_val }}</td>
+        <td>{{ timer.pct_90_trans_val }}</td>
+        <td>{{ timer.pct_95_trans_val }}</td>
+        <td>{{ timer.max_trans_val }}</td>
+        <td>{{ timer.stdev_trans_val }}</td>
+    </tr>
+</table>
+
+<h3>Interval Details (secs)</h3>
+
+<table>
+    <tr>
+        <th>interval</th>
+        <th>count</th>
+        <th>rate</th>
+        <th>min</th>
+        <th>avg</th>
+        <th>80pct</th>
+        <th>90pct</th>
+        <th>95pct</th>
+        <th>max</th>
+        <th>stdev</th>
+    </tr>
+    {% for start in timer.interval_results.interval_list %}
+    <tr>
+        <td>{{ loop.index + 1 }}</td>
+        <td>{{ timer.interval_results.count.get(start) }}</td>
+        <td>{{ timer.interval_results.rate.get(start) }}</td>
+        <td>{{ timer.interval_results.min.get(start) }}</td>
+        <td>{{ timer.interval_results.avg_resptime_points.get(start) }}</td>
+        <td>{{ timer.interval_results.percentile_80.get(start) }}</td>
+        <td>{{ timer.interval_results.percentile_90.get(start) }}</td>
+        <td>{{ timer.interval_results.percentile_95.get(start) }}</td>
+        <td>{{ timer.interval_results.max.get(start) }}</td>
+        <td>{{ timer.interval_results.stdev.get(start) }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<h3>Graphs</h3>
+
+<h4>Response Time: {{ ts_interval }} sec time-series</h4>
+
+<figure>
+    <embed src="{{ timer.name }}_response_times.svg" type="image/svg+xml" />
+</figure>
+
+<h4>Response Time: raw data (all points)</h4>
+
+<figure>
+    <embed src="{{ timer.name }}_response_times_intervals.svg" type="image/svg+xml" />
+</figure>
+
+<h4>Throughput: 5 sec time-series</h4>
+
+<figure>
+    <embed src="{{ timer.name }}_throughput.svg" type="image/svg+xml" />
+</figure>
+{% endfor %}
+
 </body>
 </html>
