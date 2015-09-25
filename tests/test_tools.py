@@ -51,10 +51,9 @@ class ToolsTest(unittest.TestCase):
             sitemap_to_csv(self.sitemap_xml, '/bad/pat/to/output')
 
     def tearDown(self):
-        try:
+        if os.path.exists(self.output_file):
             os.remove(self.output_file)
+        if os.path.exists(self.email_file):
             os.remove(self.email_file)
+        if os.path.exists(self.sitemap_csv):
             os.remove(self.sitemap_csv)
-        except OSError:
-            # Already removed
-            pass
