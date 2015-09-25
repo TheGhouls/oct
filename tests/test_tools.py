@@ -29,7 +29,6 @@ class ToolsTest(unittest.TestCase):
     def test_email_generator_success(self):
         """Generate random mail addresses"""
         email_generator_func(self.email_file, 'e')
-        email_generator_func(self.email_file, 'z')
         self.assertTrue(os.path.isfile(self.email_file))
 
     def test_email_generator_errors(self):
