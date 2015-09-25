@@ -1,16 +1,26 @@
 import csv
-import json
 import argparse
+
+from oct.results.models import db, Result, set_database
 
 
 def results_to_csv(result_file, output_file, delimiter=';'):
-    with open(result_file, 'r') as f:
-        json_data = json.load(f)
+    """Take a sqlite filled database of results and return a csv file
+
+    :param result_file str: the path of the sqlite database
+    :param output_file str: the path of the csv output file
+    :param delimiter str: the desired delimiter for the output csv file
+    """
     headers = ['elapsed', 'epoch', 'turret_name', 'scriptrun_time', 'error']
     headers_row = {}
 
-    for item in json_data:
-        for k in item['custom_timers'].keys():
+    set_database(result_file, db, {})
+
+    results = Result.select()
+
+    for item in results:
+        result_item = item.to_dict()
+        for k in result_item['custom_timers'].keys():
             if k not in headers:
                 headers.append(k)
                 headers_row[k] = k
@@ -25,11 +35,12 @@ def results_to_csv(result_file, output_file, delimiter=';'):
             'error': 'error'
         })
         writer.writerow(headers_row)
-        for item in json_data:
-            timers = item['custom_timers']
-            del item['custom_timers']
-            item.update(timers)
-            writer.writerow(item)
+        for result_item in results:
+            line = result_item.to_dict()
+            for key, value in line['custom_timers'].items():
+                line[key] = value
+            del line['custom_timers']
+            writer.writerow(line)
 
 
 def main():
