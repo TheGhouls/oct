@@ -94,8 +94,15 @@
 0.3.5 to 0.3.6
 ==============
 
-* update the result writer, results are now output in json
-* add the new `oct-tocsv` command to convert json results file to csv manualy
+* update the result writer, results are now output in sqlite database
+* add the new `oct-tocsv` command to convert sqlite results file to csv manualy
 * add travis support
 * remove the browser from the core, you can use the oct-browser independant package
 * all configurations file are now created using jinja2 and all files are now located in oct/utilities/templates
+* all stats results are now refactored and improved, remove old results calculations form multimechanize
+* report.html is now a jinja2 template and can be override in the test folder
+* improve all unit tests
+* add peewee in dependencies for sqlite manipulation and future postgresql support
+* update configuration files, now using json file for the global configuration. Json is cleaner and simpler to use for configuration
+* improve results output
+* add oct-rebuild-results commands to rebuild results
