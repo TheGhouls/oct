@@ -41,7 +41,7 @@ setup(
         'pygal',
         'cairosvg',
         'tinycss',
-        'octbrowser'
+        'peewee'
     ],
     entry_points={'console_scripts': [
         'multimech-run = oct.multimechanize.utilities.run:main',
@@ -51,6 +51,7 @@ setup(
         'oct-newproject = oct.utilities.newproject:main',
         'octtools-sitemap-to-csv = oct.tools.xmltocsv:main',
         'octtools-user-generator = oct.tools.email_generator:email_generator',
-        'oct-tocsv = oct.tools.results_to_csv:main'
+        'oct-tocsv = oct.tools.results_to_csv:main',
+        'oct-rebuild-results = oct.tools.rebuild_results:main'
     ]},
 )

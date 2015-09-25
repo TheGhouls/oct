@@ -5,6 +5,8 @@ import json
 from six.moves import queue
 import threading
 
+from oct.results.models import Result, set_database, db
+
 
 class ResultsWriter(threading.Thread):
     """This class will handle results and stats comming from the turrets
@@ -12,7 +14,7 @@ class ResultsWriter(threading.Thread):
     :param output_dir: the output directory for the results
     :type output_dir: str
     """
-    def __init__(self, queue, output_dir):
+    def __init__(self, queue, output_dir, config):
         threading.Thread.__init__(self)
         self.output_dir = output_dir
         self.trans_count = 0
@@ -28,23 +30,20 @@ class ResultsWriter(threading.Thread):
             sys.stderr.write("ERROR: Can not create output directory\n")
             sys.exit(1)
 
-        self.init_file()
-
-    def init_file(self):
-        """Init the result's file
-        """
-        with open(self.output_dir + "results.json", 'w') as f:
-            json.dump([], f)
+        set_database(self.output_dir + "results.sqlite", db, config)
+        db.connect()
+        db.create_tables([Result])
 
     def write_result(self, datas):
-        with open(self.output_dir + "results.json", 'w') as f:
-            self.trans_count += 1
-            self.timer_count += len(datas['custom_timers'])
-            if datas['error']:
-                self.error_count += 1
+        self.trans_count += 1
+        self.timer_count += len(datas['custom_timers'])
+        if datas['error']:
+            self.error_count += 1
 
-            self.results.append(datas)
-            json.dump(self.results, f)
+        result = Result(error=datas['error'], scriptrun_time=datas['scriptrun_time'], elapsed=datas['elapsed'],
+                        epoch=datas['epoch'],
+                        custom_timers=json.dumps(datas['custom_timers']), turret_name=datas['turret_name'])
+        result.save()
 
     def run(self):
         while True:

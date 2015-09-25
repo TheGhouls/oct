@@ -1,10 +1,3 @@
-#!/usr/bin/env python
-#
-#  Copyright (c) 2010-2012 Corey Goldberg (corey@goldb.org)
-#  License: GNU LGPLv3
-#
-#  This file is part of Multi-Mechanize | Performance Test Framework
-#
 import os
 import shutil
 import sys
@@ -13,8 +6,8 @@ import sys
 class Report(object):
     def __init__(self, results_dir, parent):
         self.results_dir = results_dir
-        self.fn = results_dir + 'results.html'
-        self.templates_dir = os.path.join(results_dir, parent, 'templates')
+        self.fn = os.path.join(results_dir, 'results.html')
+        self.templates_dir = os.path.join(results_dir, '../../', 'templates')
 
         with open(os.path.join(self.templates_dir, 'head.html')) as f:
             self.head = f.read()
@@ -23,9 +16,10 @@ class Report(object):
             self.footer = f.read()
 
         self.set_statics()
-        self.write_head_html()
 
     def set_statics(self):
+        if os.path.exists(self.results_dir):
+            return
         try:
             shutil.copytree(os.path.join(self.templates_dir, 'css'), os.path.join(self.results_dir, 'css'))
             shutil.copytree(os.path.join(self.templates_dir, 'img'), os.path.join(self.results_dir, 'img'))
@@ -38,6 +32,10 @@ class Report(object):
         with open(self.fn, 'a') as f:
             f.write('%s\n' % line)
 
+    def write_report(self, template):
+        with open(self.fn, 'w') as f:
+            f.write(template)
+
     def write_head_html(self):
         with open(self.fn, 'w') as f:
             f.write(self.head)
@@ -45,8 +43,3 @@ class Report(object):
     def write_closing_html(self):
         with open(self.fn, 'a') as f:
             f.write(self.footer)
-
-
-
-
-
