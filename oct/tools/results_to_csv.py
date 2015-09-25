@@ -1,3 +1,4 @@
+import os
 import csv
 import argparse
 
@@ -11,6 +12,8 @@ def results_to_csv(result_file, output_file, delimiter=';'):
     :param output_file str: the path of the csv output file
     :param delimiter str: the desired delimiter for the output csv file
     """
+    if not os.path.isfile(result_file):
+        raise OSError("Results file does not exists")
     headers = ['elapsed', 'epoch', 'turret_name', 'scriptrun_time', 'error']
     headers_row = {}
 

@@ -11,20 +11,20 @@ class ToolsTest(unittest.TestCase):
     def setUp(self):
         self.base_dir = os.path.dirname(os.path.realpath(__file__))
         self.output_file = '/tmp/oct-test-output.csv'
-        self.results_file = os.path.join(self.base_dir, 'results.json')
+        self.results_file = os.path.join(self.base_dir, 'results.sqlite')
         self.email_file = '/tmp/oct-test-email.csv'
         self.sitemap_xml = os.path.join(self.base_dir, 'sitemap.xml')
         self.sitemap_csv = '/tmp/oct-test-sitemap.xml'
 
     def test_convert_to_csv_success(self):
-        """Convert json result file to csv"""
+        """Convert sqlite result file to csv"""
         results_to_csv(self.results_file, self.output_file)
         self.assertTrue(os.path.isfile(self.output_file))
 
     def test_convert_to_csv_errors(self):
-        """Convert json result file to csv error"""
-        with self.assertRaises(IOError):
-            results_to_csv('bad_result_file', '/tmp/toto')
+        """Convert sqlite result file to csv error"""
+        with self.assertRaises(OSError):
+            results_to_csv('bad_result_file', '/tmp/bad_results_file')
 
     def test_email_generator_success(self):
         """Generate random mail addresses"""
