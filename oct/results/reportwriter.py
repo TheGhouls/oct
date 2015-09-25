@@ -33,7 +33,6 @@ class Report(object):
             f.write('%s\n' % line)
 
     def write_report(self, template):
-        print(os.path.abspath(self.fn))
         with open(self.fn, 'w') as f:
             f.write(template)
 
