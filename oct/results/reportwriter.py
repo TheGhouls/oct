@@ -6,7 +6,7 @@ import sys
 class Report(object):
     def __init__(self, results_dir, parent):
         self.results_dir = results_dir
-        self.fn = results_dir + 'results.html'
+        self.fn = os.path.join(results_dir, 'results.html')
         self.templates_dir = os.path.join(results_dir, '../../', 'templates')
 
         with open(os.path.join(self.templates_dir, 'head.html')) as f:
@@ -18,6 +18,8 @@ class Report(object):
         self.set_statics()
 
     def set_statics(self):
+        if os.path.exists(self.results_dir):
+            return
         try:
             shutil.copytree(os.path.join(self.templates_dir, 'css'), os.path.join(self.results_dir, 'css'))
             shutil.copytree(os.path.join(self.templates_dir, 'img'), os.path.join(self.results_dir, 'img'))
@@ -31,6 +33,7 @@ class Report(object):
             f.write('%s\n' % line)
 
     def write_report(self, template):
+        print(os.path.abspath(self.fn))
         with open(self.fn, 'w') as f:
             f.write(template)
 

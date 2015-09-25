@@ -16,6 +16,7 @@ def output(results_dir, results_file, config, parent='../../'):
     :param turrets: the turrets configuration
     :param parents str: the parent directory
     """
+    results_dir = os.path.abspath(results_dir)
     results = Results(os.path.join(results_dir, results_file), config['run_time'])
 
     print('transactions: %i' % results.total_transactions)

@@ -1,10 +1,9 @@
 import six
 import time
 import json
-import sqlite3
 import numpy as np
 from collections import defaultdict
-from oct.results.models import Result, set_database, db
+from oct.results.models import Result
 
 
 def split_series(points, interval):
@@ -32,11 +31,6 @@ class Results(object):
         self.total_errors = 0
         self.uniq_timer_names = set()
         self.uniq_user_group_names = set()
-
-        self.conn = sqlite3.connect(results_file_name)
-        self.conn.text_factory = str
-        self.conn.row_factory = dict_factory
-        self.cur = self.conn.cursor()
 
         self.resp_stats_list = self.__parse_file()
 
