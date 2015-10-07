@@ -20,15 +20,15 @@ Description
 OCT stand for Open Charge Tester and his goal is simple : make a library that give you the tools for writing performances tests on webiste.
 Writing your script for browsing a web site is done with a custon minimal browser, based on lxml.
 
-If you know multi-mechnanize as well, we use it too, but here we already made some change inside the core, like :
+If you know multi-mechnanize as well, we've started using it for the core, but now we have removed many code from it and added many features
+ like :
 * update render of graphics
 * update command for new projects
 * more information in config file
-* customisable templates
+* new config file format
+* customisable jinja template
 * customisable configuration files
 * new commands
-* new browser replacing mechanize (python3 support)
-* etc...
 
 Installation
 ------------
@@ -50,11 +50,13 @@ Roadmap
 -------
 
 Actually the project is in the alpha version, non-suitable for production, but will be under active developpement for some featurs like :
-* Full python3 support (testing)
-* Full celery integration for multi-processing (in progress)
-* More generic tests in core module
+* Full zeromq integration for distribution of the tests (in progress)
+* Packaging turrets commands
+* More tools commands
+* More simple deployement
+* Light turrets management
 * More fancy templates
-* Stand-alone browser
+* Generic use of any library for testing
 
 Contribution
 ------------
