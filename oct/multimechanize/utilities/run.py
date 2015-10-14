@@ -23,6 +23,7 @@ import oct.results.resultswriter as resultswriter
 import oct.multimechanize.progressbar as progressbar
 from oct.multimechanize import __version__ as version
 from oct.utilities.configuration import configure
+from oct.core.hq import HightQuarter
 
 
 def main():
@@ -69,61 +70,13 @@ def run(project_name, cmd_opts, remote_starter=None):
                                                time.strftime('%Y.%m.%d_%H.%M.%S_'+str(milisec)+'/', run_localtime))
 
     # this queue is shared between all processes/threads
-    queue = multiprocessing.Queue()
-    rw = resultswriter.ResultsWriter(queue, output_dir, config)
-    rw.daemon = True
-    rw.start()
+    rw = resultswriter.ResultsWriter(output_dir, config)
 
     script_prefix = os.path.join(cmd_opts.projects_dir, project_name, "test_scripts")
     script_prefix = os.path.normpath(script_prefix)
 
-    user_groups = []
-    for i, turret in enumerate(config['turrets']):
-        script_file = os.path.join(script_prefix, turret['script'])
-        ug = core.UserGroup(queue, i, turret['name'], turret['canons'],
-                            script_file, config['run_time'], turret['rampup'])
-        user_groups.append(ug)
-    for user_group in user_groups:
-        user_group.start()
-
-    start_time = time.time()
-
-    if config['console_logging']:
-        for user_group in user_groups:
-            user_group.join()
-    else:
-        print('\n  turrets:  %i' % len(user_groups))
-
-        if config['progress_bar']:
-            p = progressbar.ProgressBar(config['run_time'])
-            elapsed = 0
-            while elapsed < (config['run_time'] + 1):
-                p.update_time(elapsed)
-                if sys.platform.startswith('win'):
-                    print('{0}   transactions: {1}  timers: {2}  errors: {3}\r'.format(p,
-                                                                                       rw.trans_count,
-                                                                                       rw.timer_count,
-                                                                                       rw.error_count), end=' ')
-                else:
-                    print('%s   transactions: %i  timers: %i  errors: %i' % (p, rw.trans_count, rw.timer_count,
-                                                                             rw.error_count))
-                    sys.stdout.write(chr(27) + '[A')
-                time.sleep(1)
-                elapsed = time.time() - start_time
-
-            print(p)
-
-        while [user_group for user_group in user_groups if user_group.is_alive()]:
-            if config['progress_bar']:
-                if sys.platform.startswith('win'):
-                    print('waiting for all requests to finish...\r', end=' ')
-                else:
-                    print('waiting for all requests to finish...\r')
-                    sys.stdout.write(chr(27) + '[A')
-            time.sleep(.5)
-
-        if not sys.platform.startswith('win'):
-            print()
+    hq = HightQuarter(config.get('publish_port', 5000), config.get('rc_port', 5001), rw, config)
+    hq.run()
 
     # all agents are done running at this point
     time.sleep(.2)  # make sure the writer queue is flushed

@@ -41,7 +41,8 @@ setup(
         'pygal',
         'cairosvg',
         'tinycss',
-        'peewee'
+        'peewee',
+        'oct-turrets'
     ],
     entry_points={'console_scripts': [
         'multimech-run = oct.multimechanize.utilities.run:main',
