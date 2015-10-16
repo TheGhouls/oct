@@ -60,13 +60,13 @@
     </tr>
     <tr>
         <td>{{ report.results.total_transactions }} </td>
-        <td>{{ all_results.min_trans_val }}</td>
-        <td>{{ all_results.average_trans_val }}</td>
-        <td>{{ all_results.pct_80_trans_val }}</td>
-        <td>{{ all_results.pct_90_trans_val }}</td>
-        <td>{{ all_results.pct_95_trans_val }}</td>
-        <td>{{ all_results.max_trans_val }}</td>
-        <td>{{ all_results.stdev_trans_val }}</td>
+        <td>{{ all_results.min_trans_val|round(2) }}</td>
+        <td>{{ all_results.average_trans_val|round(2) }}</td>
+        <td>{{ all_results.pct_80_trans_val|round(2) }}</td>
+        <td>{{ all_results.pct_90_trans_val|round(2) }}</td>
+        <td>{{ all_results.pct_95_trans_val|round(2) }}</td>
+        <td>{{ all_results.max_trans_val|round(2) }}</td>
+        <td>{{ all_results.stdev_trans_val|round(2) }}</td>
     </tr>
 </table>
 
@@ -88,15 +88,15 @@
     {% for start in all_results.interval_results.interval_list %}
     <tr>
         <td>{{ loop.index + 1 }}</td>
-        <td>{{ all_results.interval_results.count.get(start) }}</td>
-        <td>{{ all_results.interval_results.rate.get(start) }}</td>
-        <td>{{ all_results.interval_results.min.get(start) }}</td>
-        <td>{{ all_results.interval_results.avg_resptime_points.get(start) }}</td>
-        <td>{{ all_results.interval_results.percentile_80.get(start) }}</td>
-        <td>{{ all_results.interval_results.percentile_90.get(start) }}</td>
-        <td>{{ all_results.interval_results.percentile_95.get(start) }}</td>
-        <td>{{ all_results.interval_results.max.get(start) }}</td>
-        <td>{{ all_results.interval_results.stdev.get(start) }}</td>
+        <td>{{ all_results.interval_results.count.get(start)|round(2) }}</td>
+        <td>{{ all_results.interval_results.rate.get(start)|round(2) }}</td>
+        <td>{{ all_results.interval_results.min.get(start)|round(2) }}</td>
+        <td>{{ all_results.interval_results.avg_resptime_points.get(start)|round(2) }}</td>
+        <td>{{ all_results.interval_results.percentile_80.get(start)|round(2) }}</td>
+        <td>{{ all_results.interval_results.percentile_90.get(start)|round(2) }}</td>
+        <td>{{ all_results.interval_results.percentile_95.get(start)|round(2) }}</td>
+        <td>{{ all_results.interval_results.max.get(start)|round(2) }}</td>
+        <td>{{ all_results.interval_results.stdev.get(start)|round(2) }}</td>
     </tr>
     {% endfor %}
 </table>
@@ -139,13 +139,13 @@
     </tr>
     <tr>
         <td>{{ timer.trans_timer_vals|length }} </td>
-        <td>{{ timer.min_trans_val }}</td>
-        <td>{{ timer.average_trans_val }}</td>
-        <td>{{ timer.pct_80_trans_val }}</td>
-        <td>{{ timer.pct_90_trans_val }}</td>
-        <td>{{ timer.pct_95_trans_val }}</td>
-        <td>{{ timer.max_trans_val }}</td>
-        <td>{{ timer.stdev_trans_val }}</td>
+        <td>{{ timer.min_trans_val|round(2) }}</td>
+        <td>{{ timer.average_trans_val|round(2) }}</td>
+        <td>{{ timer.pct_80_trans_val|round(2) }}</td>
+        <td>{{ timer.pct_90_trans_val|round(2) }}</td>
+        <td>{{ timer.pct_95_trans_val|round(2) }}</td>
+        <td>{{ timer.max_trans_val|round(2) }}</td>
+        <td>{{ timer.stdev_trans_val|round(2) }}</td>
     </tr>
 </table>
 
@@ -167,15 +167,15 @@
     {% for start in timer.interval_results.interval_list %}
     <tr>
         <td>{{ loop.index + 1 }}</td>
-        <td>{{ timer.interval_results.count.get(start) }}</td>
-        <td>{{ timer.interval_results.rate.get(start) }}</td>
-        <td>{{ timer.interval_results.min.get(start) }}</td>
-        <td>{{ timer.interval_results.avg_resptime_points.get(start) }}</td>
-        <td>{{ timer.interval_results.percentile_80.get(start) }}</td>
-        <td>{{ timer.interval_results.percentile_90.get(start) }}</td>
-        <td>{{ timer.interval_results.percentile_95.get(start) }}</td>
-        <td>{{ timer.interval_results.max.get(start) }}</td>
-        <td>{{ timer.interval_results.stdev.get(start) }}</td>
+        <td>{{ timer.interval_results.count.get(start)|round(2) }}</td>
+        <td>{{ timer.interval_results.rate.get(start)|round(2) }}</td>
+        <td>{{ timer.interval_results.min.get(start)|round(2) }}</td>
+        <td>{{ timer.interval_results.avg_resptime_points.get(start)|round(2) }}</td>
+        <td>{{ timer.interval_results.percentile_80.get(start)|round(2) }}</td>
+        <td>{{ timer.interval_results.percentile_90.get(start)|round(2) }}</td>
+        <td>{{ timer.interval_results.percentile_95.get(start)|round(2) }}</td>
+        <td>{{ timer.interval_results.max.get(start)|round(2) }}</td>
+        <td>{{ timer.interval_results.stdev.get(start)|round(2) }}</td>
     </tr>
     {% endfor %}
 </table>
