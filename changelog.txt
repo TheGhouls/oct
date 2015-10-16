@@ -106,3 +106,9 @@
 * update configuration files, now using json file for the global configuration. Json is cleaner and simpler to use for configuration
 * improve results output
 * add oct-rebuild-results commands to rebuild results
+
+0.3.6 to 0.3.7
+==============
+
+* Fix several bugs in template and results rendering
+* Now rounding numeric values in template with 2 digits for more readable reports
