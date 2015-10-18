@@ -18,7 +18,7 @@ class Report(object):
         self.set_statics()
 
     def set_statics(self):
-        if os.path.exists(self.results_dir):
+        if not os.path.exists(self.results_dir):
             return
         try:
             shutil.copytree(os.path.join(self.templates_dir, 'css'), os.path.join(self.results_dir, 'css'))

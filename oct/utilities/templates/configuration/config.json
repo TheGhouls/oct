@@ -3,7 +3,7 @@
     "results_ts_interval": 10,
     "progress_bar": true,
     "console_logging": false,
-    "testing": true,  // while this is true, the report will be an in sqlite database file stored in /tmp/
+    "testing": false,
     "turrets": [
         {"name": "navigation", "canons": 2, "rampup": 0, "script": "{{ script_name }}"},
         {"name": "random", "canons": 2, "rampup": 0, "script": "{{ script_name }}"}
