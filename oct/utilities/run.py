@@ -76,6 +76,7 @@ def run(project_name, cmd_opts, remote_starter=None):
     script_prefix = os.path.normpath(script_prefix)
 
     hq = HightQuarter(config.get('publish_port', 5000), config.get('rc_port', 5001), rw, config)
+    hq.wait_turrets(config.get("min_turrets"), 1)
     hq.run()
 
     # all agents are done running at this point

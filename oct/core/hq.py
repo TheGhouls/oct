@@ -26,6 +26,25 @@ class HightQuarter(object):
 
         self.results_writer = results_writer
         self.config = config
+        self.turrets = []
+
+        self.publisher.send_json({'command': 'status_request', 'msg': None})
+
+    def _turret_already_exists(self, turret_data):
+        for t in self.turrets:
+            if turret_data['uuid'] == t['uuid']:
+                return False
+        return True
+
+    def wait_turrets(self, wait_for):
+        """Wait until wait_for turrets are connected and ready
+        """
+        while len(self.turrets) < wait_for:
+            socks = dict(self.poller.poll(1000))
+            if self.result_collector in socks:
+                data = self.result_collector.recv_json()
+                if 'turret' in data and 'status' in data and not self._turret_already_exists(data):
+                    self.turrets.append({'turret': data['turret'], 'status': data['status'], 'uuid': data['uuid']})
 
     def run(self):
         """Run the hight quarter, lunch the turrets and wait for results
@@ -38,11 +57,15 @@ class HightQuarter(object):
                 socks = dict(self.poller.poll(1000))
                 if self.result_collector in socks:
                     data = self.result_collector.recv_json()
-                    self.results_writer.write_result(data)
-                print('elapsed: {}   transactions: {}  timers: {}  errors: {}\r'.format(round(elapsed),
-                                                                                        self.results_writer.trans_count,
-                                                                                        self.results_writer.timer_count,
-                                                                                        self.results_writer.error_count),end=' ')
+                    if 'status' in data:
+                        self.turrets.append((data['turret'], data['status']))
+                    else:
+                        self.results_writer.write_result(data)
+                print('turrets: {}, elapsed: {}   transactions: {}  timers: {}  errors: {}\r'.format(self.turrets,
+                                                                                                     round(elapsed),
+                                                                                                     self.results_writer.trans_count,
+                                                                                                     self.results_writer.timer_count,
+                                                                                                     self.results_writer.error_count),end=' ')
                 elapsed = time.time() - start_time
             except (Exception, KeyboardInterrupt) as e:
                 print("\nStopping test, sending stop command to turrets")

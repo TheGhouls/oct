@@ -6,6 +6,7 @@
     "testing": false,
     "publish_port": 5000,
     "rc_port": 5001,
+    "min_turrets": 1,
     "turrets": [
         {"name": "navigation", "canons": 2, "rampup": 0, "script": "{{ script_name }}"},
         {"name": "random", "canons": 2, "rampup": 0, "script": "{{ script_name }}"}
