@@ -24,7 +24,8 @@ class HightQuarter(object):
 
         self.poller.register(self.result_collector, zmq.POLLIN)
 
-        self.results_writer = results_writer = results_writer
+        self.results_writer = results_writer
+        self.config = config
 
     def run(self):
         """Run the hight quarter, lunch the turrets and wait for results
@@ -34,15 +35,18 @@ class HightQuarter(object):
         self.publisher.send_json({'command': 'start', 'msg': 'open fire'})
         while elapsed < (self.config['run_time'] + 1):
             try:
-                socks = dict(self.poller.poll(self.result_collector.recv_json(), 1000))
+                socks = dict(self.poller.poll(1000))
                 if self.result_collector in socks:
+                    data = self.result_collector.recv_json()
                     self.results_writer.write_result(data)
-                print('{0}   transactions: {1}  timers: {2}  errors: {3}\r'.format(p,
-                                                                                   self.results_writer.trans_count,
-                                                                                   self.results_writer.timer_count,
-                                                                                   self.results_writer.error_count), end=' ')
+                print('elapsed: {}   transactions: {}  timers: {}  errors: {}\r'.format(round(elapsed),
+                                                                                        self.results_writer.trans_count,
+                                                                                        self.results_writer.timer_count,
+                                                                                        self.results_writer.error_count),end=' ')
                 elapsed = time.time() - start_time
-            except:
-                print("Stopping test, sending stop command to turrets")
+            except (Exception, KeyboardInterrupt) as e:
+                print("\nStopping test, sending stop command to turrets")
                 self.publisher.send_json({'command': 'stop', 'msg': 'premature stop'})
+                print(e)
+                break
         self.publisher.send_json({'command': 'stop', 'msg': 'stopping fire'})

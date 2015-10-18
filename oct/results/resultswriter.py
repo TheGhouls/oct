@@ -3,23 +3,28 @@ import sys
 import time
 import json
 from six.moves import queue
+from threading import Thread
 
 from oct.results.models import Result, set_database, db
 
 
-class ResultsWriter(object):
+class ResultsWriter(Thread):
     """This class will handle results and stats comming from the turrets
 
     :param output_dir: the output directory for the results
     :type output_dir: str
     """
-    def __init__(self, output_dir, config):
+    def __init__(self, output_dir, config, queue=None):
+        Thread.__init__(self)
         self.output_dir = output_dir
         self.trans_count = 0
         self.timer_count = 0
         self.error_count = 0
         self.turret_name = 'Turret'
         self.results = []
+
+        if queue:
+            self.queue = queue
 
         try:
             os.makedirs(self.output_dir, 0o755)
@@ -42,13 +47,13 @@ class ResultsWriter(object):
                         custom_timers=json.dumps(datas['custom_timers']), turret_name=datas['turret_name'])
         result.save()
 
-    # def run(self):
-    #     while True:
-    #         try:
-    #             elapsed, epoch, self.user_group_name, scriptrun_time, error, custom_timers = self.queue.get(False)
-    #             datas = dict(elapsed=elapsed, epoch=epoch, turret_name=self.user_group_name,
-    #                          scriptrun_time=scriptrun_time,
-    #                          error=error, custom_timers=custom_timers)
-    #             self.write_result(datas)
-    #         except queue.Empty:
-    #             time.sleep(.05)
+    def run(self):
+        while True:
+            try:
+                elapsed, epoch, self.user_group_name, scriptrun_time, error, custom_timers = self.queue.get(False)
+                datas = dict(elapsed=elapsed, epoch=epoch, turret_name=self.user_group_name,
+                             scriptrun_time=scriptrun_time,
+                             error=error, custom_timers=custom_timers)
+                self.write_result(datas)
+            except queue.Empty:
+                time.sleep(.05)

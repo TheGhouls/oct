@@ -34,10 +34,11 @@ class Results(object):
 
         self.resp_stats_list = self.__parse_file()
 
-        self.epoch_start = self.resp_stats_list[0].epoch_secs
-        self.epoch_finish = self.resp_stats_list[-1].epoch_secs
-        self.start_datetime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(self.epoch_start))
-        self.finish_datetime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(self.epoch_finish))
+        if len(self.resp_stats_list) > 0:
+            self.epoch_start = self.resp_stats_list[0].epoch_secs
+            self.epoch_finish = self.resp_stats_list[-1].epoch_secs
+            self.start_datetime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(self.epoch_start))
+            self.finish_datetime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(self.epoch_finish))
 
     def __parse_file(self):
         # set_database(self.results_file_name, db)
