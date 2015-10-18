@@ -39,12 +39,15 @@ class HightQuarter(object):
     def wait_turrets(self, wait_for):
         """Wait until wait_for turrets are connected and ready
         """
+        print("waiting for {} turrets to connect".format(wait_for - len(self.turrets)))
         while len(self.turrets) < wait_for:
             socks = dict(self.poller.poll(1000))
             if self.result_collector in socks:
                 data = self.result_collector.recv_json()
                 if 'turret' in data and 'status' in data and not self._turret_already_exists(data):
-                    self.turrets.append({'turret': data['turret'], 'status': data['status'], 'uuid': data['uuid']})
+                    self.turrets.append({'turret': data['turret'], 'status': data['status'], 'uuid': sdata['uuid']})
+                    print("{} turrets are now connected".format(len(self.turrets)))
+                    print("waiting for {} turrets to connect".format(wait_for - len(self.turrets)))
 
     def run(self):
         """Run the hight quarter, lunch the turrets and wait for results
