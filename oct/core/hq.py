@@ -55,6 +55,7 @@ class HightQuarter(object):
         elapsed = 0
         start_time = time.time()
         self.publisher.send_json({'command': 'start', 'msg': 'open fire'})
+        display = 'turrets: {}, elapsed: {}   transactions: {}  timers: {}  errors: {}\r'
         while elapsed < (self.config['run_time'] + 1):
             try:
                 socks = dict(self.poller.poll(1000))
@@ -64,11 +65,9 @@ class HightQuarter(object):
                         self.turrets.append((data['turret'], data['status']))
                     else:
                         self.results_writer.write_result(data)
-                print('turrets: {}, elapsed: {}   transactions: {}  timers: {}  errors: {}\r'.format(self.turrets,
-                                                                                                     round(elapsed),
-                                                                                                     self.results_writer.trans_count,
-                                                                                                     self.results_writer.timer_count,
-                                                                                                     self.results_writer.error_count),end=' ')
+                print(display.format(self.turrets, round(elapsed), self.results_writer.trans_count,
+                                     self.results_writer.timer_count,
+                                     self.results_writer.error_count), end='')
                 elapsed = time.time() - start_time
             except (Exception, KeyboardInterrupt) as e:
                 print("\nStopping test, sending stop command to turrets")
