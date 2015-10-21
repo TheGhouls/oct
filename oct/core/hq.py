@@ -36,6 +36,12 @@ class HightQuarter(object):
                 return False
         return True
 
+    def _update_turret(self, turret_data):
+        for t in self.turrets:
+            if turret_data['uuid'] == t['uuid']:
+                t['status'] = turret_data['status']
+                break
+
     def wait_turrets(self, wait_for):
         """Wait until wait_for turrets are connected and ready
         """
@@ -48,6 +54,8 @@ class HightQuarter(object):
                     self.turrets.append({'turret': data['turret'], 'status': data['status'], 'uuid': sdata['uuid']})
                     print("{} turrets are now connected".format(len(self.turrets)))
                     print("waiting for {} turrets to connect".format(wait_for - len(self.turrets)))
+                elif 'turret' in data and 'status' in data and self._turret_already_exists(data):
+                    self._update_turret(data)
 
     def run(self):
         """Run the hight quarter, lunch the turrets and wait for results
