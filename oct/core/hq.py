@@ -2,6 +2,7 @@ from __future__ import print_function
 import zmq
 import time
 import json
+import traceback
 
 
 class HightQuarter(object):
@@ -30,13 +31,11 @@ class HightQuarter(object):
         self.config = config
         self.turrets = []
 
-        self._publish({'command': 'status_request', 'msg': None})
-
     def _turret_already_exists(self, turret_data):
         for t in self.turrets:
             if turret_data['uuid'] == t['uuid']:
-                return False
-        return True
+                return True
+        return False
 
     def _update_turret(self, turret_data):
         for t in self.turrets:
@@ -46,14 +45,15 @@ class HightQuarter(object):
 
     def _publish(self, message):
         data = json.dumps(message)
-        self.publisher.send_multipart([bytes('hq', 'UTF-8'), bytes(data, 'UTF-8')])
+        self.publisher.send_string(data)
 
     def wait_turrets(self, wait_for):
         """Wait until wait_for turrets are connected and ready
         """
         print("waiting for {} turrets to connect".format(wait_for - len(self.turrets)))
         while len(self.turrets) < wait_for:
-            socks = dict(self.poller.poll(1000))
+            self._publish({'command': 'status_request', 'msg': None})
+            socks = dict(self.poller.poll(5000))
             if self.result_collector in socks:
                 data = self.result_collector.recv_json()
                 if 'turret' in data and 'status' in data and not self._turret_already_exists(data):
@@ -75,17 +75,15 @@ class HightQuarter(object):
                 socks = dict(self.poller.poll(1000))
                 if self.result_collector in socks:
                     data = self.result_collector.recv_json()
-                    if 'status' in data:
-                        self.turrets.append((data['turret'], data['status']))
-                    else:
+                    if 'status' not in data:
                         self.results_writer.write_result(data)
                 print(display.format(self.turrets, round(elapsed), self.results_writer.trans_count,
                                      self.results_writer.timer_count,
                                      self.results_writer.error_count), end='')
                 elapsed = time.time() - start_time
-            except (Exception, KeyboardInterrupt) as e:
+            except (Exception, KeyboardInterrupt):
                 print("\nStopping test, sending stop command to turrets")
                 self._publish({'command': 'stop', 'msg': 'premature stop'})
-                print(e)
+                traceback.print_exc()
                 break
         self._publish({'command': 'stop', 'msg': 'stopping fire'})
