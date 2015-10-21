@@ -1,6 +1,7 @@
 from __future__ import print_function
 import zmq
 import time
+import json
 
 
 class HightQuarter(object):
@@ -29,7 +30,7 @@ class HightQuarter(object):
         self.config = config
         self.turrets = []
 
-        self.publisher.send_json({'command': 'status_request', 'msg': None})
+        self.publisher.send_multipart(['hq', json.dumps({'command': 'status_request', 'msg': None})])
 
     def _turret_already_exists(self, turret_data):
         for t in self.turrets:
@@ -52,7 +53,7 @@ class HightQuarter(object):
             if self.result_collector in socks:
                 data = self.result_collector.recv_json()
                 if 'turret' in data and 'status' in data and not self._turret_already_exists(data):
-                    self.turrets.append({'turret': data['turret'], 'status': data['status'], 'uuid': sdata['uuid']})
+                    self.turrets.append({'turret': data['turret'], 'status': data['status'], 'uuid': data['uuid']})
                     print("{} turrets are now connected".format(len(self.turrets)))
                     print("waiting for {} turrets to connect".format(wait_for - len(self.turrets)))
                 elif 'turret' in data and 'status' in data and self._turret_already_exists(data):
@@ -63,7 +64,7 @@ class HightQuarter(object):
         """
         elapsed = 0
         start_time = time.time()
-        self.publisher.send_json({'command': 'start', 'msg': 'open fire'})
+        self.publisher.send_multipart(['hq', json.dumps({'command': 'start', 'msg': 'open fire'})])
         display = 'turrets: {}, elapsed: {}   transactions: {}  timers: {}  errors: {}\r'
         while elapsed < (self.config['run_time'] + 1):
             try:
@@ -80,7 +81,7 @@ class HightQuarter(object):
                 elapsed = time.time() - start_time
             except (Exception, KeyboardInterrupt) as e:
                 print("\nStopping test, sending stop command to turrets")
-                self.publisher.send_json({'command': 'stop', 'msg': 'premature stop'})
+                self.publisher.send_multipart(['hq', json.dumps({'command': 'stop', 'msg': 'premature stop'})])
                 print(e)
                 break
-        self.publisher.send_json({'command': 'stop', 'msg': 'stopping fire'})
+        self.publisher.send_multipart(['hq', json.dumps({'command': 'stop', 'msg': 'stopping fire'})])
