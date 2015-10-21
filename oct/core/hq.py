@@ -30,7 +30,7 @@ class HightQuarter(object):
         self.config = config
         self.turrets = []
 
-        self.publisher.send_multipart(['hq', json.dumps({'command': 'status_request', 'msg': None})])
+        self._publish({'command': 'status_request', 'msg': None})
 
     def _turret_already_exists(self, turret_data):
         for t in self.turrets:
@@ -43,6 +43,10 @@ class HightQuarter(object):
             if turret_data['uuid'] == t['uuid']:
                 t['status'] = turret_data['status']
                 break
+
+    def _publish(self, message):
+        data = json.dumps(message)
+        self.publisher.send_multipart([bytes('hq', 'UTF-8'), bytes(data, 'UTF-8')])
 
     def wait_turrets(self, wait_for):
         """Wait until wait_for turrets are connected and ready
@@ -64,7 +68,7 @@ class HightQuarter(object):
         """
         elapsed = 0
         start_time = time.time()
-        self.publisher.send_multipart(['hq', json.dumps({'command': 'start', 'msg': 'open fire'})])
+        self._publish({'command': 'start', 'msg': 'open fire'})
         display = 'turrets: {}, elapsed: {}   transactions: {}  timers: {}  errors: {}\r'
         while elapsed < (self.config['run_time'] + 1):
             try:
@@ -81,7 +85,7 @@ class HightQuarter(object):
                 elapsed = time.time() - start_time
             except (Exception, KeyboardInterrupt) as e:
                 print("\nStopping test, sending stop command to turrets")
-                self.publisher.send_multipart(['hq', json.dumps({'command': 'stop', 'msg': 'premature stop'})])
+                self._publish({'command': 'stop', 'msg': 'premature stop'})
                 print(e)
                 break
-        self.publisher.send_multipart(['hq', json.dumps({'command': 'stop', 'msg': 'stopping fire'})])
+        self._publish({'command': 'stop', 'msg': 'stopping fire'})
