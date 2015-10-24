@@ -30,6 +30,7 @@ class HightQuarter(object):
         self.results_writer = results_writer
         self.config = config
         self.turrets = []
+        self.started = False
 
     def _turret_already_exists(self, turret_data):
         for t in self.turrets:
@@ -47,6 +48,8 @@ class HightQuarter(object):
         self.results_writer.write_turret(turret)
         turret['uuid'] = turret_data['uuid']
         self.turrets.append(turret)
+        if self.started:
+            self._publish({'command': 'start', 'msg': 'open fire'})
 
     def _update_turret(self, turret_data):
         for t in self.turrets:
@@ -54,9 +57,9 @@ class HightQuarter(object):
                 t['status'] = turret_data['status']
                 break
 
-    def _publish(self, message):
+    def _publish(self, message, channel=''):
         data = json.dumps(message)
-        self.publisher.send_string(data)
+        self.publisher.send_string("%s %s" % (channel, data))
 
     def _process_turret_status(self, data):
         if 'status' in data:
@@ -74,7 +77,7 @@ class HightQuarter(object):
         print("waiting for {} turrets to connect".format(wait_for - len(self.turrets)))
         while len(self.turrets) < wait_for:
             self._publish({'command': 'status_request', 'msg': None})
-            socks = dict(self.poller.poll(5000))
+            socks = dict(self.poller.poll(1000))
             if self.result_collector in socks:
                 data = self.result_collector.recv_json()
                 self._process_turret_status(data)
@@ -86,8 +89,9 @@ class HightQuarter(object):
         elapsed = 0
         start_time = time.time()
         self._publish({'command': 'start', 'msg': 'open fire'})
+        self.started = True
         display = 'turrets: {}, elapsed: {}   transactions: {}  timers: {}  errors: {}\r'
-        while elapsed < (self.config['run_time'] + 1):
+        while elapsed <= (self.config['run_time']):
             try:
                 socks = dict(self.poller.poll(1000))
                 if self.result_collector in socks:
