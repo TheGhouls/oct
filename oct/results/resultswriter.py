@@ -5,7 +5,7 @@ import json
 from six.moves import queue
 from threading import Thread
 
-from oct.results.models import Result, set_database, db
+from oct.results.models import Result, Turret, set_database, db
 
 
 class ResultsWriter(Thread):
@@ -34,7 +34,11 @@ class ResultsWriter(Thread):
 
         set_database(self.output_dir + "results.sqlite", db, config)
         db.connect()
-        db.create_tables([Result])
+        db.create_tables([Result, Turret])
+
+    def write_turret(self, datas):
+        turret = Turret(name=datas['name'], canons=datas['canons'], script=datas['script'], rampup=datas['rampup'])
+        turret.save()
 
     def write_result(self, datas):
         self.trans_count += 1

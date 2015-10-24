@@ -1,5 +1,5 @@
 import json
-from peewee import Proxy, TextField, FloatField, CharField, SqliteDatabase, Model
+from peewee import Proxy, TextField, FloatField, CharField, IntegerField, SqliteDatabase, Model
 
 db = Proxy()
 
@@ -20,6 +20,24 @@ class Result(Model):
             'epoch': self.epoch,
             'custom_timers': json.loads(self.custom_timers),
             'turret_name': self.turret_name
+        }
+
+    class Meta:
+        database = db
+
+
+class Turret(Model):
+    name = TextField()
+    canons = IntegerField()
+    script = TextField()
+    rampup = IntegerField()
+
+    def to_dict(self):
+        return {
+            'name': self.name,
+            'canons': self.canons,
+            'script': self.script,
+            'rampup': self.rampup
         }
 
     class Meta:

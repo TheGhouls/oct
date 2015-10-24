@@ -37,6 +37,17 @@ class HightQuarter(object):
                 return True
         return False
 
+    def _add_turret(self, turret_data):
+        turret = {
+            'name': turret_data['turret'],
+            'canons': turret_data['canons'],
+            'script': turret_data['script'],
+            'rampup': turret_data['rampup']
+        }
+        self.results_writer.write_turret(turret)
+        turret['uuid'] = turret_data['uuid']
+        self.turrets.append(turret)
+
     def _update_turret(self, turret_data):
         for t in self.turrets:
             if turret_data['uuid'] == t['uuid']:
@@ -47,6 +58,16 @@ class HightQuarter(object):
         data = json.dumps(message)
         self.publisher.send_string(data)
 
+    def _process_turret_status(self, data):
+        if 'status' in data:
+            if self._turret_already_exists(data):
+                self._update_turret(data)
+            else:
+                self._add_turret(data)
+            return True
+        else:
+            return False
+
     def wait_turrets(self, wait_for):
         """Wait until wait_for turrets are connected and ready
         """
@@ -56,12 +77,8 @@ class HightQuarter(object):
             socks = dict(self.poller.poll(5000))
             if self.result_collector in socks:
                 data = self.result_collector.recv_json()
-                if 'turret' in data and 'status' in data and not self._turret_already_exists(data):
-                    self.turrets.append({'turret': data['turret'], 'status': data['status'], 'uuid': data['uuid']})
-                    print("{} turrets are now connected".format(len(self.turrets)))
-                    print("waiting for {} turrets to connect".format(wait_for - len(self.turrets)))
-                elif 'turret' in data and 'status' in data and self._turret_already_exists(data):
-                    self._update_turret(data)
+                self._process_turret_status(data)
+                print("waiting for {} turrets to connect".format(wait_for - len(self.turrets)))
 
     def run(self):
         """Run the hight quarter, lunch the turrets and wait for results
@@ -77,6 +94,8 @@ class HightQuarter(object):
                     data = self.result_collector.recv_json()
                     if 'status' not in data:
                         self.results_writer.write_result(data)
+                    else:
+                        self._process_turret_status(data)
                 print(display.format(self.turrets, round(elapsed), self.results_writer.trans_count,
                                      self.results_writer.timer_count,
                                      self.results_writer.error_count), end='')

@@ -18,6 +18,7 @@ def output(results_dir, results_file, config, parent='../../'):
     """
     results_dir = os.path.abspath(results_dir)
     results = Results(os.path.join(results_dir, results_file), config['run_time'])
+    print(results.turrets)
 
     if len(results.resp_stats_list) == 0:
         print("No results, cannot create report")
@@ -37,7 +38,7 @@ def output(results_dir, results_file, config, parent='../../'):
         'report': report_results,
         'run_time': config['run_time'],
         'ts_interval': config['results_ts_interval'],
-        'turrets_config': config['turrets'],
+        'turrets_config': results.turrets,
         'all_results': report_results.all_results,
     }
 

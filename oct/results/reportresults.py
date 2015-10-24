@@ -3,7 +3,7 @@ import time
 import json
 import numpy as np
 from collections import defaultdict
-from oct.results.models import Result
+from oct.results.models import Result, Turret
 
 
 def split_series(points, interval):
@@ -31,6 +31,7 @@ class Results(object):
         self.total_errors = 0
         self.uniq_timer_names = set()
         self.uniq_user_group_names = set()
+        self.turrets = []
 
         self.resp_stats_list = self.__parse_file()
 
@@ -41,7 +42,6 @@ class Results(object):
             self.finish_datetime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(self.epoch_finish))
 
     def __parse_file(self):
-        # set_database(self.results_file_name, db)
         resp_stats_list = []
         for item in Result.select():
             if item.error:
@@ -56,6 +56,9 @@ class Results(object):
             r = ResponseStats(item.elapsed, item.epoch, item.turret_name, item.scriptrun_time,
                               item.error, custom_timers)
             resp_stats_list.append(r)
+
+        for turret in Turret.select():
+            self.turrets.append(turret.to_dict())
 
         return resp_stats_list
 
