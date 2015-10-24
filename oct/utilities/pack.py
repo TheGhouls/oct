@@ -32,10 +32,11 @@ def tar_me(config_file, dir_path):
         if True:
             tar_file_name = turret['name']
             tar_file = tarfile.open(tar_file_name+".tar", 'w')
-            tar_file.add(os.path.abspath(config_file))
-            tar_file.add(os.path.abspath(turret['script']))
+            tar_file.addfile(tarfile.TarInfo("config.json"), file(os.path.abspath(config_file)))
+            tar_file.addfile(tarfile.TarInfo(os.path.basename(turret['script'])), file(os.path.abspath(config_file)))
+            # tar_file.add(os.path.abspath(config_file))
+            # tar_file.add(os.path.abspath(turret['script']))
             for f in tar_file.getnames():
                 print("Added %s" % f)
             print("tar file is: %s" % dir_path+tar_file_name+".tar")
             tar_file.close()
-
