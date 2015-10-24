@@ -53,6 +53,7 @@ setup(
         'octtools-sitemap-to-csv = oct.tools.xmltocsv:main',
         'octtools-user-generator = oct.tools.email_generator:email_generator',
         'oct-tocsv = oct.tools.results_to_csv:main',
-        'oct-rebuild-results = oct.tools.rebuild_results:main'
+        'oct-rebuild-results = oct.tools.rebuild_results:main',
+        'oct-pack-turrets = oct.utilities.pack:main'
     ]},
 )
