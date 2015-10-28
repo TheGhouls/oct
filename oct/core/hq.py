@@ -32,6 +32,10 @@ class HightQuarter(object):
         self.turrets = []
         self.started = False
 
+        # waiting for init sockets
+        print("Warmup")
+        time.sleep(1)
+
     def _turret_already_exists(self, turret_data):
         for t in self.turrets:
             if turret_data['uuid'] == t['uuid']:
@@ -77,7 +81,7 @@ class HightQuarter(object):
         print("waiting for {} turrets to connect".format(wait_for - len(self.turrets)))
         while len(self.turrets) < wait_for:
             self._publish({'command': 'status_request', 'msg': None})
-            socks = dict(self.poller.poll(1000))
+            socks = dict(self.poller.poll(2000))
             if self.result_collector in socks:
                 data = self.result_collector.recv_json()
                 self._process_turret_status(data)
@@ -110,3 +114,5 @@ class HightQuarter(object):
                 traceback.print_exc()
                 break
         self._publish({'command': 'stop', 'msg': 'stopping fire'})
+        self.result_collector.close()
+        self.publisher.close()
