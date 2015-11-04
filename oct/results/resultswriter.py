@@ -37,8 +37,10 @@ class ResultsWriter(Thread):
         db.create_tables([Result, Turret])
 
     def write_turret(self, datas):
-        turret = Turret(name=datas['name'], canons=datas['canons'], script=datas['script'], rampup=datas['rampup'])
+        turret = Turret(name=datas['turret'], canons=datas['canons'], script=datas['script'], rampup=datas['rampup'],
+                        uuid=datas['uuid'], status=datas['status'])
         turret.save()
+        return turret
 
     def write_result(self, datas):
         self.trans_count += 1

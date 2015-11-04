@@ -18,7 +18,6 @@ def output(results_dir, results_file, config, parent='../../'):
     """
     results_dir = os.path.abspath(results_dir)
     results = Results(os.path.join(results_dir, results_file), config['run_time'])
-    print(results.turrets)
 
     if len(results.resp_stats_list) == 0:
         print("No results, cannot create report")

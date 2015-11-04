@@ -38,7 +38,7 @@ class HightQuarter(object):
 
     def _turret_already_exists(self, turret_data):
         for t in self.turrets:
-            if turret_data['uuid'] == t['uuid']:
+            if turret_data['uuid'] == t.uuid:
                 return True
         return False
 
@@ -47,18 +47,18 @@ class HightQuarter(object):
             'name': turret_data['turret'],
             'canons': turret_data['canons'],
             'script': turret_data['script'],
-            'rampup': turret_data['rampup']
+            'rampup': turret_data['rampup'],
+            'uuid': turret_data['uuid']
         }
-        self.results_writer.write_turret(turret)
-        turret['uuid'] = turret_data['uuid']
-        self.turrets.append(turret)
+        self.turrets.append(self.results_writer.write_turret(turret_data))
         if self.started:
             self._publish({'command': 'start', 'msg': 'open fire'})
 
     def _update_turret(self, turret_data):
         for t in self.turrets:
-            if turret_data['uuid'] == t['uuid']:
-                t['status'] = turret_data['status']
+            if turret_data['uuid'] == t.uuid:
+                t.status = turret_data['status']
+                t.save()
                 break
 
     def _publish(self, message, channel=''):
@@ -104,7 +104,7 @@ class HightQuarter(object):
                         self.results_writer.write_result(data)
                     else:
                         self._process_turret_status(data)
-                print(display.format(self.turrets, round(elapsed), self.results_writer.trans_count,
+                print(display.format(len(self.turrets), round(elapsed), self.results_writer.trans_count,
                                      self.results_writer.timer_count,
                                      self.results_writer.error_count), end='')
                 elapsed = time.time() - start_time
