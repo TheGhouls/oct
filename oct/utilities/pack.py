@@ -2,40 +2,54 @@ import argparse
 import json
 import tarfile
 import os.path
-from oct_turrets.utils import is_valid_conf
+import tempfile
+from jinja2 import Environment, PackageLoader
+
+from oct.utilities.configuration import configure_for_turret
 
 
 def main():
     parser = argparse.ArgumentParser(description='Give parameters for package a turret config_file and v_user')
-    parser.add_argument('oct_project_path', type=str, default='', help='path for oct project dir')
+    parser.add_argument('path', type=str, help='path for oct project dir')
     args = parser.parse_args()
-    path = args.oct_project_path
 
-    if os.path.exists(path):
-        config_file_path = os.path.abspath(path) + "/config.json"
-        tar_path = tar_me(config_file_path, path)
+    if os.path.exists(args.path):
+        env = Environment(loader=PackageLoader('oct.utilities', 'templates'))
+        turret_config = env.get_template('configuration/turret_config.json')
+
+        config_file = os.path.join(os.path.abspath(args.path),  "config.json")
+        configs = configure_for_turret(args.path, config_file)
+
+        for turret in configs:
+            content = turret_config.render(turret)
+            tmp_file = os.path.join(tempfile.gettempdir(), turret['name'] + ".json")
+            try:
+                with open(tmp_file, 'w') as f:
+                    f.write(content)
+                pack_turret(turret, tmp_file, os.path.dirname(config_file))
+                os.remove(tmp_file)
+            except IOError as e:
+                print("Error while packaging turret %s" % turret['name'])
+                print("Error: %s" % e)
     else:
-        print("you need to enter a valid path")
+        parser.error("you need to enter a valid project path")
 
 
-def tar_me(config_file, dir_path):
-    conf_file = 0
-    if os.path.isfile(config_file):
-        with open(config_file) as f:
-            conf_file = f.read()
+def pack_turret(turret_config, tmp_config_file, base_config_path):
+    """pack a turret into a tar file based on the turret configuration
 
-    json_parsed = json.loads(conf_file)
-    turrets = json_parsed['turrets']
+    :param turret_config dict: the turret configuration to pack
+    :param tmp_config_file str: the path of the temp config file
+    :param base_config_path str: the base directory of the main configuration file
+    """
+    file_name = turret_config['name']
+    tar_file = tarfile.open(file_name + ".tar", 'w')
+    tar_file.add(os.path.abspath(tmp_config_file), arcname="config.json")
 
-    for turret in turrets:
-        # if is_valid_conf(turret):
-        if True:
-            tar_file_name = turret['name']
-            tar_file = tarfile.open(tar_file_name+".tar", 'w')
-            tar_file.add(os.path.abspath(config_file), arcname="config.json")
-            test_dir = os.path.dirname(os.path.abspath(config_file))
-            tar_file.add(os.path.join(test_dir, turret['script']), arcname=os.path.basename(turret['script']))
-            for f in tar_file.getnames():
-                print("Added %s" % f)
-            print("tar file is: %s" % dir_path+tar_file_name+".tar")
-            tar_file.close()
+    script_path = os.path.join(os.path.abspath(base_config_path), turret_config['script'])
+    tar_file.add(script_path, arcname=turret_config['script'])
+    for f in tar_file.getnames():
+        print("Added %s" % f)
+    tar_file.close()
+    print("Archive %s created" % (file_name + ".tar"))
+    print("=========================================")

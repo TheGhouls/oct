@@ -1,0 +1,9 @@
+{
+    "name": "{{ name }}",
+    "canons": {{ canons }},
+    "rampup": {{ rampup }},
+    "script": "{{ script }}",
+    "hq_address": "{{ hq_address }}",
+    "hq_publisher": {{ hq_publisher }},
+    "hq_rc": {{ hq_rc }}
+}

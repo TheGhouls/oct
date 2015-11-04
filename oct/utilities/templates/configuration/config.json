@@ -8,7 +8,7 @@
     "rc_port": 5001,
     "min_turrets": 1,
     "turrets": [
-        {"name": "navigation", "canons": 2, "rampup": 0, "script": "{{ script_name }}"},
-        {"name": "random", "canons": 2, "rampup": 0, "script": "{{ script_name }}"}
+        {"name": "navigation", "canons": 2, "rampup": 0, "script": "test_scripts/{{ script_name }}"},
+        {"name": "random", "canons": 2, "rampup": 0, "script": "test_scripts/{{ script_name }}"}
     ]
 }
