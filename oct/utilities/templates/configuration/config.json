@@ -10,5 +10,6 @@
     "turrets": [
         {"name": "navigation", "canons": 2, "rampup": 0, "script": "test_scripts/{{ script_name }}"},
         {"name": "random", "canons": 2, "rampup": 0, "script": "test_scripts/{{ script_name }}"}
-    ]
+    ],
+    "turrets_requirements": []
 }

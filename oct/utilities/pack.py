@@ -16,6 +16,7 @@ def main():
     if os.path.exists(args.path):
         env = Environment(loader=PackageLoader('oct.utilities', 'templates'))
         turret_config = env.get_template('configuration/turret_config.json')
+        turret_setup = env.get_template('scripts/setup.py')
 
         config_file = os.path.join(os.path.abspath(args.path),  "config.json")
         configs = configure_for_turret(args.path, config_file)
@@ -23,11 +24,17 @@ def main():
         for turret in configs:
             content = turret_config.render(turret)
             tmp_file = os.path.join(tempfile.gettempdir(), turret['name'] + ".json")
+            tmp_setup = os.path.join(tempfile.gettempdir(), turret['name'] + ".py")
+            turrets_requirements = turret.get('turrets_requirements', [])
+            setup_file = turret_setup.render({'turrets_requirements': turrets_requirements, 'name': turret.get('name')})
             try:
                 with open(tmp_file, 'w') as f:
                     f.write(content)
-                pack_turret(turret, tmp_file, os.path.dirname(config_file))
+                with open(tmp_setup, 'w') as f:
+                    f.write(setup_file)
+                pack_turret(turret, tmp_file, tmp_setup, os.path.dirname(config_file))
                 os.remove(tmp_file)
+                os.remove(tmp_setup)
             except IOError as e:
                 print("Error while packaging turret %s" % turret['name'])
                 print("Error: %s" % e)
@@ -35,7 +42,7 @@ def main():
         parser.error("you need to enter a valid project path")
 
 
-def pack_turret(turret_config, tmp_config_file, base_config_path):
+def pack_turret(turret_config, tmp_config_file, tmp_setup, base_config_path):
     """pack a turret into a tar file based on the turret configuration
 
     :param turret_config dict: the turret configuration to pack
@@ -45,6 +52,7 @@ def pack_turret(turret_config, tmp_config_file, base_config_path):
     file_name = turret_config['name']
     tar_file = tarfile.open(file_name + ".tar", 'w')
     tar_file.add(os.path.abspath(tmp_config_file), arcname="config.json")
+    tar_file.add(os.path.abspath(tmp_setup), arcname="setup.py")
 
     script_path = os.path.join(os.path.abspath(base_config_path), turret_config['script'])
     tar_file.add(script_path, arcname=turret_config['script'])
