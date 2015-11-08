@@ -70,7 +70,7 @@ def run(project_name, cmd_opts, remote_starter=None):
 
     # this queue is shared between all processes/threads
     queue = multiprocessing.Queue()
-    rw = resultswriter.ResultsWriter(queue, output_dir, config)
+    rw = resultswriter.ResultsWriter(output_dir, config, queue)
     rw.daemon = True
     rw.start()
 

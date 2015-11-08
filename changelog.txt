@@ -112,3 +112,23 @@
 
 * Fix several bugs in template and results rendering
 * Now rounding numeric values in template with 2 digits for more readable reports
+* oct-run command is now avaible with a whole new functionnalities:
+    - Does not run tests with multiprocess and multi-threads anymore
+    - Now creating a ZMQ pub and pull sockets and waiting for turrets to connect
+    - The number of turrets to wait is configurable in the project settings
+    - The oct-run command will now run a "HQ" containing the zmq sockets and will send the start command to turrets
+    and get informations about them
+    - The turrets are now located in a new github repository and a new pypi package oct-turrets https://github.com/karec/oct-turrets
+    - oct-turrets package is now a dependencies of the oct project
+    - You now have the ability to create a turret in any language supported by zeromq
+    - oct-browser package has been removed from the dependencies
+* OCT now encourage you to use the library you want for the tests (like selenium, mechanize, etc...)
+* For compatibility reason, the multi-mech run command are still functionnal but will be soon removed in favor of an oct-run-local command
+* Since the oct-browser is not a dependency anymore and you can use any library you want for testing the generic transaction of the core
+as been removed. Transaction now inherit by default from the BaseTransaction class located in the oct-turrets package
+* A new command has been added `oct-pack-turrets` that will create a tar file from a test folder containing all files and configuration
+required for running a turret. This command will generate a tar archive per turret in your project `config.json` file
+* More informations are stored in the results for the turrets and the report display the last known status of a turret and the associated last update time
+* You can hotplug a turret while a test is running. This turret will appear in the final report
+* The HQ will sleep for 1 second after the creation of the sockets to wait for them
+* Remove the GenericTransaction class in oct.core.generic

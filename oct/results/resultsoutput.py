@@ -19,6 +19,10 @@ def output(results_dir, results_file, config, parent='../../'):
     results_dir = os.path.abspath(results_dir)
     results = Results(os.path.join(results_dir, results_file), config['run_time'])
 
+    if len(results.resp_stats_list) == 0:
+        print("No results, cannot create report")
+        return False
+
     print('transactions: %i' % results.total_transactions)
     print('errors: %i' % results.total_errors)
     print('')
@@ -33,7 +37,7 @@ def output(results_dir, results_file, config, parent='../../'):
         'report': report_results,
         'run_time': config['run_time'],
         'ts_interval': config['results_ts_interval'],
-        'turrets_config': config['turrets'],
+        'turrets_config': results.turrets,
         'all_results': report_results.all_results,
     }
 
@@ -66,3 +70,4 @@ def output(results_dir, results_file, config, parent='../../'):
 
     report = Report(results_dir, parent)
     report.write_report(template.render(data))
+    return True

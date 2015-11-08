@@ -3,26 +3,28 @@ import sys
 import time
 import json
 from six.moves import queue
-import threading
+from threading import Thread
 
-from oct.results.models import Result, set_database, db
+from oct.results.models import Result, Turret, set_database, db
 
 
-class ResultsWriter(threading.Thread):
+class ResultsWriter(Thread):
     """This class will handle results and stats comming from the turrets
 
     :param output_dir: the output directory for the results
     :type output_dir: str
     """
-    def __init__(self, queue, output_dir, config):
-        threading.Thread.__init__(self)
+    def __init__(self, output_dir, config, queue=None):
+        Thread.__init__(self)
         self.output_dir = output_dir
         self.trans_count = 0
         self.timer_count = 0
         self.error_count = 0
         self.turret_name = 'Turret'
         self.results = []
-        self.queue = queue
+
+        if queue:
+            self.queue = queue
 
         try:
             os.makedirs(self.output_dir, 0o755)
@@ -32,7 +34,13 @@ class ResultsWriter(threading.Thread):
 
         set_database(self.output_dir + "results.sqlite", db, config)
         db.connect()
-        db.create_tables([Result])
+        db.create_tables([Result, Turret])
+
+    def write_turret(self, datas):
+        turret = Turret(name=datas['turret'], canons=datas['canons'], script=datas['script'], rampup=datas['rampup'],
+                        uuid=datas['uuid'], status=datas['status'])
+        turret.save()
+        return turret
 
     def write_result(self, datas):
         self.trans_count += 1
