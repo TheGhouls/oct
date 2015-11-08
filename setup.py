@@ -33,8 +33,6 @@ setup(
     install_requires=[
         'argparse',
         'pygal',
-        'cairosvg',
-        'tinycss',
         'peewee',
         'oct-turrets',
         'six',
