@@ -1,7 +1,6 @@
 Jinja2==2.8
 MarkupSafe==0.23
 numpy==1.10.1
-oct==0.3.6
 oct-turrets==0.1.0
 peewee==2.6.4
 pygal==2.0.10
