@@ -32,15 +32,15 @@ setup(
     ],
     install_requires=[
         'argparse',
-        'requests',
-        'lxml',
-        'celery',
-        'cssselect',
         'pygal',
         'cairosvg',
         'tinycss',
         'peewee',
-        'oct-turrets'
+        'oct-turrets',
+        'six',
+        'pyzmq',
+        'numpy',
+        'jinja2'
     ],
     entry_points={'console_scripts': [
         'multimech-run = oct.multimechanize.utilities.run:main',
