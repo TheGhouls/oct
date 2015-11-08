@@ -1,5 +1,3 @@
-__author__ = 'manu'
-
 import os
 from setuptools import setup
 from oct import __version__
@@ -19,11 +17,11 @@ setup(
     package_data={
         'oct.utilities': ['templates/css/*', 'templates/configuration/*', 'templates/html/*', 'templates/scripts/*']
     },
-    description="A library based on multi-mechanize for performances testing, using custom browser for writing tests",
+    description="A library for performances testing, give you the tools for load testing anything",
     long_description=long_description,
     url='https://github.com/karec/oct',
     download_url='https://github.com/karec/oct/archive/master.zip',
-    keywords=['testing', 'multi-mechanize', 'perfs', 'webscrapper', 'browser', 'web', 'performances', 'lxml'],
+    keywords=['testing', 'perfs', 'performances', 'web', 'load', 'zeromq'],
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Environment :: Console',
