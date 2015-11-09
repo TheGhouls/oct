@@ -10,6 +10,8 @@ oct
 
 [OCT on pypi](https://pypi.python.org/pypi/oct)
 
+follow us ! [@oct_py](https://twitter.com/oct_py)
+
 Python Version | Tested |
 -------------- | -------|
 Python >= 2.7.x|Tested|
@@ -47,6 +49,11 @@ Or using setuptools :
 
 `python setup.py install`
 
+
+Turrets
+-------
+
+[Python turret](https://github.com/karec/oct-turrets)
 
 What's next ?
 -------------
