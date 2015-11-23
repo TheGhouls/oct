@@ -49,11 +49,7 @@ def main():
 
     core.init(cmd_opts.projects_dir, project_name)
 
-    # -- ORIGINAL-MAIN:
-    if cmd_opts.results_dir:  # don't run a test, just re-process results
-        rerun_results(project_name, cmd_opts, cmd_opts.results_dir)
-    else:
-        run(project_name, cmd_opts)
+    run(project_name, cmd_opts)
     return
 
 
@@ -97,28 +93,6 @@ def run(project_name, cmd_opts, remote_starter=None):
         remote_starter.output_dir = output_dir
 
     return
-
-
-def rerun_results(project_name, cmd_opts, results_dir):
-    output_dir = '%s/%s/results/%s/' % (cmd_opts.projects_dir, project_name, results_dir)
-    saved_config = '%s/config.cfg' % output_dir
-    (run_time, rampup, results_ts_interval, console_logging, progress_bar, results_database,
-     post_run_script, xml_report, user_group_configs) = configure(project_name, cmd_opts, config_file=saved_config)
-    print('\n\nanalyzing results...\n')
-    # results.output_results(output_dir, 'results.csv', run_time, rampup, results_ts_interval, user_group_configs,
-    #                       xml_report)
-    print('created: %sresults.html\n' % output_dir)
-    if xml_report:
-        print('created: %sresults.jtl' % output_dir)
-        print('created: last_results.jtl\n')
-
-
-class UserGroupConfig(object):
-    def __init__(self, num_threads, name, script_file):
-        self.num_threads = num_threads
-        self.name = name
-        self.script_file = script_file
-
 
 if __name__ == '__main__':
     main()

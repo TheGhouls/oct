@@ -12,8 +12,6 @@ def create_project(project_name):
 
     config_content = env.get_template('configuration/config.json').render(script_name='v_user.py')
     script_content = env.get_template('scripts/v_user.py').render()
-    head_content = env.get_template('html/head.html').render()
-    footer_content = env.get_template('html/footer.html').render()
 
     if os.path.exists(project_name):
         sys.stderr.write('\nERROR: project already exists: %s\n\n' % project_name)
@@ -36,10 +34,6 @@ def create_project(project_name):
         f.write(config_content)
     with open(os.path.join(project_name, 'test_scripts', 'v_user.py'), 'w') as f:
         f.write(script_content)
-    with open(os.path.join(project_name, 'templates', 'head.html'), 'w') as f:
-        f.write(head_content)
-    with open(os.path.join(project_name, 'templates', 'footer.html'), 'w') as f:
-        f.write(footer_content)
 
 
 def main():
