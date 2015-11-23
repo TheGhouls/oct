@@ -47,6 +47,8 @@ class HQTest(unittest.TestCase):
     def tearDown(self):
         shutil.rmtree('/tmp/oct-test')
         self.turret.terminate()
+        if os.path.isfile('/tmp/results.sqlite'):
+            os.remove('/tmp/results.sqlite')
 
 if __name__ == '__main__':
     unittest.main()
