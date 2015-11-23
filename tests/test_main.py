@@ -26,7 +26,7 @@ class MainTest(unittest.TestCase):
         create_project(self.project_path)
 
         # update the runtime for the project
-        with open(os.path.join(self.base_dir, 'config.json')) as f:
+        with open(os.path.join(self.base_dir, 'fixtures', 'config.json')) as f:
             data = json.load(f)
 
         with open(os.path.join(self.project_path, 'config.json'), 'w') as f:

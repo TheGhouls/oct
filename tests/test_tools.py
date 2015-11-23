@@ -11,9 +11,9 @@ class ToolsTest(unittest.TestCase):
     def setUp(self):
         self.base_dir = os.path.dirname(os.path.realpath(__file__))
         self.output_file = '/tmp/oct-test-output.csv'
-        self.results_file = os.path.join(self.base_dir, 'results.sqlite')
+        self.results_file = os.path.join(self.base_dir, 'fixtures', 'results.sqlite')
         self.email_file = '/tmp/oct-test-email.csv'
-        self.sitemap_xml = os.path.join(self.base_dir, 'sitemap.xml')
+        self.sitemap_xml = os.path.join(self.base_dir, 'fixtures', 'sitemap.xml')
         self.sitemap_csv = '/tmp/oct-test-sitemap.xml'
 
     def test_convert_to_csv_success(self):
