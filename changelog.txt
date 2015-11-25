@@ -137,3 +137,4 @@ required for running a turret. This command will generate a tar archive per turr
 ==============
 
 * Fix an error in turret setup generation
+* Fix an error in throughput graph render (y-axis)

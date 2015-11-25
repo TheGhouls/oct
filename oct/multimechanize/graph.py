@@ -33,5 +33,6 @@ def tp_graph(throughputs_dict, image_name, dir='./'):
     fig = pygal.XY(x_title='Elapsed Time In Test (secs)', y_title='Transactions Per Second (count)',
                    human_readable=True, js=('http://kozea.github.io/pygal.js/2.0.x/pygal-tooltips.min.js',))
     x_seq = sorted(throughputs_dict.keys())
-    fig.add('Transactions per second', [(None, 0)] + [(round(item, 2), round(throughputs_dict[item], 2)) for item in x_seq])
+    y_seq = [round(throughputs_dict[x], 2) for x in x_seq]
+    fig.add('Transactions per second', [(None, 0)] + list(zip(x_seq, y_seq)))
     fig.render_to_file(filename=os.path.join(dir, image_name))
