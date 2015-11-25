@@ -132,3 +132,8 @@ required for running a turret. This command will generate a tar archive per turr
 * You can hotplug a turret while a test is running. This turret will appear in the final report
 * The HQ will sleep for 1 second after the creation of the sockets to wait for them
 * Remove the GenericTransaction class in oct.core.generic
+
+0.3.7 to 0.3.8
+==============
+
+* Fix an error in turret setup generation
