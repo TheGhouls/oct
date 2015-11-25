@@ -6,20 +6,36 @@
 Welcome to oct's documentation!
 ===============================
 
-Contents:
+.. sidebar:: Informations
+
+    OCT is still in alpha version and is not yet suitable for production, but
+    we working hard on it for make it to the beta !
+    Follow us for more informations about the next releases
+
+    **twitter** `@oct_py <https://twitter.com/oct_py>`_
+
+.. toctree::
+   :maxdepth: 1
+
+   introduction
+   installation
+   first_project
+
 
 .. toctree::
    :maxdepth: 2
-   :glob:
 
+   writing_tests
+   packaging_turrets
+   runing_turrets
+   collecting_results
+
+
+.. toctree::
+   :maxdepth: 1
+
+   writing_turret
    api
 
 
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
 
