@@ -45,7 +45,3 @@ def main():
         raise
 
     create_project(project_name)
-
-
-if __name__ == '__main__':
-    main()

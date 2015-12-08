@@ -7,60 +7,47 @@
 #  This file is part of Multi-Mechanize | Performance Test Framework
 #
 from __future__ import print_function
-import optparse
+import argparse
 import os
 import shutil
-import sys
 import time
 from datetime import datetime
 from oct.results.resultsoutput import output as output_results
 
-
-import oct.multimechanize.core as core
 import oct.results.resultswriter as resultswriter
-from oct.multimechanize import __version__ as version
 from oct.utilities.configuration import configure
 from oct.core.hq import HightQuarter
 
 
 def main():
     """
-    Main function to run multimechanize benchmark/performance test.
+    Main function to run oct tests.
     """
 
-    usage = 'Usage: %prog <project name> [options]'
-    parser = optparse.OptionParser(usage=usage, version=version)
-    parser.add_option('-r', '--results', dest='results_dir', help='results directory to reprocess')
-    parser.add_option('-d', '--directory', dest='projects_dir', help='directory containing project folder', default='.')
-    cmd_opts, args = parser.parse_args()
+    parser = argparse.ArgumentParser(prog="oct-run")
+    parser.add_argument('project_name', help="The project directory")
+    parser.add_argument('-r', '--results', dest='results_dir', help='results directory to reprocess')
+    parser.add_argument('-d', '--directory', dest='projects_dir', help='directory containing project folder',
+                        default='.')
+    args = parser.parse_args()
 
-    try:
-        project_name = args[0]
-    except IndexError:
-        sys.stderr.write('\nERROR: no project specified\n\n')
-        sys.stderr.write('%s\n' % usage)
-        sys.stderr.write('Example: oct-run my_project\n\n')
-        sys.exit(1)
-
-    core.init(cmd_opts.projects_dir, project_name)
-
-    run(project_name, cmd_opts)
-    return
+    run(args)
 
 
-def run(project_name, cmd_opts):
+def run(cmd_args):
 
-    config = configure(project_name, cmd_opts)
+    project_name = cmd_args.project_name
+    config = configure(project_name, cmd_args)
 
     run_localtime = time.localtime()
     milisec = datetime.now().microsecond
-    output_dir = '%s/%s/results/results_%s' % (cmd_opts.projects_dir, project_name,
+    output_dir = '%s/%s/results/results_%s' % (cmd_args.projects_dir, project_name,
                                                time.strftime('%Y.%m.%d_%H.%M.%S_' + str(milisec) + '/', run_localtime))
 
     # this queue is shared between all processes/threads
     rw = resultswriter.ResultsWriter(output_dir, config)
 
-    script_prefix = os.path.join(cmd_opts.projects_dir, project_name, "test_scripts")
+    script_prefix = os.path.join(cmd_args.projects_dir, project_name, "test_scripts")
     script_prefix = os.path.normpath(script_prefix)
 
     hq = HightQuarter(config.get('publish_port', 5000), config.get('rc_port', 5001), rw, config)
@@ -74,7 +61,7 @@ def run(project_name, cmd_opts):
         print('created: %sresults.html\n' % output_dir)
 
     # copy config file to results directory
-    project_config = os.sep.join([cmd_opts.projects_dir, project_name, 'config.json'])
+    project_config = os.sep.join([cmd_args.projects_dir, project_name, 'config.json'])
     saved_config = os.sep.join([output_dir, 'config.json'])
     shutil.copy(project_config, saved_config)
 
