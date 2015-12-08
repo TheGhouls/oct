@@ -7,10 +7,8 @@
 #  This file is part of Multi-Mechanize | Performance Test Framework
 #
 from __future__ import print_function
-import multiprocessing
 import optparse
 import os
-# -- NOT-NEEDED: import Queue
 import shutil
 import sys
 import time
@@ -20,7 +18,6 @@ from oct.results.resultsoutput import output as output_results
 
 import oct.multimechanize.core as core
 import oct.results.resultswriter as resultswriter
-import oct.multimechanize.progressbar as progressbar
 from oct.multimechanize import __version__ as version
 from oct.utilities.configuration import configure
 from oct.core.hq import HightQuarter
@@ -33,9 +30,7 @@ def main():
 
     usage = 'Usage: %prog <project name> [options]'
     parser = optparse.OptionParser(usage=usage, version=version)
-    parser.add_option('-p', '--port', dest='port', type='int', help='rpc listener port')
     parser.add_option('-r', '--results', dest='results_dir', help='results directory to reprocess')
-    parser.add_option('-b', '--bind-addr', dest='bind_addr', help='rpc bind address', default='localhost')
     parser.add_option('-d', '--directory', dest='projects_dir', help='directory containing project folder', default='.')
     cmd_opts, args = parser.parse_args()
 
@@ -44,7 +39,7 @@ def main():
     except IndexError:
         sys.stderr.write('\nERROR: no project specified\n\n')
         sys.stderr.write('%s\n' % usage)
-        sys.stderr.write('Example: multimech-run my_project\n\n')
+        sys.stderr.write('Example: oct-run my_project\n\n')
         sys.exit(1)
 
     core.init(cmd_opts.projects_dir, project_name)
@@ -53,17 +48,14 @@ def main():
     return
 
 
-def run(project_name, cmd_opts, remote_starter=None):
-    if remote_starter is not None:
-        remote_starter.test_running = True
-        remote_starter.output_dir = None
+def run(project_name, cmd_opts):
 
     config = configure(project_name, cmd_opts)
 
     run_localtime = time.localtime()
     milisec = datetime.now().microsecond
     output_dir = '%s/%s/results/results_%s' % (cmd_opts.projects_dir, project_name,
-                                               time.strftime('%Y.%m.%d_%H.%M.%S_'+str(milisec)+'/', run_localtime))
+                                               time.strftime('%Y.%m.%d_%H.%M.%S_' + str(milisec) + '/', run_localtime))
 
     # this queue is shared between all processes/threads
     rw = resultswriter.ResultsWriter(output_dir, config)
@@ -88,11 +80,4 @@ def run(project_name, cmd_opts, remote_starter=None):
 
     print('done.\n')
 
-    if remote_starter is not None:
-        remote_starter.test_running = False
-        remote_starter.output_dir = output_dir
-
     return
-
-if __name__ == '__main__':
-    main()
