@@ -1,3 +1,4 @@
+from __future__ import print_function
 import os
 import shutil
 import sys
@@ -28,7 +29,7 @@ def create_project(project_name):
         shutil.copy(os.path.join(BASE_DIR, 'templates', 'html', 'report.html'),
                     os.path.join(project_name, 'templates'))
     except OSError:
-        sys.stderr.write('\nERROR: can not create directory for %r\n\n' % project_name)
+        print('ERROR: can not create directory for %r' % project_name, file=sys.stderr)
         raise
     with open(os.path.join(project_name, 'config.json'), 'w') as f:
         f.write(config_content)
@@ -40,8 +41,8 @@ def main():
     try:
         project_name = sys.argv[1]
     except IndexError:
-        sys.stderr.write('\nERROR: no project specified\n\n')
-        sys.stderr.write('Usage: oct-newproject <project name>\n\n')
+        print('ERROR: no project specified', file=sys.stderr)
+        print('Usage: oct-newproject <project name>')
         raise
 
     create_project(project_name)
