@@ -41,9 +41,6 @@ setup(
         'jinja2'
     ],
     entry_points={'console_scripts': [
-        'multimech-run = oct.multimechanize.utilities.run:main',
-        'multimech-newproject = oct.multimechanize.utilities.newproject:main',
-        'multimech-gridgui = oct.multimechanize.utilities.gridgui:main',
         'oct-run = oct.utilities.run:main',
         'oct-newproject = oct.utilities.newproject:main',
         'octtools-sitemap-to-csv = oct.tools.xmltocsv:main',
