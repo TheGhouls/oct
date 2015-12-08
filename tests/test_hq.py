@@ -21,8 +21,16 @@ def run_turret():
     turret.start()
 
 
+def run_bad_turret():
+    module = load_file(os.path.join(BASE_DIR, 'fixtures', 'bad_user.py'))
+    config = validate_conf(os.path.join(BASE_DIR, 'fixtures', 'turret_config.json'))
+    turret = Turret(config, module)
+    turret.start()
+
+
 class CmdOpts(object):
     projects_dir = '/tmp/oct-test'
+    project_name = '.'
 
 
 class HQTest(unittest.TestCase):
@@ -30,6 +38,8 @@ class HQTest(unittest.TestCase):
     def setUp(self):
         self.turret = Process(target=run_turret)
         self.turret.start()
+        self.bad_turret = Process(target=run_bad_turret)
+        self.bad_turret.start()
         create_project('/tmp/oct-test')
 
         # update the runtime for the project
@@ -42,7 +52,7 @@ class HQTest(unittest.TestCase):
     def test_run_hq(self):
         """Test hq
         """
-        run('.', CmdOpts())
+        run(CmdOpts())
 
     def test_create_errors(self):
         """Test errors when creating project
@@ -53,6 +63,7 @@ class HQTest(unittest.TestCase):
     def tearDown(self):
         shutil.rmtree('/tmp/oct-test')
         self.turret.terminate()
+        self.bad_turret.terminate()
         if os.path.isfile('/tmp/results.sqlite'):
             os.remove('/tmp/results.sqlite')
 
