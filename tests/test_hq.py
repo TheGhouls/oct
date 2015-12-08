@@ -44,6 +44,12 @@ class HQTest(unittest.TestCase):
         """
         run('.', CmdOpts())
 
+    def test_create_errors(self):
+        """Test errors when creating project
+        """
+        with self.assertRaises(OSError):
+            create_project('/tmp')
+
     def tearDown(self):
         shutil.rmtree('/tmp/oct-test')
         self.turret.terminate()

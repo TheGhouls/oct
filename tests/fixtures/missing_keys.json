@@ -1,0 +1,9 @@
+{
+    "results_ts_interval": 1,
+    "progress_bar": true,
+    "console_logging": false,
+    "min_turrets": 1,
+    "turrets": [
+        {"name": "navigation", "canons": 2, "rampup": 0, "script": "v_user.py"}
+    ]
+}
