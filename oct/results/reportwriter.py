@@ -1,6 +1,5 @@
 import os
 import shutil
-import sys
 
 
 class Report(object):
@@ -19,8 +18,7 @@ class Report(object):
             shutil.copytree(os.path.join(self.templates_dir, 'img'), os.path.join(self.results_dir, 'img'))
             shutil.copytree(os.path.join(self.templates_dir, 'scripts'), os.path.join(self.results_dir, 'scripts'))
         except OSError:
-            sys.stderr.write('\nERROR : can not create directory for results\n\n')
-            sys.exit(1)
+            raise OSError("Could not create directory for results")
 
     def write_report(self, template):
         with open(self.fn, 'w') as f:

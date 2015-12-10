@@ -26,7 +26,7 @@ def configure(project_name, cmd_opts, config_file=None):
     :rtype: Object
     """
     if config_file is None:
-        config_file = os.path.join(cmd_opts.projects_dir, project_name, 'config.json')
+        config_file = os.path.join(cmd_opts.project_dir, project_name, 'config.json')
     try:
         with open(config_file, 'r') as f:
             config = json.load(f)

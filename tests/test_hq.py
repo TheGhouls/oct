@@ -1,11 +1,12 @@
 import os
+import sys
 import unittest
 import shutil
 import json
 from multiprocessing import Process
 from oct_turrets.turret import Turret
 from oct_turrets.utils import load_file, validate_conf
-from oct.utilities.run import run
+from oct.utilities.run import run, main
 from oct.utilities.newproject import create_project
 
 
@@ -29,7 +30,7 @@ def run_bad_turret():
 
 
 class CmdOpts(object):
-    projects_dir = '/tmp/oct-test'
+    project_dir = '/tmp/oct-test'
     project_name = '.'
 
 
@@ -53,6 +54,14 @@ class HQTest(unittest.TestCase):
         """Test hq
         """
         run(CmdOpts())
+
+    def test_run_argparse(self):
+        """Test runing hq with command line arguments
+        """
+        sys.argv = sys.argv[:1]
+        opts = CmdOpts()
+        sys.argv += [opts.project_name, "-d", opts.project_dir]
+        main()
 
     def test_create_errors(self):
         """Test errors when creating project

@@ -1,7 +1,8 @@
 import os
+import sys
 import unittest
 
-from oct.tools.results_to_csv import results_to_csv
+from oct.tools.results_to_csv import results_to_csv, main
 
 
 class ToolsTest(unittest.TestCase):
@@ -20,6 +21,13 @@ class ToolsTest(unittest.TestCase):
         """Convert sqlite result file to csv error"""
         with self.assertRaises(OSError):
             results_to_csv('bad_result_file', '/tmp/bad_results_file')
+
+    def test_parser(self):
+        """Call the main function with sys.argv set
+        """
+        sys.argv = sys.argv[:1]
+        sys.argv += [self.results_file, self.output_file, "-d", ";"]
+        main()
 
     def tearDown(self):
         if os.path.exists(self.output_file):
