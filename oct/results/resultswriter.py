@@ -43,7 +43,15 @@ class ResultsWriter(Thread):
         if datas['error']:
             self.error_count += 1
 
-        result = Result(error=datas['error'], scriptrun_time=datas['scriptrun_time'], elapsed=datas['elapsed'],
-                        epoch=datas['epoch'],
-                        custom_timers=json.dumps(datas['custom_timers']), turret_name=datas['turret_name'])
-        result.save()
+        datas['custom_timers'] = json.dumps(datas['custom_timers'])
+        self.results.append(datas)
+
+        if len(self.results) >= 450:  # SQLite limit for inser_many is 500
+            with db.atomic():
+                Result.insert_many(self.results).execute()
+            del self.results[:]
+
+    def write_remaining(self):
+        with db.atomic():
+            Result.insert_many(self.results).execute()
+        del self.results[:]

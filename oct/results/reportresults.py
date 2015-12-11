@@ -36,7 +36,7 @@ class Results(object):
 
     def __parse_file(self):
         resp_stats_list = []
-        for item in Result.select():
+        for item in Result.select().order_by(Result.epoch.asc()):
             if item.error:
                 self.total_errors += 1
             self.total_transactions += 1

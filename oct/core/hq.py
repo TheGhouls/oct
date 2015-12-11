@@ -15,14 +15,13 @@ class HightQuarter(object):
     :param config dict: the configuration of the test
     """
     def __init__(self, publish_port, rc_port, results_writer, config):
-        context = zmq.Context()
-
+        self.context = zmq.Context()
         self.poller = zmq.Poller()
 
-        self.result_collector = context.socket(zmq.PULL)
+        self.result_collector = self.context.socket(zmq.PULL)
         self.result_collector.bind("tcp://*:{}".format(rc_port))
 
-        self.publisher = context.socket(zmq.PUB)
+        self.publisher = self.context.socket(zmq.PUB)
         self.publisher.bind("tcp://*:{}".format(publish_port))
 
         self.poller.register(self.result_collector, zmq.POLLIN)
@@ -43,13 +42,6 @@ class HightQuarter(object):
         return False
 
     def _add_turret(self, turret_data):
-        turret = {
-            'name': turret_data['turret'],
-            'canons': turret_data['canons'],
-            'script': turret_data['script'],
-            'rampup': turret_data['rampup'],
-            'uuid': turret_data['uuid']
-        }
         self.turrets.append(self.results_writer.write_turret(turret_data))
         if self.started:
             self._publish({'command': 'start', 'msg': 'open fire'})
@@ -114,5 +106,15 @@ class HightQuarter(object):
                 traceback.print_exc()
                 break
         self._publish({'command': 'stop', 'msg': 'stopping fire'})
-        self.result_collector.close()
-        self.publisher.close()
+        print("\n\nProcessing all remaining messages...")
+        self.result_collector.unbind(self.result_collector.LAST_ENDPOINT)
+        try:
+            data = self.result_collector.recv_json(zmq.NOBLOCK)
+            while data:
+                data = self.result_collector.recv_json(zmq.NOBLOCK)
+                if 'status' not in data:
+                    self.results_writer.write_result(data)
+        except zmq.Again:
+            self.result_collector.close()
+            self.publisher.close()
+            self.results_writer.write_remaining()
