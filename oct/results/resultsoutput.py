@@ -1,4 +1,5 @@
 import os
+import time
 from jinja2 import Environment, FileSystemLoader
 from oct.multimechanize import graph
 from oct.results.reportresults import Results, ReportResults
@@ -16,6 +17,7 @@ def output(results_dir, results_file, config, parent='../../'):
     :param turrets: the turrets configuration
     :param parents str: the parent directory
     """
+    start = time.time()
     results_dir = os.path.abspath(results_dir)
     results = Results(os.path.join(results_dir, results_file), config['run_time'])
 
@@ -65,10 +67,10 @@ def output(results_dir, results_file, config, parent='../../'):
                          results_dir)
 
     # generate the jinja template
-    print(os.path.join(results_dir, parent, 'templates'))
     j_env = Environment(loader=FileSystemLoader(os.path.join(results_dir, parent, 'templates')))
     template = j_env.get_template('report.html')
 
     report = Report(results_dir, parent)
     report.write_report(template.render(data))
+    print("Report generated in {} seconds".format(time.time() - start))
     return True
