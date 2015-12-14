@@ -1,5 +1,4 @@
 import argparse
-import json
 import tarfile
 import os.path
 import tempfile
@@ -18,7 +17,7 @@ def main():
         turret_config = env.get_template('configuration/turret_config.json')
         turret_setup = env.get_template('scripts/setup.py')
 
-        config_file = os.path.join(os.path.abspath(args.path),  "config.json")
+        config_file = os.path.join(os.path.abspath(args.path), "config.json")
         configs = configure_for_turret(args.path, config_file)
 
         for turret in configs:
@@ -32,7 +31,7 @@ def main():
                     f.write(content)
                 with open(tmp_setup, 'w') as f:
                     f.write(setup_file)
-                pack_turret(turret, tmp_file, tmp_setup, os.path.dirname(config_file))
+                pack_turret(turret, tmp_file, tmp_setup, os.path.dirname(config_file), args.path)
                 os.remove(tmp_file)
                 os.remove(tmp_setup)
             except IOError as e:
@@ -42,7 +41,7 @@ def main():
         parser.error("you need to enter a valid project path")
 
 
-def pack_turret(turret_config, tmp_config_file, tmp_setup, base_config_path):
+def pack_turret(turret_config, tmp_config_file, tmp_setup, base_config_path, path=None):
     """pack a turret into a tar file based on the turret configuration
 
     :param turret_config dict: the turret configuration to pack
@@ -50,6 +49,8 @@ def pack_turret(turret_config, tmp_config_file, tmp_setup, base_config_path):
     :param base_config_path str: the base directory of the main configuration file
     """
     file_name = turret_config['name']
+    if path is not None:
+        file_name = os.path.join(path, file_name)
     tar_file = tarfile.open(file_name + ".tar", 'w')
     tar_file.add(os.path.abspath(tmp_config_file), arcname="config.json")
     tar_file.add(os.path.abspath(tmp_setup), arcname="setup.py")
