@@ -171,4 +171,4 @@ Backward compatibility breaks
 * oct.multimechanize.core module has been deleted
 * remote starter argument has been removed from the oct-run command
 * removed old head and footer html templates since only report.html jinja2 template will be used
-
+* removed oct.testing package, since it's irrevelent inside the core of oct
