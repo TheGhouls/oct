@@ -136,5 +136,39 @@ required for running a turret. This command will generate a tar archive per turr
 0.3.7 to 0.3.8
 ==============
 
+Improvements and bug fixes
+--------------------------
+
 * Fix an error in turret setup generation
 * Fix an error in throughput graph render (y-axis)
+* All new tests suit, now covering 99% of the code
+* Added python 3.5 support
+* Improve performance when writing results to the sqlite database using db.atomic() context
+* The HQ socket will now unbind and read all buffered messages before generating the report
+* The generation of the report will now print the total time took to create all reports
+* New project command now has better error output
+* oct.results.reportwriter has been refactored for removing old multi-threading code
+* oct.results.reportwriter will now only use report.html file to generate the results.html output
+* oct.results.reportwriter will now raise an OSError if the results directory cannot be create instead of a sys.exit
+* oct.results.resultswriter has been refactored for removing old multi-threading code
+* oct-pack-turrets command now create tar file relative from path argument
+* oct-utilities.run now use argparse instead of optparse
+* fixed typo for oct.utilities.configuration
+* fixed typo for oct.utilities.run
+
+
+Backward compatibility breaks
+-----------------------------
+
+* oct.core.main module has been removed since it's no longer used for runing tests
+* oct.multimechanize.rpcserver module has been removed since it's no longer used
+* oct.multimechanize.utilities package has been removed in favor of oct utilities
+* octtools-sitemap-to-csv command has been removed since it's no longer usefull inside the core
+* octtools-user-generator command has been removed since it's no longer usefull inside the core
+* oct.tools.xmltocsv module has been removed since it's irrevelent inside the core
+* oct.tools.email_generator module has been removed since it's irrevelent inside the core
+* removed all multimech-* commands
+* oct.multimechanize.core module has been deleted
+* remote starter argument has been removed from the oct-run command
+* removed old head and footer html templates since only report.html jinja2 template will be used
+
