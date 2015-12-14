@@ -54,7 +54,7 @@ class UtilitiesTest(unittest.TestCase):
         sys.argv = sys.argv[:1]
         sys.argv.append(self.test_dir)
         open(os.path.join(self.test_dir, 'navigation.tar'), 'a').close()
-        os.chmod(os.path.join(self.test_dir, 'navigation.tar'), 0444)
+        os.chmod(os.path.join(self.test_dir, 'navigation.tar'), 0o444)
         main_pack()
 
     def tearDown(self):
