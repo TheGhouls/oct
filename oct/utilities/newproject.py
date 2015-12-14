@@ -16,7 +16,7 @@ def create_project(project_name):
 
     if os.path.exists(project_name):
         sys.stderr.write('\nERROR: project already exists: %s\n\n' % project_name)
-        raise OSError()
+        raise OSError("Project %s already exists" % project_name)
     try:
         os.makedirs(project_name)
         os.makedirs(os.path.join(project_name, 'test_scripts'))
