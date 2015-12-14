@@ -1,19 +1,17 @@
 import os
 import sys
 import json
-from threading import Thread
 
 from oct.results.models import Result, Turret, set_database, db
 
 
-class ResultsWriter(Thread):
+class ResultsWriter(object):
     """This class will handle results and stats comming from the turrets
 
     :param output_dir: the output directory for the results
     :type output_dir: str
     """
     def __init__(self, output_dir, config):
-        Thread.__init__(self)
         self.output_dir = output_dir
         self.trans_count = 0
         self.timer_count = 0
