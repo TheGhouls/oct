@@ -12,7 +12,7 @@ setup(
     version=__version__,
     author='Emmanuel Valette',
     author_email='manu.valette@gmail.com',
-    packages=['oct', 'oct.core', 'oct.multimechanize', 'oct.utilities', 'oct.tools', 'oct.results'],
+    packages=['oct', 'oct.core', 'oct.utilities', 'oct.tools', 'oct.results'],
     package_data={
         'oct.utilities': ['templates/css/*', 'templates/configuration/*', 'templates/html/*', 'templates/scripts/*']
     },
