@@ -1,7 +1,7 @@
 import os
 import time
 from jinja2 import Environment, FileSystemLoader
-from oct.multimechanize import graph
+from oct.results import graphs
 from oct.results.reportresults import Results, ReportResults
 from oct.results.reportwriter import Report
 
@@ -43,28 +43,28 @@ def output(results_dir, results_file, config, parent='../../'):
         'all_results': report_results.all_results,
     }
 
-    graph.resp_graph_raw(report_results.all_results['trans_timer_points'], 'All_Transactions_response_times.svg',
-                         results_dir)
-    graph.resp_graph(report_results.all_results['interval_results'].avg_resptime_points,
-                     report_results.all_results['interval_results'].percentile_80,
-                     report_results.all_results['interval_results'].percentile_90,
-                     'All_Transactions_response_times_intervals.svg',
-                     results_dir)
-    graph.tp_graph(report_results.all_results['throughput_points'],
-                   'All_Transactions_throughput.svg',
-                   results_dir)
+    graphs.resp_graph_raw(report_results.all_results['trans_timer_points'], 'All_Transactions_response_times.svg',
+                          results_dir)
+    graphs.resp_graph(report_results.all_results['interval_results'].avg_resptime_points,
+                      report_results.all_results['interval_results'].percentile_80,
+                      report_results.all_results['interval_results'].percentile_90,
+                      'All_Transactions_response_times_intervals.svg',
+                      results_dir)
+    graphs.tp_graph(report_results.all_results['throughput_points'],
+                    'All_Transactions_throughput.svg',
+                    results_dir)
 
     report_results.clear_all_transactions()
     report_results.set_custom_timers()
 
     for timer in report_results.custom_timers:
-        graph.resp_graph_raw(timer['trans_timer_points'], timer['name'] + '_response_times.svg', results_dir)
-        graph.tp_graph(timer['throughput_points'], timer['name'] + '_throughput.svg', results_dir)
-        graph.resp_graph(timer['interval_results'].avg_resptime_points,
-                         timer['interval_results'].percentile_80,
-                         timer['interval_results'].percentile_90,
-                         timer['name'] + '_response_times_intervals.svg',
-                         results_dir)
+        graphs.resp_graph_raw(timer['trans_timer_points'], timer['name'] + '_response_times.svg', results_dir)
+        graphs.tp_graph(timer['throughput_points'], timer['name'] + '_throughput.svg', results_dir)
+        graphs.resp_graph(timer['interval_results'].avg_resptime_points,
+                          timer['interval_results'].percentile_80,
+                          timer['interval_results'].percentile_90,
+                          timer['name'] + '_response_times_intervals.svg',
+                          results_dir)
 
     # generate the jinja template
     j_env = Environment(loader=FileSystemLoader(os.path.join(results_dir, parent, 'templates')))
