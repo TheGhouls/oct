@@ -16,7 +16,7 @@ setup(
     package_data={
         'oct.utilities': ['templates/css/*', 'templates/configuration/*', 'templates/html/*', 'templates/scripts/*']
     },
-    description="A library for performances testing, give you the tools for load testing anything",
+    description="A library for performances testing, give you the tools for load testing anything with any language",
     long_description=long_description,
     url='https://github.com/karec/oct',
     download_url='https://github.com/karec/oct/archive/master.zip',
