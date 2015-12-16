@@ -16,13 +16,6 @@ def split_series(points, interval):
     return series
 
 
-def dict_factory(cursor, row):
-    d = {}
-    for idx, col in enumerate(cursor.description):
-        d[col[0]] = row[idx]
-    return d
-
-
 class Results(object):
     def __init__(self, results_file_name, run_time):
         self.results_file_name = results_file_name
@@ -43,7 +36,7 @@ class Results(object):
 
     def __parse_file(self):
         resp_stats_list = []
-        for item in Result.select():
+        for item in Result.select().order_by(Result.epoch.asc()):
             if item.error:
                 self.total_errors += 1
             self.total_transactions += 1
