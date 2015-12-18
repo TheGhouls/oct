@@ -45,6 +45,16 @@ oct.results.resultswriter module
     :show-inheritance:
 
 
+oct.results.graphs module
+-------------------------
+
+.. automodule:: oct.results.graphs
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+
 Module contents
 ---------------
 

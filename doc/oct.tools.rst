@@ -4,14 +4,6 @@ oct.tools package
 Submodules
 ----------
 
-oct.tools.email_generator module
---------------------------------
-
-.. automodule:: oct.tools.email_generator
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 oct.tools.rebuild_results module
 --------------------------------
 
@@ -27,15 +19,6 @@ oct.tools.results_to_csv module
     :members:
     :undoc-members:
     :show-inheritance:
-
-oct.tools.xmltocsv module
--------------------------
-
-.. automodule:: oct.tools.xmltocsv
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 
 Module contents
 ---------------
