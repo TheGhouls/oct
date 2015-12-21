@@ -4,11 +4,9 @@ Introduction
 Terminology
 -----------
 
-* HQ for Headquarter. It's the "server" part of OCT and it will be in charge of sending start signal,
-stop signal, collecting results and create reports
-* Turret. A turret is the "client" part of OCT. It can be writen in any language and it communicate with the HQ using a
-zeromq PUSH socket. Each turret own one or many canons.
-* Canons represent the virtual users, wich means that each canon of the turret will run a test in parallel
+* HQ for Headquarter: It's the "server" part of OCT and it will be in charge of sending start signal, stop signal, collecting results and create reports
+* Turret: A turret is the "client" part of OCT. It can be writen in any language and it communicate with the HQ using a zeromq PUSH socket. Each turret own one or many canons.
+* Canons: represent the virtual users, wich means that each canon of the turret will run a test in parallel
 
 .. note::
     Why do we use this terminology ? For the image. Think about it like that : Eeach turret own X canons who will shoot
@@ -35,3 +33,7 @@ the principle is very simple :
 * OCT will next compile the results and create a html report of them
 
 Want a graph ? Here you go :
+
+.. image:: images/oct-basic.png
+
+So this is it, a bunch of turrets shooting the target and sending informations to the HQ
