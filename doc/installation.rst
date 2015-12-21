@@ -6,13 +6,13 @@ OCT-Core
 
 OCT is avaible on pypi so you can install it with pip :
 
-.. code-block::
+.. code-block:: bash
 
     pip install oct
 
 Or directly from the source :
 
-.. code-block::
+.. code-block:: bash
 
     python setup.py install
 
