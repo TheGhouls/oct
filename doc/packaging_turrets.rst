@@ -27,6 +27,8 @@ You can use it like this :
 
 A sucessful packing should return the following output :
 
+.. code-block:: bash
+
     Added config.json
     Added setup.py
     Added test_scripts/v_user.py
