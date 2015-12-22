@@ -3,6 +3,12 @@ Running Tests
 
 So that's it ? Your turrets are running and ready to fire at the target ? Si let's do it ! Leeeeeeroooooy....
 
+Configuration
+-------------
+
+Before runing tests, don't forget to update your configuration if your turrets are running on a different IP address from
+the master
+
 Starting the test
 -----------------
 
