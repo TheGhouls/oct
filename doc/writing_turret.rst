@@ -27,7 +27,7 @@ results to the master using a PUSH/PULL pattern.
 
 .. note::
     The python turret also use a push/pull pattern to enable communication between canons and the turret itself. All canons
-    have an inproc turret connected to the turret process
+    have an inproc socket connected to the turret process
 
 Requirements
 ------------
