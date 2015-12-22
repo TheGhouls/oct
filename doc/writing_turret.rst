@@ -18,7 +18,7 @@ who have a zeromq binding (`zeromq bindings`_)
 
 .. _zeromq bindings: http://zeromq.org/bindings:_start
 
-But before starting to code, you need to understand how the turrets must communication with the HQ. Here is a schema to explain it :
+But before starting to code, you need to understand how the turrets must communicate with the HQ. Here is a schema to explain it :
 
 .. image:: images/oct-turrets.png
 
