@@ -84,6 +84,9 @@ Differents HQ orders
 Tell the HQ that your turret is ready to fire
 ---------------------------------------------
 
+Don't forget to update your turret status
+-----------------------------------------
+
 Messages format
 ---------------
 
@@ -93,3 +96,8 @@ Error management
 In case of turret destruction
 -----------------------------
 
+Writing your own packaging system
+---------------------------------
+
+Document your turret
+--------------------
