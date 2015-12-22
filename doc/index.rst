@@ -23,7 +23,7 @@ Welcome to oct's documentation!
 
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    writing_tests
    packaging_turrets
