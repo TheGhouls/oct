@@ -21,7 +21,7 @@ numpy, but you will also need ``build-essential`` and ``python-dev`` to compile 
 
 On a debian based system you can install them using apt for example :
 
-.. code-block::
+.. code-block:: bash
 
     apt-get install python-dev build-essential
 
