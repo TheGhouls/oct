@@ -151,19 +151,81 @@ A complete json status message will look like this :
     The status messages are not fixed, since it will only be used in the final html report for displaying the latest known status of each turret. But it's important to update it, since if a turret crash it will obviously impact the results
 
 
-Messages format
----------------
+Results messages format
+-----------------------
 
+All results messages that will be sent to the HQ should have the same pattern. Note that if the HQ receive a bad formated
+message, it will fail silently and you will loose those data.
+
+But don't worry, one again the pattern of the message is pretty simple :
+
+.. code-block:: json
+
+    {
+        "turret_name": "my_turret"
+        "elapsed": 12.48, // total elapsed time in seconds
+        "epoch": 1453731738 // timestamp
+        "scriptrun_time": 1.2, // the time took to execute the current transaction (aka the response time)
+        "error": "My custom error", // the error string. Is empty if no error has been encoutered
+        "custom_timers": {
+            "Example_timer": 0.6, // An example custom timer
+            "Other timer": 0.8
+        }
+    }
+
+See ? Pretty simple, isn't it ?
+
+This message will be sent throught the ``push`` socket of the turret and will be received by the ``pull`` socket of the master.
+
+.. warning::
+    The master use the ``recv_json()`` method to retreive messages comming from the turret, so take care to sent message using the appropriate ``send_json()`` method
 
 
 Error management
 ----------------
 
-In case of turret destruction
------------------------------
+The way turrets must manage errors is pretty simple :
+
+* If the error is inside the test scripts, the turret should keep running
+* If the error append at the turret level, the turret should send a notification to the master before dying
+
+So, what's append when an error is thrown inside the test script ? Simple, your turret should log it and send it to the master
+in the ``error`` key of the reponse message.
+In this way, the user could be informed if something went wrong, but the test will continue to run.
+
+And now, if the error appear at the turret level, how to tell the HQ that your turret is dead ? Pretty simple again,
+a simple status message with the new status of your turret :
+
+.. code-block:: json
+
+    {
+        "turret": "navigation",
+        "status": "Aborted",
+        "uuid": "d7b8a1cc-639a-405c-9b16-62ce5cd66f36",
+        'rampup': "30",
+        'script': "tests/navigation.py",
+        'canons': "250"
+    }
+
+If you sent this message, in the final html report the user will be able to see that one turret is dead and at
+what moment the turret as stopped
 
 Writing your own packaging system
 ---------------------------------
 
+For this you're pretty free to implement it the way you want / need it. But don't forget that the goal of the packaging system
+is to provide simple way to distribute turret in one command line.
+
+Don't forget to document the way your user can packages their turrets and how they can run it !
+
+Plus, the packaging avaible in the core of OCT will be rewrite to be more generic as soon as possible.
+
 Document your turret
 --------------------
+
+This section will be fast : please, document your turret !
+
+We expected to create a list to reference all avaible turrets, and if your turrets doesn't have a documentation, we will refuse
+to list it.
+
+But keep in mind that for many case, a simple README is enough. But at least, tell your users how to install and start your turret.
