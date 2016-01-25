@@ -75,20 +75,86 @@ Obviously you will need all this informations
 Sockets configuration
 ---------------------
 
+For communicate with the master, you will need only two zmq sockets :
+
+* A sub socket listening on '' channel and on '<turret_uniq_id>' channel (for direct order)
+* A push socket to send results to the master
+
+For exemple, in the python turret the sockets are create this way :
+
+.. code-block:: python
+
+    self.context = zmq.Context()
+
+    self.master_publisher = self.context.socket(zmq.SUB)
+    self.master_publisher.connect("tcp://{}:{}".format(self.config['hq_address'], self.config['hq_publisher']))
+    self.master_publisher.setsockopt_string(zmq.SUBSCRIBE, '')
+    self.master_publisher.setsockopt_string(zmq.SUBSCRIBE, self.uuid)
+
+    self.result_collector = self.context.socket(zmq.PUSH)
+    self.result_collector.connect("tcp://{}:{}".format(self.config['hq_address'], self.config['hq_rc']))
+
+You need to listen to the ``master_publisher`` socket to retreive commands from the master. This commands can be :
+
+* ``start`` this command tell the turret to start the tests
+* ``status_request`` the master ask for the status of the turret (RUNING, WAITING, etc.)
+* ``kill`` tell the turret to shutdown
+* ``stop`` tell the turret to stop tests and clean everything to be in ready stat again
+
 HQ commands format
 ------------------
 
-Differents HQ orders
---------------------
+The HQ will send command in json format. All command message will contains 2 keys : ``command`` and ``msg``.
+
+For example :
+
+.. code-block:: json
+
+    {
+        "command": "stop",
+        "msg": "premature stop"
+    }
 
 Tell the HQ that your turret is ready to fire
 ---------------------------------------------
 
-Don't forget to update your turret status
------------------------------------------
+The master need to know if your turret is ready or not. Why ? Because the HQ can be configured for waiting to ``n`` number
+of turrets before starting tests.
+
+But don't worry, it's pretty simple to tell the master that your turret is ready, you only need to send a json message with the
+``PUSH`` socket of your turret.
+
+The status message SHOULD contain all of the following fields :
+
+* ``turret`` the name of the turret (eg: navigation, connection, etc.)
+* ``status`` the current status of the turret (ready, waiting, running, etc.)
+* ``uuid`` the unid id of the turret
+* ``rampup`` the rampup setting of the turret
+* ``script`` the test script associated with the turret
+* ``canons`` the number of canons on the turret
+
+A complete json status message will look like this :
+
+.. code-block:: json
+
+    {
+        "turret": "navigation",
+        "status": "READY",
+        "uuid": "d7b8a1cc-639a-405c-9b16-62ce5cd66f36",
+        'rampup': "30",
+        'script': "tests/navigation.py",
+        'canons': "250"
+    }
+
+.. note::
+
+    The status messages are not fixed, since it will only be used in the final html report for displaying the latest known status of each turret. But it's important to update it, since if a turret crash it will obviously impact the results
+
 
 Messages format
 ---------------
+
+
 
 Error management
 ----------------
