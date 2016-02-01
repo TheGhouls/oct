@@ -1,138 +1,3 @@
-0.1 to 0.1.1
-============
-
-* add nr management for get_form method and auth method
-* auth method now passing kwargs to get_form
-
-0.1.1 to 0.2
-============
-
-* replace beautifoulsoup4 by lxml for parsing statics files
-
-0.2 to 0.2.1
-============
-
-* added a minimal-browser for replacing mechanize
-
-0.2.1 to 0.2.2
-==============
-
-* Improve minimal-browser, now handles features like :
-    - auth
-    - full session support
-    - better form management
-    - multiple select
-    - bad action value for form tag
-
-0.2.2 to 0.3
-============
-
-* Minimal browser ready
-* Added more features to the browser
-* resetting session for each thread at the end of the transaction forcing each user to have different session
-* improve results writer for multiples custom timers in same test
-* checked compatibility of the browser with python3.4
-* 2to3 passed for browser, no change needed
-* update GenericTransaction, now using custom browser
-* Old GenericTransaction methods still unchanged
-* Updated documentation examples for new browser
-* Global documentation update
-
-0.3 to 0.3.1
-============
-
-* Update requirements in setup for cssselect
-
-0.3.1 to 0.3.2
-==============
-
-* Remove matplotlib from setup dependencies
-* now using pygal for graphs renders
-* updated multimechanize graph and results file
-* now generating svg files for graph
-* clean up dependencies globaly
-* updated css file for graph size
-
-0.3.2 to 0.3.3
-==============
-
-* refactore multi-mechanize core for python3
-* compatibility for python3.4 started
-* keep compatibility for python >= 2.7 using six
-* added six to requirements
-* tested basic functionality, all ok for both python 2.7 and python 3.4
-* refactor most of the documentation
-* update graph render
-
-0.3.3 to 0.3.4
-==============
-
-* Global code cleaning
-* improve python3 support
-* update setup long_description
-* update documentation
-* starting unittest
-* fix warning for browser, manually close connection after a request
-
-0.3.4 to 0.3.5
-==============
-
-* update browser and add headers feature. Can add or delete a header or set all headers
-* abandon get_statics method from generic transaction, not representative of real case
-* get_statics -> use csv_file and load each url as user will be more performant...
-* fix a bug inside check_status_response function
-* update command oct-run
-* update newproject for adding celery configuration
-* added full celery support for running test through the oct-run command
-* keep multimech-run command
-* results.csv file now updated via logger object with oct-run
-* transaction number no longer displayed in results
-* oct-run will now clean all tasks running if KeyBoardInterrupt exception occur
-* update browser for headers support
-* fix a bug if custom configuration section is used
-
-0.3.5 to 0.3.6
-==============
-
-* update the result writer, results are now output in sqlite database
-* add the new `oct-tocsv` command to convert sqlite results file to csv manualy
-* add travis support
-* remove the browser from the core, you can use the oct-browser independant package
-* all configurations file are now created using jinja2 and all files are now located in oct/utilities/templates
-* all stats results are now refactored and improved, remove old results calculations form multimechanize
-* report.html is now a jinja2 template and can be override in the test folder
-* improve all unit tests
-* add peewee in dependencies for sqlite manipulation and future postgresql support
-* update configuration files, now using json file for the global configuration. Json is cleaner and simpler to use for configuration
-* improve results output
-* add oct-rebuild-results commands to rebuild results
-
-0.3.6 to 0.3.7
-==============
-
-* Fix several bugs in template and results rendering
-* Now rounding numeric values in template with 2 digits for more readable reports
-* oct-run command is now avaible with a whole new functionnalities:
-    - Does not run tests with multiprocess and multi-threads anymore
-    - Now creating a ZMQ pub and pull sockets and waiting for turrets to connect
-    - The number of turrets to wait is configurable in the project settings
-    - The oct-run command will now run a "HQ" containing the zmq sockets and will send the start command to turrets
-    and get informations about them
-    - The turrets are now located in a new github repository and a new pypi package oct-turrets https://github.com/karec/oct-turrets
-    - oct-turrets package is now a dependencies of the oct project
-    - You now have the ability to create a turret in any language supported by zeromq
-    - oct-browser package has been removed from the dependencies
-* OCT now encourage you to use the library you want for the tests (like selenium, mechanize, etc...)
-* For compatibility reason, the multi-mech run command are still functionnal but will be soon removed in favor of an oct-run-local command
-* Since the oct-browser is not a dependency anymore and you can use any library you want for testing the generic transaction of the core
-as been removed. Transaction now inherit by default from the BaseTransaction class located in the oct-turrets package
-* A new command has been added `oct-pack-turrets` that will create a tar file from a test folder containing all files and configuration
-required for running a turret. This command will generate a tar archive per turret in your project `config.json` file
-* More informations are stored in the results for the turrets and the report display the last known status of a turret and the associated last update time
-* You can hotplug a turret while a test is running. This turret will appear in the final report
-* The HQ will sleep for 1 second after the creation of the sockets to wait for them
-* Remove the GenericTransaction class in oct.core.generic
-
 0.3.7 to 0.3.8
 ==============
 
@@ -174,3 +39,138 @@ Backward compatibility breaks
 * removed old head and footer html templates since only report.html jinja2 template will be used
 * removed oct.testing package, since it's irrevelent inside the core of oct
 * removed all oct.multimechanize package
+
+0.3.6 to 0.3.7
+==============
+
+* Fix several bugs in template and results rendering
+* Now rounding numeric values in template with 2 digits for more readable reports
+* oct-run command is now avaible with a whole new functionnalities:
+    - Does not run tests with multiprocess and multi-threads anymore
+    - Now creating a ZMQ pub and pull sockets and waiting for turrets to connect
+    - The number of turrets to wait is configurable in the project settings
+    - The oct-run command will now run a "HQ" containing the zmq sockets and will send the start command to turrets
+    and get informations about them
+    - The turrets are now located in a new github repository and a new pypi package oct-turrets https://github.com/karec/oct-turrets
+    - oct-turrets package is now a dependencies of the oct project
+    - You now have the ability to create a turret in any language supported by zeromq
+    - oct-browser package has been removed from the dependencies
+* OCT now encourage you to use the library you want for the tests (like selenium, mechanize, etc...)
+* For compatibility reason, the multi-mech run command are still functionnal but will be soon removed in favor of an oct-run-local command
+* Since the oct-browser is not a dependency anymore and you can use any library you want for testing the generic transaction of the core
+as been removed. Transaction now inherit by default from the BaseTransaction class located in the oct-turrets package
+* A new command has been added `oct-pack-turrets` that will create a tar file from a test folder containing all files and configuration
+required for running a turret. This command will generate a tar archive per turret in your project `config.json` file
+* More informations are stored in the results for the turrets and the report display the last known status of a turret and the associated last update time
+* You can hotplug a turret while a test is running. This turret will appear in the final report
+* The HQ will sleep for 1 second after the creation of the sockets to wait for them
+* Remove the GenericTransaction class in oct.core.generic
+
+0.3.5 to 0.3.6
+==============
+
+* update the result writer, results are now output in sqlite database
+* add the new `oct-tocsv` command to convert sqlite results file to csv manualy
+* add travis support
+* remove the browser from the core, you can use the oct-browser independant package
+* all configurations file are now created using jinja2 and all files are now located in oct/utilities/templates
+* all stats results are now refactored and improved, remove old results calculations form multimechanize
+* report.html is now a jinja2 template and can be override in the test folder
+* improve all unit tests
+* add peewee in dependencies for sqlite manipulation and future postgresql support
+* update configuration files, now using json file for the global configuration. Json is cleaner and simpler to use for configuration
+* improve results output
+* add oct-rebuild-results commands to rebuild results
+
+0.3.4 to 0.3.5
+==============
+
+* update browser and add headers feature. Can add or delete a header or set all headers
+* abandon get_statics method from generic transaction, not representative of real case
+* get_statics -> use csv_file and load each url as user will be more performant...
+* fix a bug inside check_status_response function
+* update command oct-run
+* update newproject for adding celery configuration
+* added full celery support for running test through the oct-run command
+* keep multimech-run command
+* results.csv file now updated via logger object with oct-run
+* transaction number no longer displayed in results
+* oct-run will now clean all tasks running if KeyBoardInterrupt exception occur
+* update browser for headers support
+* fix a bug if custom configuration section is used
+
+0.3.3 to 0.3.4
+==============
+
+* Global code cleaning
+* improve python3 support
+* update setup long_description
+* update documentation
+* starting unittest
+* fix warning for browser, manually close connection after a request
+
+0.3.2 to 0.3.3
+==============
+
+* refactore multi-mechanize core for python3
+* compatibility for python3.4 started
+* keep compatibility for python >= 2.7 using six
+* added six to requirements
+* tested basic functionality, all ok for both python 2.7 and python 3.4
+* refactor most of the documentation
+* update graph render
+
+0.3.1 to 0.3.2
+==============
+
+* Remove matplotlib from setup dependencies
+* now using pygal for graphs renders
+* updated multimechanize graph and results file
+* now generating svg files for graph
+* clean up dependencies globaly
+* updated css file for graph size
+
+0.3 to 0.3.1
+============
+
+* Update requirements in setup for cssselect
+
+0.2.2 to 0.3
+============
+
+* Minimal browser ready
+* Added more features to the browser
+* resetting session for each thread at the end of the transaction forcing each user to have different session
+* improve results writer for multiples custom timers in same test
+* checked compatibility of the browser with python3.4
+* 2to3 passed for browser, no change needed
+* update GenericTransaction, now using custom browser
+* Old GenericTransaction methods still unchanged
+* Updated documentation examples for new browser
+* Global documentation update
+
+0.2.1 to 0.2.2
+==============
+
+* Improve minimal-browser, now handles features like :
+    - auth
+    - full session support
+    - better form management
+    - multiple select
+    - bad action value for form tag
+
+0.2 to 0.2.1
+============
+
+* added a minimal-browser for replacing mechanize
+
+0.1.1 to 0.2
+============
+
+* replace beautifoulsoup4 by lxml for parsing statics files
+
+0.1 to 0.1.1
+============
+
+* add nr management for get_form method and auth method
+* auth method now passing kwargs to get_form
