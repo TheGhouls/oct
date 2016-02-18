@@ -27,7 +27,7 @@ Welcome to oct's documentation!
 
    writing_tests
    packaging_turrets
-   runing_tests
+   running_tests
    collecting_results
 
 
