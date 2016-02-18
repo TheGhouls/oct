@@ -3,7 +3,7 @@ Packaging your turrets
 
 .. warning::
 
-    This section will explain to you how to package turrets, but only based on the **python** turret. But many turrets will
+    This section will explain how to package turrets, but only based on the **python** turret. But most turrets will
     have similar implementation
 
 So that's it ? You've written all your tests and you're ready to start to fire at your target ? Well let's prepare your turrets
@@ -14,10 +14,10 @@ Auto packaging
 
 .. warning::
 
-    This example only work for python based turrets. Please refer to your turret documentation if you use anything else
+    This example only works for python based turrets. Please refer to your turret documentation if you use anything else
 
-Oct provide a simple way to package your turrets and set them ready to fire, the ``oct-pack-turrets`` command.
-It generate tar files based on your configuration file. Those tar files are the turrets, ready to fire at your command.
+OCT provides a simple way to package your turrets and set them ready to fire, the ``oct-pack-turrets`` command.
+It generates tar files based on your configuration file. Those tar files are the turrets, ready to fire at your command.
 
 You can use it like this :
 
@@ -58,7 +58,7 @@ Where ``<key>`` is the missing key
 Installing and starting the turrets
 -----------------------------------
 
-Now that your turrets are packaged, you call install them using pip for example :
+Now that your turrets are packaged, you can install them using pip for example :
 
 .. code-block:: bash
 
@@ -67,7 +67,7 @@ Now that your turrets are packaged, you call install them using pip for example 
 This command will install all required packages listed under the ``turrets_requirements`` configuration key, plus the
 oct-turrets package itself.
 
-Once the installation is done you can start your turret using the ``oct-turrets-start`` like that :
+Once the installation is finished you can start your turret using the ``oct-turrets-start`` like that :
 
 .. code-block:: bash
 
@@ -79,4 +79,4 @@ And if everything is fine you should see this message :
 
     [2015-12-21 18:02:09,295: INFO | oct_turrets.turret] starting turret
 
-You are now ready to fire the target !
+You are now ready to fire at the target !
