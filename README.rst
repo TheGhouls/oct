@@ -8,4 +8,4 @@ Github repository : `https://github.com/karec/oct`_
 
 Website: `http://www.oct-py.com/`_
 
-.. _http://www.oct-py.com/
+.. _http://www.oct-py.com/: http://www.oct-py.com/
