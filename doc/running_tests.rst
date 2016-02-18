@@ -6,20 +6,20 @@ So that's it ? Your turrets are running and ready to fire at the target ? Si let
 Configuration
 -------------
 
-Before runing tests, don't forget to update your configuration if your turrets are running on a different IP address from
-the master
+Before running the tests, don't forget to update your configuration if your turrets are running on a different IP address from
+the master.
 
 Starting the test
 -----------------
 
-Simple as a command :
+Just type:
 
 .. code-block:: bash
 
     oct-run /path/to/oct/project
 
-And that's it, your test will start and your turret will now fire at the target. If everything is going ok you should see
-an output like that :
+And that's it, your test will start and your turrets will now fire at the target. If everything is going ok you should see
+an output like:
 
 .. code-block:: bash
 
@@ -29,7 +29,7 @@ an output like that :
     turrets: 1, elapsed: 20.0   transactions: 4906  timers: 4906  errors: 0
 
 So... That's it ?
-And yes that's it ! You've successfuly ran your first OCT test !
+And yes that's it ! You've successfuly run your first OCT test !
 
 Once the test have ended you should see the following output :
 
