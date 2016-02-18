@@ -1,28 +1,28 @@
 Collecting the results
 ======================
 
-The tests has ended and the report has been created ? Let's take a look at it !
+The tests have ended and the report has been created ? Let's take a look at it !
 
 Results.html file
 -----------------
 
-This is the main and the more explicit part of the results, it will give you all major informations about the tests, plus
-some graphs to help you for reading the results.
+This is the main and the more explicit part of the results, it will give you all major information about the tests, plus
+some graphs to help you read the results.
 
-A default result page look like this :
+A default result page looks like this :
 
 .. image:: images/oct-results.png
     :scale: 50%
 
-For each custom timer, a section will be created (like All transactions section) and the associated graphs will be created.
+For each custom timer, a section will be created (like the "All transactions" section) and the associated graphs will be created.
 
-At the moment the graphs are in SVG format and use javascript for simpler interpretation and reading.
+The graphs are currently in SVG format and use javascript to make reading and interpretating the result easier.
 
 Regenerate results
 ------------------
 
-Sometimes you may need to regenerate the html report with all graphs from an sqlite file. OCT got a tool to allow you to
-do this.
+Sometimes you may need to regenerate the html report with all graphs from an sqlite file.
+OCT got a tool that allows you to do this.
 
 You can simply use the ``oct-rebuild-results`` like this for example:
 
@@ -32,5 +32,5 @@ You can simply use the ``oct-rebuild-results`` like this for example:
 
 .. note::
 
-    The oct-rebuild-results command will only work on an already created results folder that contain only the sqlite results
+    The oct-rebuild-results command will only work on an already created results folder that contains only the sqlite results
     and optionnaly the configuration.
