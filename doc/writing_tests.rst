@@ -3,7 +3,7 @@ Writing tests
 
 .. warning::
 
-    This section will explain to you how to write tests, but only based on the **python** turret. But many turrets will
+    This section will explain how to write tests, but only based on the **python** turret. But many turrets will
     have similar implementation
 
 Basic example
@@ -27,11 +27,11 @@ Let's take the default ``v_user.py`` file :
             time.sleep(r)
             self.custom_timers['Example_Timer'] = r
 
-So this basic script will basicaly test nothing, so let's test this basic use case :
+This raw script will test nothing as it is, so let's work on this simple use case:
 
-We need to test a basic api over the internet and we want to use the ``requests`` python library.
+We need to test a basic API over the Internet and we want to use the ``requests`` python library.
 
-So first let's adapt the script for it :
+So first let's adapt the script to our needs:
 
 .. code-block:: python
 
@@ -56,10 +56,10 @@ So first let's adapt the script for it :
             requests.get(self.url + "other-service")
             self.custom_timers['other-service'] = time.time() - start
 
-So what are we doing here ? We've just imported requests and use it in our script. For each service we've defined a custom
+So what are we doing here ? We've just imported requests and used it in our script. For each service we've defined a custom
 timer to see how much time each one will take to answer.
 
-But how to install dependencies needed by the turrets ? You can simply update your configuration with something like that :
+But how to install the dependencies needed by the turrets ? You can simply update your configuration with something like that :
 
 .. code-block:: json
 
@@ -81,7 +81,7 @@ But how to install dependencies needed by the turrets ? You can simply update yo
         ]
     }
 
-If you specify the dependecies in the "turrets_requirements" you will be able to install all of it for each turret by simply runing :
+If you specify the dependecies in the "turrets_requirements" you will be able to install them for each turret by simply runing :
 
 .. code-block:: bash
 
@@ -90,12 +90,12 @@ If you specify the dependecies in the "turrets_requirements" you will be able to
 Setup and Tear down
 -------------------
 
-The previous example still pretty simple, but you can need for example sessions or cookies. But how to manage it knowing that the
-transaction class will be instanciate only once ?
+The previous example is still pretty simple, but you might need things like sessions or cookies. How to manage it knowing that the
+transaction class will instantiate only once ?
 
-Pretty simple too, we give you two methods in the ``BaseTransaction`` class to help you : ``setup`` and ``tear_down``
+Pretty simple too: we give you two methods in the ``BaseTransaction`` class to help you : ``setup`` and ``tear_down``
 
-How does it works ? Take a look a this example :
+How does it works ? Take a look a this example:
 
 .. code-block:: python
 
@@ -127,7 +127,7 @@ How does it works ? Take a look a this example :
         def tear_down(self):
             self.session.close()
 
-And that's it ! Before each ``run`` iteration, the setup method will be call, and you guess it, after iteration the ``tear_down`` is call.
+And that's it ! Before each ``run`` iteration, the ``setup`` method is called, and you've guessed it, ``tear_down`` is called after the iteration.
 
 .. note::
 
