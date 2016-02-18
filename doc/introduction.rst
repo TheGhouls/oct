@@ -4,19 +4,21 @@ Introduction
 Terminology
 -----------
 
-* HQ for Headquarter: It's the "server" part of OCT and it will be in charge of sending start signal, stop signal, collecting results and create reports
-* Turret: A turret is the "client" part of OCT. It can be writen in any language and it communicate with the HQ using a zeromq PUSH socket. Each turret own one or many canons.
+* HQ for Headquarters: it's the "server" component of OCT and it's tasked with sending start signal, stop signal, collecting results and create reports
+* Turret: a turret is the "client" component of OCT. It can be writen in any language and it communicates with the HQ using a zeromq PUSH socket. Each turret owns one or many canons.
 * Canons: represent the virtual users, wich means that each canon of the turret will run a test in parallel
 
 .. note::
-    Why do we use this terminology ? For the image. Think about it like that : Eeach turret own X canons who will shoot
-    to the target. The turret will send report about the shoots to the HQ
+    Why do we use this terminology ? It gives a good idea of what's happening
+    when you use OCT. Think about it like that : each turret owns X canons that
+    shoot at the target and report on the result to the HQ
 
 What is OCT
 -----------
 
 OCT is an agnostic load testing tool. What do we mean by agnostic ? Simple : OCT provides only the needed tools
-to distribute and simply run your tests and compile the results. But the tools and programming languages for writing tests are up to you.
+to distribute and simply run your tests and compile the results. But the tools and programming languages for writing 
+the tests themselves are up to you.
 
 At this stage of developpment we only offer a python turret, but if you want to create your own turret implementation
 in any language, please do it ! We're realy open to any suggestions and help.
@@ -27,13 +29,13 @@ How it works ?
 OCT use the power of ``zeromq`` to distribute test on any number of physical machines you need. When running a test
 the principle is very simple :
 
-* OCT start the HQ wich is in charge of collecting results and send a start message to the turrets
-* The turrets catch the message, start the tests and send results to the HQ
-* When the test end, the HQ will send a stop message to the turrets and process the remaining messages in queue
-* OCT will next compile the results and create a html report of them
+* OCT starts the HQ. It sends a start message to the turrets and will later collect their results
+* The turrets receive the message, start the tests and send results to the HQ
+* When the test ends, the HQ sends a stop message to the turrets and process the remaining messages in queue
+* OCT will then compile the results and create a html report of them
 
 Want a graph ? Here you go :
 
 .. image:: images/oct-basic.png
 
-So this is it, a bunch of turrets shooting the target and sending informations to the HQ
+So this is it, a bunch of turrets shooting at the target and sending information to the HQ
