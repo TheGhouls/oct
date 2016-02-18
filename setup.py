@@ -25,9 +25,11 @@ setup(
         'Development Status :: 3 - Alpha',
         'Environment :: Console',
         'Intended Audience :: Developers',
+        'Intended Audience :: System Administrators',
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3.4'
+        'Programming Language :: Python :: 3.5'
     ],
     install_requires=[
         'argparse',
