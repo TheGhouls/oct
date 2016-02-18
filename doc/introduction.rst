@@ -1,6 +1,16 @@
 Introduction
 ============
 
+What is OCT
+-----------
+
+OCT is an agnostic load testing tool. What do we mean by agnostic ? It's simple : OCT provides only the needed tools
+to distribute and run your tests and compile the results. But the tools and programming languages for writing
+the tests themselves are up to you.
+
+At this stage of development we only offer a python turret, but if you want to create your own turret implementation
+in any language, please do it ! We're really open to any suggestions and help.
+
 Terminology
 -----------
 
@@ -12,16 +22,6 @@ Terminology
     Why do we use this terminology ? It gives a good idea of what's happening
     when you use OCT. Think about it like that : each turret owns X canons that
     shoot at the target and report on the result to the HQ
-
-What is OCT
------------
-
-OCT is an agnostic load testing tool. What do we mean by agnostic ? It's simple : OCT provides only the needed tools
-to distribute and run your tests and compile the results. But the tools and programming languages for writing 
-the tests themselves are up to you.
-
-At this stage of development we only offer a python turret, but if you want to create your own turret implementation
-in any language, please do it ! We're really open to any suggestions and help.
 
 How it works ?
 --------------
