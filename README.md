@@ -1,5 +1,7 @@
 oct
 ===
+
+[![Join the chat at https://gitter.im/karec/oct](https://badges.gitter.im/karec/oct.svg)](https://gitter.im/karec/oct?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![doc](https://readthedocs.org/projects/oct/badge/?version=latest)](http://oct.readthedocs.org/en/latest/)
 [![Latest Version](https://img.shields.io/pypi/v/oct.svg?style=flat)](https://pypi.python.org/pypi/oct/)
 [![Supported Python versions](https://img.shields.io/pypi/pyversions/oct.svg?style=flat)](https://pypi.python.org/pypi/oct/)
