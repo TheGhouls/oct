@@ -67,6 +67,36 @@ class HightQuarter(object):
         else:
             return False
 
+    def _process_socks(self, socks):
+        if self.result_collector in socks:
+            data = self.result_collector.recv_json()
+            if 'status' not in data:
+                self.results_writer.write_result(data)
+            else:
+                self._process_turret_status(data)
+
+    def _print_status(self, elapsed):
+        display = 'turrets: {}, elapsed: {}   transactions: {}  timers: {}  errors: {}\r'
+        print(display.format(len(self.turrets), round(elapsed), self.results_writer.trans_count,
+                             self.results_writer.timer_count,
+                             self.results_writer.error_count), end='')
+
+    def _clean_queue(self):
+        try:
+            data = self.result_collector.recv_json(zmq.NOBLOCK)
+            while data:
+                data = self.result_collector.recv_json(zmq.NOBLOCK)
+                if 'status' not in data:
+                    self.results_writer.write_result(data)
+        except zmq.Again:
+            self.result_collector.close()
+            self.publisher.close()
+            self.results_writer.write_remaining()
+
+    def _run_loop_action(self):
+        socks = dict(self.poller.poll(1000))
+        self._process_socks(socks)
+
     def wait_turrets(self, wait_for):
         """Wait until wait_for turrets are connected and ready
         """
@@ -86,19 +116,10 @@ class HightQuarter(object):
         start_time = time.time()
         self._publish({'command': 'start', 'msg': 'open fire'})
         self.started = True
-        display = 'turrets: {}, elapsed: {}   transactions: {}  timers: {}  errors: {}\r'
         while elapsed <= (self.config['run_time']):
             try:
-                socks = dict(self.poller.poll(1000))
-                if self.result_collector in socks:
-                    data = self.result_collector.recv_json()
-                    if 'status' not in data:
-                        self.results_writer.write_result(data)
-                    else:
-                        self._process_turret_status(data)
-                print(display.format(len(self.turrets), round(elapsed), self.results_writer.trans_count,
-                                     self.results_writer.timer_count,
-                                     self.results_writer.error_count), end='')
+                self._run_loop_action()
+                self._print_status(elapsed)
                 elapsed = time.time() - start_time
             except (Exception, KeyboardInterrupt):
                 print("\nStopping test, sending stop command to turrets")
@@ -108,13 +129,4 @@ class HightQuarter(object):
         self._publish({'command': 'stop', 'msg': 'stopping fire'})
         print("\n\nProcessing all remaining messages...")
         self.result_collector.unbind(self.result_collector.LAST_ENDPOINT)
-        try:
-            data = self.result_collector.recv_json(zmq.NOBLOCK)
-            while data:
-                data = self.result_collector.recv_json(zmq.NOBLOCK)
-                if 'status' not in data:
-                    self.results_writer.write_result(data)
-        except zmq.Again:
-            self.result_collector.close()
-            self.publisher.close()
-            self.results_writer.write_remaining()
+        self._clean_queue()

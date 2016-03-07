@@ -6,6 +6,8 @@ db = Proxy()
 
 
 class Result(Model):
+    """Define a result model
+    """
     error = TextField(null=True)
     scriptrun_time = FloatField()
     elapsed = FloatField()
@@ -28,6 +30,8 @@ class Result(Model):
 
 
 class Turret(Model):
+    """Define a turret model
+    """
     name = TextField()
     uuid = TextField()
     canons = IntegerField()

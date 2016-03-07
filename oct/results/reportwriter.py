@@ -3,6 +3,11 @@ import shutil
 
 
 class Report(object):
+    """A class representing a report, used to output the result
+
+    :param results_dir str: the output directory for the report
+    :param parent str: the parent directory
+    """
     def __init__(self, results_dir, parent):
         self.results_dir = results_dir
         self.fn = os.path.join(results_dir, 'results.html')
@@ -11,6 +16,8 @@ class Report(object):
         self.set_statics()
 
     def set_statics(self):
+        """Create statics directory and copy files in it
+        """
         if not os.path.exists(self.results_dir):
             return
         try:
@@ -21,5 +28,9 @@ class Report(object):
             raise OSError("Could not create directory for results")
 
     def write_report(self, template):
+        """Write the compiled jinja template to the results file
+
+        :param template str: the compiled jinja template
+        """
         with open(self.fn, 'w') as f:
             f.write(template)

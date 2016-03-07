@@ -8,7 +8,10 @@ BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
 
 def create_project(project_name):
+    """Create a new oct project
 
+    :param project_name str: the name of the project
+    """
     env = Environment(loader=PackageLoader('oct.utilities', 'templates'))
 
     config_content = env.get_template('configuration/config.json').render(script_name='v_user.py')
