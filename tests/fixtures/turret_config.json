@@ -1,6 +1,6 @@
 {
     "name": "navigation",
-    "canons": 1,
+    "canons": 10,
     "rampup": 0,
     "script": "v_user.py",
     "hq_address": "127.0.0.1",
