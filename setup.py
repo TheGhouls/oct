@@ -39,7 +39,8 @@ setup(
         'six',
         'pyzmq',
         'numpy',
-        'jinja2'
+        'jinja2',
+        'pandas'
     ],
     entry_points={'console_scripts': [
         'oct-run = oct.utilities.run:main',
