@@ -20,10 +20,11 @@ class ReportResults(object):
         self.timers_values = {}
         self.turrets = []
         self.main_df = None
+        self.summary = None
         self.interval = interval
 
-        if self.total_transaction > 0:
-            self.epoch_start = Result.order_by(Result.epoch.asc()).get().epoch
+        if self.total_transactions > 0:
+            self.epoch_start = Result.select().order_by(Result.epoch.asc()).get().epoch
             self.epoch_finish = Result.select().order_by(Result.epoch.desc()).get().epoch
             self.start_datetime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(self.epoch_start))
             self.finish_datetime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(self.epoch_finish))
@@ -31,21 +32,23 @@ class ReportResults(object):
         self._get_all_timers()
         self._init_dataframes()
 
-    def _init_dateframes(self):
+    def _init_dataframes(self):
         """Initialise the main dataframe for the results and the custom timers dataframes
         """
         df = pd.read_sql_query("SELECT elapsed, epoch, scriptrun_time FROM result ORDER BY epoch ASC", db.get_conn())
-        self.main_df = self._get_prcessed_dataframe(df)
+        self.summary = df.describe(percentiles=[.80, .90, .95]).transpose().loc['scriptrun_time']
+        self.main_df = self._get_processed_dataframe(df)
 
-        for key, value in six.iteritems(self.timers_value):
+        for key, value in six.iteritems(self.timers_values):
             df = pd.DataFrame(columns=['epoch', 'scriptrun_time'])
             for t in value:
-                df.append({'epoch': t[0], 'scriptrun_time': t[1]})
-            df = self.get_processed_dataframe(df)
+                df = df.append({'epoch': t[0], 'scriptrun_time': t[1]}, ignore_index=True)
+            df.index = pd.to_datetime(df['epoch'], unit='s')
+            df = self._get_processed_dataframe(df)
             self.timers_df[key] = df
 
     def _get_all_timers(self):
-        for item in Result.select(Result.custom_timers).order_by(Result.epoch.asc()):
+        for item in Result.select(Result.custom_timers, Result.epoch).order_by(Result.epoch.asc()):
             custom_timers = {}
             if item.custom_timers:
                 custom_timers = json.loads(item.custom_timers)
@@ -73,7 +76,7 @@ class ReportResults(object):
         """
         dataframe.index = pd.to_datetime(dataframe['epoch'], unit='s')
         df_grp = dataframe.groupby(pd.TimeGrouper(str(self.interval) + 'S'))
-        return df_grp.apply(lambda x: x.describe()['scriptrun_time'])
+        return df_grp.apply(lambda x: x.describe(percentiles=[.80, .90, .95])['scriptrun_time']).unstack().round(2)
 
     def _init_data(self):
         """Setup data from database

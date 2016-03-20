@@ -1,6 +1,6 @@
 import argparse
 
-from oct.results.resultsoutput import output
+from oct.results.output import output
 from oct.results.models import db, set_database
 from oct.utilities.configuration import configure
 
