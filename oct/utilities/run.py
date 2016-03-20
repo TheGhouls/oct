@@ -12,7 +12,7 @@ import os
 import shutil
 import time
 from datetime import datetime
-from oct.results.resultsoutput import output as output_results
+from oct.results.output import output as output_results
 
 import oct.results.resultswriter as resultswriter
 from oct.utilities.configuration import configure

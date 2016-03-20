@@ -76,7 +76,9 @@ class ReportResults(object):
         """
         dataframe.index = pd.to_datetime(dataframe['epoch'], unit='s')
         df_grp = dataframe.groupby(pd.TimeGrouper(str(self.interval) + 'S'))
-        return df_grp.apply(lambda x: x.describe(percentiles=[.80, .90, .95])['scriptrun_time']).unstack().round(2)
+        return df_grp.apply(lambda x: x.describe(percentiles=[.80, .90, .95])['scriptrun_time'])\
+                     .unstack()\
+                     .round(2)
 
     def _init_data(self):
         """Setup data from database

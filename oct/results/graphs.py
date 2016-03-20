@@ -1,5 +1,7 @@
 import os
 import pygal
+from datetime import time
+import pandas as pd
 
 
 def resp_graph_raw(nested_resp_list, image_name, dir='./'):
@@ -19,39 +21,33 @@ def resp_graph_raw(nested_resp_list, image_name, dir='./'):
     fig.render_to_file(filename=os.path.join(dir, image_name))
 
 
-def resp_graph(avg_resptime_points_dict, percentile_80_resptime_points_dict,
-               percentile_90_resptime_points_dict, image_name, dir='./'):
+def resp_graph(dataframe, image_name, dir='./'):
     """Response time graph for bucketed data
 
-    :param avg_resptime_points_dict dict: a dictionnary containing the average response time points
-    :param percentile_80_resptime_points_dict dict: a dictionnary containing the percentile 80 response time points
-    :param percentile_90_resptime_points_dict dict: a dictionnary containing the percentile 90 response time points
+    :param dataframe pandas.DataFrame: dataframe containing all data
     :param image_name str: the output file name
     :param dir str: the output directory
     :return: None
     """
-    fig = pygal.XY(human_readable=True, x_title='Elapsed Time In Test (secs)',
-                   y_title='Response Time (secs)',
-                   js=('http://kozea.github.io/pygal.js/2.0.x/pygal-tooltips.min.js',))
-    x_seq = sorted(avg_resptime_points_dict.keys())
-    fig.add('AVG', [(0, None)] + [(round(x, 2), round(avg_resptime_points_dict[x], 2)) for x in x_seq])
-    x_seq = sorted(percentile_90_resptime_points_dict.keys())
-    fig.add('90pct', [(0, None)] + [(round(x, 2), round(percentile_90_resptime_points_dict[x], 2)) for x in x_seq])
-    x_seq = sorted(percentile_80_resptime_points_dict.keys())
-    fig.add('80pct', [(0, None)] + [(round(x, 2), round(percentile_80_resptime_points_dict[x], 2)) for x in x_seq])
+    fig = pygal.TimeLine(x_title='Elapsed Time In Test (secs)',
+                         y_title='Response Time (secs)',
+                         x_label_rotation=25,
+                         js=('http://kozea.github.io/pygal.js/2.0.x/pygal-tooltips.min.js',))
+    fig.add('AVG', [(index.to_pydatetime().time(), row['mean'] if pd.notnull(row['mean']) else None) for index, row in dataframe.iterrows()])
+    fig.add('90%', [(index.to_pydatetime().time(), row['90%'] if pd.notnull(row['90%']) else None) for index, row in dataframe.iterrows()])
+    fig.add('80%', [(index.to_pydatetime().time(), row['80%'] if pd.notnull(row['80%']) else None) for index, row in dataframe.iterrows()])
     fig.render_to_file(filename=os.path.join(dir, image_name))
 
 
-def tp_graph(throughputs_dict, image_name, dir='./'):
+def tp_graph(dataframe, image_name, dir='./'):
     """Throughput graph
 
-    :param throughputs_dict dict: a dictionary containing the throughputs points
+    :param dataframe pandas.DataFrame: dataframe containing all data
     :param dir str: the output directory
     :return: None
     """
-    fig = pygal.XY(x_title='Elapsed Time In Test (secs)', y_title='Transactions Per Second (count)',
-                   human_readable=True, js=('http://kozea.github.io/pygal.js/2.0.x/pygal-tooltips.min.js',))
-    x_seq = sorted(throughputs_dict.keys())
-    y_seq = [round(throughputs_dict[x], 2) for x in x_seq]
-    fig.add('Transactions per second', [(None, 0)] + list(zip(x_seq, y_seq)))
+    fig = pygal.TimeLine(x_title='Elapsed Time In Test (secs)', y_title='Transactions Per Second (count)',
+                         human_readable=True, js=('http://kozea.github.io/pygal.js/2.0.x/pygal-tooltips.min.js',))
+    fig.add('Transactions per second', [(index.to_pydatetime().time(), row['count'])
+                                        for index, row in dataframe.iterrows()])
     fig.render_to_file(filename=os.path.join(dir, image_name))

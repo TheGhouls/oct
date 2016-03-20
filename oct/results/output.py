@@ -41,6 +41,12 @@ def output(results_dir, results_file, config, parent='../../'):
         'turrets_config': results.turrets,
         'all_results': {"all": results.main_df, "timers": results.timers_df, 'summary': results.summary}
     }
+
+    # do we even keep this shit ?
+    # graphs.resp_graph_raw(results.main_df, 'All_Transactions_response_times.svg', results_dir)
+    graphs.resp_graph(results.main_df, 'All_Transactions_response_times_intervals.svg', results_dir)
+    graphs.tp_graph(results.main_df, 'All_Transactions_throughput.svg', results_dir)
+
     j_env = Environment(loader=FileSystemLoader(os.path.join(results_dir, parent, 'templates')))
     template = j_env.get_template('report.html')
 
