@@ -15,12 +15,13 @@ class ReportResults(object):
     def __init__(self, results_file, run_time, interval):
         self.results_file = results_file
         self.total_transactions = Result.select().count()
-        self.total_errors = Result.select().where(Result.error != "", Result.error != None).count()
-        self.timers_df = {}
-        self.timers_values = {}
+        self.total_errors = Result.select()\
+                            .where(Result.error != "", Result.error != None)\
+                            .count()
+        self.timers_results = {}
+        self._timers_values = {}
         self.turrets = []
-        self.main_df = None
-        self.summary = None
+        self.main_results = {}
         self.interval = interval
 
         if self.total_transactions > 0:
@@ -29,23 +30,23 @@ class ReportResults(object):
             self.start_datetime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(self.epoch_start))
             self.finish_datetime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(self.epoch_finish))
 
-        self._get_all_timers()
-        self._init_dataframes()
+        if self.total_transactions > 0:
+            self._get_all_timers()
+            self._init_dataframes()
+            self._init_turrets()
 
     def _init_dataframes(self):
         """Initialise the main dataframe for the results and the custom timers dataframes
         """
         df = pd.read_sql_query("SELECT elapsed, epoch, scriptrun_time FROM result ORDER BY epoch ASC", db.get_conn())
-        self.summary = df.describe(percentiles=[.80, .90, .95]).transpose().loc['scriptrun_time']
-        self.main_df = self._get_processed_dataframe(df)
+        self.main_results = self._get_processed_dataframe(df)
 
-        for key, value in six.iteritems(self.timers_values):
-            df = pd.DataFrame(columns=['epoch', 'scriptrun_time'])
-            for t in value:
-                df = df.append({'epoch': t[0], 'scriptrun_time': t[1]}, ignore_index=True)
+        for key, value in six.iteritems(self._timers_values):
+            values = [{'epoch': t[0], 'scriptrun_time': t[1]} for t in value]
+            df = pd.DataFrame(values)
             df.index = pd.to_datetime(df['epoch'], unit='s')
-            df = self._get_processed_dataframe(df)
-            self.timers_df[key] = df
+            timer_results = self._get_processed_dataframe(df)
+            self.timers_results[key] = timer_results
 
     def _get_all_timers(self):
         for item in Result.select(Result.custom_timers, Result.epoch).order_by(Result.epoch.asc()):
@@ -62,25 +63,30 @@ class ReportResults(object):
         :param value float: the value of the timer
         :param epoch int: the epoch of timer
         """
-        if self.timers_values.get(name):
-            self.timers_values[name].append((epoch, value))
+        if self._timers_values.get(name):
+            self._timers_values[name].append((epoch, value))
         else:
-            self.timers_values[name] = [(epoch, value)]
+            self._timers_values[name] = [(epoch, value)]
 
     def _get_processed_dataframe(self, dataframe):
         """Generate required dataframe for results from raw dataframe
 
         :param dataframe pandas.DataFrame: the raw dataframe
-        :return: a dataframe containing compiled results
-        :rtype: pandas.DataFrame
+        :return: a dict containing raw, compiled, and summary dataframes from original dataframe
+        :rtype: dict
         """
-        dataframe.index = pd.to_datetime(dataframe['epoch'], unit='s')
+        dataframe.index = pd.to_datetime(dataframe['epoch'], unit='s', utc=True)
+        del dataframe['epoch']
+        summary = dataframe.describe(percentiles=[.80, .90, .95]).transpose().loc['scriptrun_time']
         df_grp = dataframe.groupby(pd.TimeGrouper(str(self.interval) + 'S'))
-        return df_grp.apply(lambda x: x.describe(percentiles=[.80, .90, .95])['scriptrun_time'])\
-                     .unstack()\
-                     .round(2)
+        df_final = df_grp.apply(lambda x: x.describe(percentiles=[.80, .90, .95])['scriptrun_time']).unstack()
+        return {
+            "raw": dataframe.round(2),
+            "compiled": df_final.round(2),
+            "summary": summary.round(2)
+        }
 
-    def _init_data(self):
+    def _init_turrets(self):
         """Setup data from database
         """
         for turret in Turret.select():

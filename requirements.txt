@@ -1,4 +1,5 @@
 numpy
+dateutil
 pandas
 Jinja2
 MarkupSafe

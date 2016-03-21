@@ -66,13 +66,13 @@
     </tr>
     <tr>
         <td>{{ report.total_transactions }} </td>
-        <td>{{ all_results.summary['min']|round(2) }}</td>
-        <td>{{ all_results.summary['mean']|round(2) }}</td>
-        <td>{{ all_results.summary['80%']|round(2) }}</td>
-        <td>{{ all_results.summary['90%']|round(2) }}</td>
-        <td>{{ all_results.summary['95%']|round(2) }}</td>
-        <td>{{ all_results.summary['max']|round(2) }}</td>
-        <td>{{ all_results.summary['std']|round(2) }}</td>
+        <td>{{ all_results.all.summary['min'] }}</td>
+        <td>{{ all_results.all.summary['mean'] }}</td>
+        <td>{{ all_results.all.summary['80%'] }}</td>
+        <td>{{ all_results.all.summary['90%'] }}</td>
+        <td>{{ all_results.all.summary['95%'] }}</td>
+        <td>{{ all_results.all.summary['max'] }}</td>
+        <td>{{ all_results.all.summary['std'] }}</td>
     </tr>
 </table>
 
@@ -90,7 +90,7 @@
         <th>max</th>
         <th>stdev</th>
     </tr>
-    {% for index, row in all_results.all.iterrows() %}
+    {% for index, row in all_results.all.compiled.iterrows() %}
     <tr>
         <td>{{ loop.index }}</td>
         <td>{{ row['count'] }}</td>
@@ -129,6 +129,32 @@
 <hr />
 <h2>Custom Timer: {{ key }}</h2>
 
+
+<h3>Timer Summary (secs)</h3>
+<table>
+    <tr>
+        <th>count</th>
+        <th>min</th>
+        <th>avg</th>
+        <th>80pct</th>
+        <th>90pct</th>
+        <th>95pct</th>
+        <th>max</th>
+        <th>stdev</th>
+    </tr>
+    <tr>
+        <td>{{ value.raw.count()['scriptrun_time'] }} </td>
+        <td>{{ value.summary['min'] }}</td>
+        <td>{{ value.summary['mean'] }}</td>
+        <td>{{ value.summary['80%'] }}</td>
+        <td>{{ value.summary['90%'] }}</td>
+        <td>{{ value.summary['95%'] }}</td>
+        <td>{{ value.summary['max'] }}</td>
+        <td>{{ value.summary['std'] }}</td>
+    </tr>
+</table>
+
+
 <h3>Interval Details (secs)</h3>
 
 <table>
@@ -143,7 +169,7 @@
         <th>max</th>
         <th>stdev</th>
     </tr>
-    {% for index, row in value.iterrows() %}
+    {% for index, row in value.compiled.iterrows() %}
     <tr>
         <td>{{ loop.index }}</td>
         <td>{{ row['count'] }}</td>

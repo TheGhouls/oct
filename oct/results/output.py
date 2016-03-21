@@ -21,8 +21,10 @@ def output(results_dir, results_file, config, parent='../../'):
     :param parents str: the parent directory
     """
     start = time.time()
+    print("Compiling results...")
     results_dir = os.path.abspath(results_dir)
     results = ReportResults(os.path.join(results_dir, results_file), config['run_time'], config['results_ts_interval'])
+    print("Results compiled in {} seconds".format(time.time() - start))
 
     if results.total_transactions == 0:
         print("No results, cannot create report")
@@ -32,25 +34,35 @@ def output(results_dir, results_file, config, parent='../../'):
     print('errors: %i' % results.total_errors)
     print('')
     print('test start: %s' % results.start_datetime)
-    print('test finish: %s' % results.finish_datetime, end='\n')
+    print('test finish: %s' % results.finish_datetime)
 
     data = {
         'report': results,
         'run_time': config['run_time'],
         'ts_interval': config['results_ts_interval'],
         'turrets_config': results.turrets,
-        'all_results': {"all": results.main_df, "timers": results.timers_df, 'summary': results.summary}
+        'all_results': {"all": results.main_results, "timers": results.timers_results}
     }
 
-    # do we even keep this shit ?
-    # graphs.resp_graph_raw(results.main_df, 'All_Transactions_response_times.svg', results_dir)
-    graphs.resp_graph(results.main_df, 'All_Transactions_response_times_intervals.svg', results_dir)
-    graphs.tp_graph(results.main_df, 'All_Transactions_throughput.svg', results_dir)
+    print("Generating graphs...")
+    partial = time.time()
+    graphs.resp_graph_raw(results.main_results['raw'], 'All_Transactions_response_times.svg', results_dir)
+    graphs.resp_graph(results.main_results['compiled'], 'All_Transactions_response_times_intervals.svg', results_dir)
+    graphs.tp_graph(results.main_results['compiled'], 'All_Transactions_throughput.svg', results_dir)
 
+    for key, value in results.timers_results.items():
+        graphs.resp_graph_raw(value['raw'], key + '_response_times.svg', results_dir)
+        graphs.resp_graph(value['compiled'], key + '_response_times_intervals.svg', results_dir)
+        graphs.tp_graph(value['compiled'], key + '_throughput.svg', results_dir)
+    print("All graphs generated in {} seconds".format(time.time() - partial))
+
+    print("Generating html report...")
+    partial = time.time()
     j_env = Environment(loader=FileSystemLoader(os.path.join(results_dir, parent, 'templates')))
     template = j_env.get_template('report.html')
 
     report = Report(results_dir, parent)
     report.write_report(template.render(data))
-    print("Report generated in {} seconds".format(time.time() - start))
+    print("HTML report generated in {} seconds".format(time.time() - partial))
+    print("Full report generated in {} seconds".format(time.time() - start))
     return True
