@@ -2,6 +2,7 @@ import six
 import time
 import json
 import pandas as pd
+from collections import defaultdict
 
 from oct.results.models import db, Result, Turret
 
@@ -19,7 +20,7 @@ class ReportResults(object):
                                   .count()
         self.total_timers = 0
         self.timers_results = {}
-        self._timers_values = {}
+        self._timers_values = defaultdict(list)
         self.turrets = []
         self.main_results = {}
         self.interval = interval
@@ -45,8 +46,7 @@ class ReportResults(object):
 
         # create all custom timers dataframes
         for key, value in six.iteritems(self._timers_values):
-            values = [{'epoch': t[0], 'scriptrun_time': t[1]} for t in value]
-            df = pd.DataFrame(values)
+            df = pd.DataFrame(value, columns=['epoch', 'scriptrun_time'])
             df.index = pd.to_datetime(df['epoch'], unit='s')
             timer_results = self._get_processed_dataframe(df)
             self.timers_results[key] = timer_results
@@ -54,25 +54,14 @@ class ReportResults(object):
     def _get_all_timers(self):
         """Get all timers and set them in the _timers_values property
         """
+        query = Result.select(Result.custom_timers, Result.epoch).order_by(Result.epoch.asc())
         for item in Result.select(Result.custom_timers, Result.epoch).order_by(Result.epoch.asc()):
             custom_timers = {}
             if item.custom_timers:
                 custom_timers = json.loads(item.custom_timers)
             for key, value in six.iteritems(custom_timers):
-                self._process_timer(key, value, item.epoch)
+                self._timers_values[key].append((item.epoch, value))
                 self.total_timers += 1
-
-    def _process_timer(self, name, value, epoch):
-        """Add a custom timer to class dict. If key exists append the value, else create the key in dict
-
-        :param str name: the name of the timer
-        :param float value: the value of the timer
-        :param epoch int: the epoch of timer
-        """
-        if self._timers_values.get(name):
-            self._timers_values[name].append((epoch, value))
-        else:
-            self._timers_values[name] = [(epoch, value)]
 
     def _get_processed_dataframe(self, dataframe):
         """Generate required dataframe for results from raw dataframe
