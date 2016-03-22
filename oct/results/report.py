@@ -17,6 +17,7 @@ class ReportResults(object):
         self.total_errors = Result.select()\
                                   .where(Result.error != "", Result.error != None)\
                                   .count()
+        self.total_timers = 0
         self.timers_results = {}
         self._timers_values = {}
         self.turrets = []
@@ -59,6 +60,7 @@ class ReportResults(object):
                 custom_timers = json.loads(item.custom_timers)
             for key, value in six.iteritems(custom_timers):
                 self._process_timer(key, value, item.epoch)
+                self.total_timers += 1
 
     def _process_timer(self, name, value, epoch):
         """Add a custom timer to class dict. If key exists append the value, else create the key in dict

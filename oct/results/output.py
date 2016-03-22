@@ -21,16 +21,17 @@ def output(results_dir, config, parent='../../'):
     results_dir = os.path.abspath(results_dir)
     results = ReportResults(config['run_time'], config['results_ts_interval'])
     results.compile_results()
-    print("Results compiled in {} seconds".format(time.time() - start))
+    print("Results compiled in {} seconds\n".format(time.time() - start))
 
     if results.total_transactions == 0:
         print("No results, cannot create report")
         return False
 
     print('transactions: %i' % results.total_transactions)
+    print('timers: %i' % results.total_timers)
     print('errors: %i' % results.total_errors)
     print('test start: %s' % results.start_datetime)
-    print('test finish: %s' % results.finish_datetime)
+    print('test finish: %s\n' % results.finish_datetime)
 
     data = {
         'report': results,
@@ -50,7 +51,7 @@ def output(results_dir, config, parent='../../'):
         graphs.resp_graph_raw(value['raw'], key + '_response_times.svg', results_dir)
         graphs.resp_graph(value['compiled'], key + '_response_times_intervals.svg', results_dir)
         graphs.tp_graph(value['compiled'], key + '_throughput.svg', results_dir)
-    print("All graphs generated in {} seconds".format(time.time() - partial))
+    print("All graphs generated in {} seconds\n".format(time.time() - partial))
 
     print("Generating html report...")
     partial = time.time()
@@ -59,6 +60,6 @@ def output(results_dir, config, parent='../../'):
 
     report = Report(results_dir, parent)
     report.write_report(template.render(data))
-    print("HTML report generated in {} seconds".format(time.time() - partial))
+    print("HTML report generated in {} seconds\n".format(time.time() - partial))
     print("Full report generated in {} seconds".format(time.time() - start))
     return True
