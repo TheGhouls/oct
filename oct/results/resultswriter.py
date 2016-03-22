@@ -8,8 +8,7 @@ from oct.results.models import Result, Turret, set_database, db
 class ResultsWriter(object):
     """This class will handle results and stats comming from the turrets
 
-    :param output_dir: the output directory for the results
-    :type output_dir: str
+    :param str output_dir: the output directory for the results
     """
     def __init__(self, output_dir, config):
         self.output_dir = output_dir
@@ -32,7 +31,7 @@ class ResultsWriter(object):
     def write_turret(self, data):
         """Write the turret information in database
 
-        :param data dict: the data of the turret to save
+        :param dict data: the data of the turret to save
         :return: The turret object after save
         """
         turret = Turret(name=data['turret'], canons=data['canons'], script=data['script'], rampup=data['rampup'],
@@ -43,7 +42,7 @@ class ResultsWriter(object):
     def write_result(self, data):
         """Write the results received to the database
 
-        :param data dict: the data to save in database
+        :param dict data: the data to save in database
         :return: None
         """
         self.trans_count += 1

@@ -37,7 +37,7 @@ def main():
 def run(cmd_args):
     """Start an oct project
 
-    :param cmd_args Namespace: the commande-line arguments
+    :param Namespace cmd_args: the commande-line arguments
     """
     project_name = cmd_args.project_name
     config = configure(project_name, cmd_args)

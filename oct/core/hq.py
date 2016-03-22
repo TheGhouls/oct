@@ -9,10 +9,10 @@ class HightQuarter(object):
     """The main hight quarter that will receive informations from the turrets
     and send the start message
 
-    :param publish_port int: the port for publishing information to turrets
-    :param rc_port int: the result collector port for collecting results from the turrets
-    :param results_writer ResultsWriter: the results writer
-    :param config dict: the configuration of the test
+    :param int publish_port: the port for publishing information to turrets
+    :param int rc_port: the result collector port for collecting results from the turrets
+    :param ResultsWriter results_writer: the results writer
+    :param dict config: the configuration of the test
     """
     def __init__(self, publish_port, rc_port, results_writer, config):
         self.context = zmq.Context()

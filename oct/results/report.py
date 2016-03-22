@@ -9,8 +9,8 @@ from oct.results.models import db, Result, Turret
 class ReportResults(object):
     """Represent a report containing all tests results
 
-    :param result_file str: the sqlite result file
-    :param run_time int: the run_time of the script
+    :param str result_file: the sqlite result file
+    :param int run_time: the run_time of the script
     """
     def __init__(self, results_file, run_time, interval):
         self.results_file = results_file
@@ -49,6 +49,8 @@ class ReportResults(object):
             self.timers_results[key] = timer_results
 
     def _get_all_timers(self):
+        """Get all timers and set them in the _timers_values property
+        """
         for item in Result.select(Result.custom_timers, Result.epoch).order_by(Result.epoch.asc()):
             custom_timers = {}
             if item.custom_timers:
@@ -59,8 +61,8 @@ class ReportResults(object):
     def _process_timer(self, name, value, epoch):
         """Add a custom timer to class dict. If key exists append the value, else create the key in dict
 
-        :param name str: the name of the timer
-        :param value float: the value of the timer
+        :param str name: the name of the timer
+        :param float value: the value of the timer
         :param epoch int: the epoch of timer
         """
         if self._timers_values.get(name):
@@ -71,7 +73,7 @@ class ReportResults(object):
     def _get_processed_dataframe(self, dataframe):
         """Generate required dataframe for results from raw dataframe
 
-        :param dataframe pandas.DataFrame: the raw dataframe
+        :param pandas.DataFrame dataframe: the raw dataframe
         :return: a dict containing raw, compiled, and summary dataframes from original dataframe
         :rtype: dict
         """

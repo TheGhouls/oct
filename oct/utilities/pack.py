@@ -44,9 +44,9 @@ def main():
 def pack_turret(turret_config, tmp_config_file, tmp_setup, base_config_path, path=None):
     """pack a turret into a tar file based on the turret configuration
 
-    :param turret_config dict: the turret configuration to pack
-    :param tmp_config_file str: the path of the temp config file
-    :param base_config_path str: the base directory of the main configuration file
+    :param dict turret_config: the turret configuration to pack
+    :param str tmp_config_file: the path of the temp config file
+    :param str base_config_path: the base directory of the main configuration file
     """
     file_name = turret_config['name']
     if path is not None:

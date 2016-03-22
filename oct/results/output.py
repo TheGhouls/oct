@@ -12,13 +12,13 @@ from oct.results.reportwriter import Report
 def output(results_dir, results_file, config, parent='../../'):
     """Write the results output for the given test
 
-    :param results_dir str: the directory for the results
-    :param results_file str: the file for the results
-    :param run_time int: the total test time elapsed
-    :param rampup int: the rampup setting for the test
-    :param ts_interval int: the interval in second setting for the test
-    :param turrets: the turrets configuration
-    :param parents str: the parent directory
+    :param str results_dir: the directory for the results
+    :param str  results_file: the file for the results
+    :param int run_time: the total test time elapsed
+    :param int rampup: the rampup setting for the test
+    :param int ts_interval: the interval in second setting for the test
+    :param dict turrets: the turrets configuration
+    :param str parents: the parent directory
     """
     start = time.time()
     print("Compiling results...")

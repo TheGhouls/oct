@@ -10,7 +10,7 @@ from dateutil.tz import tzlocal
 def get_local_time(index):
     """Localize datetime for better output in graphs
 
-    :param index pandas.DateTimeIndex: pandas datetime index
+    :param pandas.DateTimeIndex index: pandas datetime index
     :return: aware time objet
     :rtype: datetime.time
     """
@@ -22,9 +22,9 @@ def get_local_time(index):
 def resp_graph_raw(dataframe, image_name, dir='./'):
     """Response time graph for raw data
 
-    :param dataframe pandas.DataFrame: the raw results dataframe
-    :param image_name str: the output file name
-    :param dir str: the output directory
+    :param pandas.DataFrame dataframe: the raw results dataframe
+    :param str image_name: the output file name
+    :param str dir: the output directory
     :return: None
     """
     factor = int(len(dataframe) / 10)
@@ -45,9 +45,9 @@ def resp_graph_raw(dataframe, image_name, dir='./'):
 def resp_graph(dataframe, image_name, dir='./'):
     """Response time graph for bucketed data
 
-    :param dataframe pandas.DataFrame: dataframe containing all data
-    :param image_name str: the output file name
-    :param dir str: the output directory
+    :param pandas.DataFrame dataframe: dataframe containing all data
+    :param str image_name: the output file name
+    :param str dir: the output directory
     :return: None
     """
     fig = pygal.TimeLine(x_title='Elapsed Time In Test (secs)',
@@ -66,8 +66,8 @@ def resp_graph(dataframe, image_name, dir='./'):
 def tp_graph(dataframe, image_name, dir='./'):
     """Throughput graph
 
-    :param dataframe pandas.DataFrame: dataframe containing all data
-    :param dir str: the output directory
+    :param pandas.DataFrame dataframe: dataframe containing all data
+    :param str dir: the output directory
     :return: None
     """
     fig = pygal.TimeLine(x_title='Elapsed Time In Test (secs)',

@@ -54,6 +54,22 @@ oct.results.graphs module
     :show-inheritance:
 
 
+oct.results.output module
+-------------------------
+
+.. automodule:: oct.results.output
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+oct.results.report module
+-------------------------
+
+.. automodule:: oct.results.report
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 
 Module contents
 ---------------

@@ -8,9 +8,9 @@ from oct.results.models import db, Result, set_database
 def results_to_csv(result_file, output_file, delimiter=';'):
     """Take a sqlite filled database of results and return a csv file
 
-    :param result_file str: the path of the sqlite database
-    :param output_file str: the path of the csv output file
-    :param delimiter str: the desired delimiter for the output csv file
+    :param str result_file: the path of the sqlite database
+    :param str output_file: the path of the csv output file
+    :param str delimiter: the desired delimiter for the output csv file
     """
     if not os.path.isfile(result_file):
         raise OSError("Results file does not exists")

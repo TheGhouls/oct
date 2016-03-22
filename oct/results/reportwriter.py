@@ -5,8 +5,8 @@ import shutil
 class Report(object):
     """A class representing a report, used to output the result
 
-    :param results_dir str: the output directory for the report
-    :param parent str: the parent directory
+    :param str results_dir: the output directory for the report
+    :param str parent: the parent directory
     """
     def __init__(self, results_dir, parent):
         self.results_dir = results_dir
