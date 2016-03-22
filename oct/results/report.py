@@ -9,8 +9,8 @@ from oct.results.models import db, Result, Turret
 class ReportResults(object):
     """Represent a report containing all tests results
 
-    :param str result_file: the sqlite result file
     :param int run_time: the run_time of the script
+    :param int interval: the time interval between each group of results
     """
     def __init__(self, run_time, interval):
         self.total_transactions = Result.select().count()

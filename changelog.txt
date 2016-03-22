@@ -12,12 +12,15 @@ Improvements and bug fixes
 * Update requirements
 * Improve documentation
 * Refactor docstring comments
+* Improve unit tests
 
 Backward compatibility breaks
 -----------------------------
 
 * Rename resultsouput module to output
 * Rename reportresults module to report
+* Remove results_file parameter in oct.results.output.output function and in oct.results.report.ReportResults constructor
+since database is configured in the oct.results.models module. You muste use the set_dabase function if you need to change it
 
 0.3.7 to 0.3.8
 ==============

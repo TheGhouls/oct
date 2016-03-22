@@ -13,11 +13,7 @@ def output(results_dir, config, parent='../../'):
     """Write the results output for the given test
 
     :param str results_dir: the directory for the results
-    :param str  results_file: the file for the results
-    :param int run_time: the total test time elapsed
-    :param int rampup: the rampup setting for the test
-    :param int ts_interval: the interval in second setting for the test
-    :param dict turrets: the turrets configuration
+    :param dict config: the configuration of the test
     :param str parents: the parent directory
     """
     start = time.time()
