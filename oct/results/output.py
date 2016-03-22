@@ -9,7 +9,7 @@ from oct.results.report import ReportResults
 from oct.results.reportwriter import Report
 
 
-def output(results_dir, results_file, config, parent='../../'):
+def output(results_dir, config, parent='../../'):
     """Write the results output for the given test
 
     :param str results_dir: the directory for the results
@@ -23,7 +23,8 @@ def output(results_dir, results_file, config, parent='../../'):
     start = time.time()
     print("Compiling results...")
     results_dir = os.path.abspath(results_dir)
-    results = ReportResults(os.path.join(results_dir, results_file), config['run_time'], config['results_ts_interval'])
+    results = ReportResults(config['run_time'], config['results_ts_interval'])
+    results.compile_results()
     print("Results compiled in {} seconds".format(time.time() - start))
 
     if results.total_transactions == 0:
@@ -32,7 +33,6 @@ def output(results_dir, results_file, config, parent='../../'):
 
     print('transactions: %i' % results.total_transactions)
     print('errors: %i' % results.total_errors)
-    print('')
     print('test start: %s' % results.start_datetime)
     print('test finish: %s' % results.finish_datetime)
 

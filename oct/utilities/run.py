@@ -57,10 +57,8 @@ def run(cmd_args):
     hq.wait_turrets(config.get("min_turrets", 1))
     hq.run()
 
-    # all agents are done running at this point
-    time.sleep(.2)  # make sure the writer queue is flushed
     print('\n\nanalyzing results...\n')
-    if output_results(output_dir, 'results.sqlite', config):
+    if output_results(output_dir, config):
         print('created: %sresults.html\n' % output_dir)
 
     # copy config file to results directory

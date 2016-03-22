@@ -12,28 +12,29 @@ class ReportResults(object):
     :param str result_file: the sqlite result file
     :param int run_time: the run_time of the script
     """
-    def __init__(self, results_file, run_time, interval):
-        self.results_file = results_file
+    def __init__(self, run_time, interval):
         self.total_transactions = Result.select().count()
         self.total_errors = Result.select()\
-                            .where(Result.error != "", Result.error != None)\
-                            .count()
+                                  .where(Result.error != "", Result.error != None)\
+                                  .count()
         self.timers_results = {}
         self._timers_values = {}
         self.turrets = []
         self.main_results = {}
         self.interval = interval
 
-        if self.total_transactions > 0:
-            self.epoch_start = Result.select().order_by(Result.epoch.asc()).get().epoch
-            self.epoch_finish = Result.select().order_by(Result.epoch.desc()).get().epoch
-            self.start_datetime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(self.epoch_start))
-            self.finish_datetime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(self.epoch_finish))
+        self._init_dates()
+        self._init_turrets()
 
-        if self.total_transactions > 0:
-            self._get_all_timers()
-            self._init_dataframes()
-            self._init_turrets()
+    def _init_dates(self):
+        """Initialize all dates properties
+        """
+        if self.total_transactions == 0:
+            return None
+        self.epoch_start = Result.select().order_by(Result.epoch.asc()).get().epoch
+        self.epoch_finish = Result.select().order_by(Result.epoch.desc()).get().epoch
+        self.start_datetime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(self.epoch_start))
+        self.finish_datetime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(self.epoch_finish))
 
     def _init_dataframes(self):
         """Initialise the main dataframe for the results and the custom timers dataframes
@@ -41,6 +42,7 @@ class ReportResults(object):
         df = pd.read_sql_query("SELECT elapsed, epoch, scriptrun_time FROM result ORDER BY epoch ASC", db.get_conn())
         self.main_results = self._get_processed_dataframe(df)
 
+        # create all custom timers dataframes
         for key, value in six.iteritems(self._timers_values):
             values = [{'epoch': t[0], 'scriptrun_time': t[1]} for t in value]
             df = pd.DataFrame(values)
@@ -93,3 +95,11 @@ class ReportResults(object):
         """
         for turret in Turret.select():
             self.turrets.append(turret.to_dict())
+
+    def compile_results(self):
+        """Compile all results for the current test
+        """
+        if self.total_transactions == 0:
+            return None
+        self._get_all_timers()
+        self._init_dataframes()
