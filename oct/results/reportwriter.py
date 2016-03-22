@@ -24,8 +24,11 @@ class Report(object):
             shutil.copytree(os.path.join(self.templates_dir, 'css'), os.path.join(self.results_dir, 'css'))
             shutil.copytree(os.path.join(self.templates_dir, 'img'), os.path.join(self.results_dir, 'img'))
             shutil.copytree(os.path.join(self.templates_dir, 'scripts'), os.path.join(self.results_dir, 'scripts'))
-        except OSError:
-            raise OSError("Could not create directory for results")
+        except OSError as e:
+            if e.errno == 17:  # File exists
+                print("WARNING : existing output directory for static files, will not replace them")
+            else:  # in all other cases, re-raise exceptions
+                raise
 
     def write_report(self, template):
         """Write the compiled jinja template to the results file
