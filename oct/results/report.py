@@ -14,10 +14,8 @@ class ReportResults(object):
     :param int interval: the time interval between each group of results
     """
     def __init__(self, run_time, interval):
-        self.total_transactions = Result.select().count()
-        self.total_errors = Result.select()\
-                                  .where(Result.error != "", Result.error != None)\
-                                  .count()
+        self.total_transactions = 0
+        self.total_errors = Result.select(Result.id).where(Result.error != "", Result.error != None).count()
         self.total_timers = 0
         self.timers_results = {}
         self._timers_values = defaultdict(list)
@@ -25,7 +23,6 @@ class ReportResults(object):
         self.main_results = {}
         self.interval = interval
 
-        self._init_dates()
         self._init_turrets()
 
     def _init_dates(self):
@@ -33,8 +30,8 @@ class ReportResults(object):
         """
         if self.total_transactions == 0:
             return None
-        self.epoch_start = Result.select().order_by(Result.epoch.asc()).get().epoch
-        self.epoch_finish = Result.select().order_by(Result.epoch.desc()).get().epoch
+        self.epoch_start =  Result.select(Result.epoch).order_by(Result.epoch.asc()).limit(1).get().epoch
+        self.epoch_finish = Result.select(Result.epoch).order_by(Result.epoch.desc()).limit(1).get().epoch
         self.start_datetime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(self.epoch_start))
         self.finish_datetime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(self.epoch_finish))
 
@@ -55,7 +52,7 @@ class ReportResults(object):
         """Get all timers and set them in the _timers_values property
         """
         query = Result.select(Result.custom_timers, Result.epoch).order_by(Result.epoch.asc())
-        for item in Result.select(Result.custom_timers, Result.epoch).order_by(Result.epoch.asc()):
+        for item in query:
             custom_timers = {}
             if item.custom_timers:
                 custom_timers = json.loads(item.custom_timers)
@@ -90,7 +87,8 @@ class ReportResults(object):
     def compile_results(self):
         """Compile all results for the current test
         """
-        if self.total_transactions == 0:
-            return None
         self._get_all_timers()
         self._init_dataframes()
+
+        self.total_transactions = len(self.main_results['raw'])
+        self._init_dates()
