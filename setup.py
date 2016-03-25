@@ -14,7 +14,13 @@ setup(
     author_email='manu.valette@gmail.com',
     packages=['oct', 'oct.core', 'oct.utilities', 'oct.tools', 'oct.results'],
     package_data={
-        'oct.utilities': ['templates/css/*', 'templates/configuration/*', 'templates/html/*', 'templates/scripts/*']
+        'oct.utilities': [
+            'templates/css/*',
+            'templates/configuration/*',
+            'templates/html/*',
+            'templates/scripts/*',
+            'templates/javascript/*'
+        ]
     },
     description="A library for performances testing, give you the tools for load testing anything with any language",
     long_description=long_description,

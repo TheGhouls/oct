@@ -24,11 +24,13 @@ def create_project(project_name):
         os.makedirs(project_name)
         os.makedirs(os.path.join(project_name, 'test_scripts'))
         os.makedirs(os.path.join(project_name, 'templates'))
-        os.makedirs(os.path.join(project_name, 'templates', 'css'))
-        os.makedirs(os.path.join(project_name, 'templates', 'scripts'))
         os.makedirs(os.path.join(project_name, 'templates', 'img'))
-        shutil.copy(os.path.join(BASE_DIR, 'templates', 'css', 'style.css'),
-                    os.path.join(project_name, 'templates', 'css'))
+
+        shutil.copytree(os.path.join(BASE_DIR, 'templates', 'css'),
+                        os.path.join(project_name, 'templates', 'css'))
+        shutil.copytree(os.path.join(BASE_DIR, 'templates', 'javascript'),
+                        os.path.join(project_name, 'templates', 'scripts'))
+
         shutil.copy(os.path.join(BASE_DIR, 'templates', 'html', 'report.html'),
                     os.path.join(project_name, 'templates'))
     except OSError:
