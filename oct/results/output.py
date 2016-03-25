@@ -6,7 +6,7 @@ from jinja2 import Environment, FileSystemLoader
 
 from oct.results import graphs
 from oct.results.report import ReportResults
-from oct.results.reportwriter import Report
+from oct.results.writer import ReportWriter
 
 
 def output(results_dir, config, parent='../../'):
@@ -58,8 +58,8 @@ def output(results_dir, config, parent='../../'):
     j_env = Environment(loader=FileSystemLoader(os.path.join(results_dir, parent, 'templates')))
     template = j_env.get_template('report.html')
 
-    report = Report(results_dir, parent)
-    report.write_report(template.render(data))
+    report_writer = ReportWriter(results_dir, parent)
+    report_writer.write_report(template.render(data))
     print("HTML report generated in {} seconds\n".format(time.time() - partial))
     print("Full report generated in {} seconds".format(time.time() - start))
     return True

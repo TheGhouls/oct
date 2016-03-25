@@ -2,7 +2,7 @@ import os
 import shutil
 
 
-class Report(object):
+class ReportWriter(object):
     """A class representing a report, used to output the result
 
     :param str results_dir: the output directory for the report

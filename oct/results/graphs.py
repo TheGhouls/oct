@@ -35,7 +35,7 @@ def resp_graph_raw(dataframe, image_name, dir='./'):
                     x_label_rotation=25,
                     x_title='Elapsed Time In Test (secs)',
                     y_title='Average Response Time (secs)',
-                    js=('http://kozea.github.io/pygal.js/2.0.x/pygal-tooltips.min.js',))
+                    js=('pygal-tooltip.min.js',))
     fig.x_labels = [x for x in grp.first()['epoch']]
     fig.title = image_name.split('.')[0]
     fig.add('Time', [x for x in grp.describe()['scriptrun_time'].unstack()['mean'].round(2)])
@@ -53,7 +53,7 @@ def resp_graph(dataframe, image_name, dir='./'):
     fig = pygal.TimeLine(x_title='Elapsed Time In Test (secs)',
                          y_title='Response Time (secs)',
                          x_label_rotation=25,
-                         js=('http://kozea.github.io/pygal.js/2.0.x/pygal-tooltips.min.js',))
+                         js=('pygal-tooltip.min.js',))
     fig.add('AVG', [(get_local_time(index), row['mean'] if pd.notnull(row['mean']) else None)
                     for index, row in dataframe.iterrows()])
     fig.add('90%', [(get_local_time(index), row['90%'] if pd.notnull(row['90%']) else None)
@@ -74,7 +74,7 @@ def tp_graph(dataframe, image_name, dir='./'):
                          x_label_rotation=25,
                          y_title='Transactions Per Second (count)',
                          human_readable=True,
-                         js=('http://kozea.github.io/pygal.js/2.0.x/pygal-tooltips.min.js',))
+                         js=('pygal-tooltip.min.js',))
     fig.add('Transactions per second', [(get_local_time(index), row['count'])
                                         for index, row in dataframe.iterrows()])
     fig.render_to_file(filename=os.path.join(dir, image_name))

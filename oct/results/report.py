@@ -70,8 +70,9 @@ class ReportResults(object):
         dataframe.index = pd.to_datetime(dataframe['epoch'], unit='s', utc=True)
         del dataframe['epoch']
         summary = dataframe.describe(percentiles=[.80, .90, .95]).transpose().loc['scriptrun_time']
-        df_grp = dataframe.groupby(pd.TimeGrouper(str(self.interval) + 'S'))
+        df_grp = dataframe.groupby(pd.TimeGrouper('{}S'.format(self.interval)))
         df_final = df_grp.apply(lambda x: x.describe(percentiles=[.80, .90, .95])['scriptrun_time']).unstack()
+
         return {
             "raw": dataframe.round(2),
             "compiled": df_final.round(2),
