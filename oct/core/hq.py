@@ -71,15 +71,15 @@ class HightQuarter(object):
         if self.result_collector in socks:
             data = self.result_collector.recv_json()
             if 'status' not in data:
-                self.results_writer.write_result(data)
+                self.stats_handler.write_result(data)
             else:
                 self._process_turret_status(data)
 
     def _print_status(self, elapsed):
         display = 'turrets: {}, elapsed: {}   transactions: {}  timers: {}  errors: {}\r'
-        print(display.format(len(self.turrets), round(elapsed), self.results_writer.trans_count,
-                             self.results_writer.timer_count,
-                             self.results_writer.error_count), end='')
+        print(display.format(len(self.turrets), round(elapsed), self.stats_handler.trans_count,
+                             self.stats_handler.timer_count,
+                             self.stats_handler.error_count), end='')
 
     def _clean_queue(self):
         try:
@@ -87,11 +87,11 @@ class HightQuarter(object):
             while data:
                 data = self.result_collector.recv_json(zmq.NOBLOCK)
                 if 'status' not in data:
-                    self.results_writer.write_result(data)
+                    self.stats_handler.write_result(data)
         except zmq.Again:
             self.result_collector.close()
             self.publisher.close()
-            self.results_writer.write_remaining()
+            self.stats_handler.write_remaining()
 
     def _run_loop_action(self):
         socks = dict(self.poller.poll(1000))
