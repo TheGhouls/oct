@@ -13,6 +13,8 @@ Improvements and bug fixes
 * Improve documentation
 * Refactor docstring comments
 * Improve unit tests
+* Added pygal javascript file in results template
+* Added javascript folder to templates
 
 Backward compatibility breaks
 -----------------------------
