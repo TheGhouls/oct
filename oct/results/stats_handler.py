@@ -5,7 +5,7 @@ import json
 from oct.results.models import Result, Turret, set_database, db
 
 
-class ResultsWriter(object):
+class StatsHandler(object):
     """This class will handle results and stats comming from the turrets
 
     :param str output_dir: the output directory for the results

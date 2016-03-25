@@ -11,10 +11,10 @@ class HightQuarter(object):
 
     :param int publish_port: the port for publishing information to turrets
     :param int rc_port: the result collector port for collecting results from the turrets
-    :param ResultsWriter results_writer: the results writer
+    :param StatsHandler stats_handler: the stats handler writer
     :param dict config: the configuration of the test
     """
-    def __init__(self, publish_port, rc_port, results_writer, config):
+    def __init__(self, publish_port, rc_port, stats_handler, config):
         self.context = zmq.Context()
         self.poller = zmq.Poller()
 
@@ -26,7 +26,7 @@ class HightQuarter(object):
 
         self.poller.register(self.result_collector, zmq.POLLIN)
 
-        self.results_writer = results_writer
+        self.stats_handler = stats_handler
         self.config = config
         self.turrets = []
         self.started = False
@@ -42,7 +42,7 @@ class HightQuarter(object):
         return False
 
     def _add_turret(self, turret_data):
-        self.turrets.append(self.results_writer.write_turret(turret_data))
+        self.turrets.append(self.stats_handler.write_turret(turret_data))
         if self.started:
             self._publish({'command': 'start', 'msg': 'open fire'})
 

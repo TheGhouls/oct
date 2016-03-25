@@ -14,7 +14,7 @@ import time
 from datetime import datetime
 from oct.results.output import output as output_results
 
-import oct.results.resultswriter as resultswriter
+import oct.results.stats_handler as stats_handler
 from oct.utilities.configuration import configure
 from oct.core.hq import HightQuarter
 
@@ -48,7 +48,7 @@ def run(cmd_args):
                                                time.strftime('%Y.%m.%d_%H.%M.%S_' + str(milisec) + '/', run_localtime))
 
     # this queue is shared between all processes/threads
-    rw = resultswriter.ResultsWriter(output_dir, config)
+    rw = stats_handler.StatsHandler(output_dir, config)
 
     script_prefix = os.path.join(cmd_args.project_dir, project_name, "test_scripts")
     script_prefix = os.path.normpath(script_prefix)
