@@ -6,7 +6,7 @@ oct
 [![Latest Version](https://img.shields.io/pypi/v/oct.svg?style=flat)](https://pypi.python.org/pypi/oct/)
 [![Supported Python versions](https://img.shields.io/pypi/pyversions/oct.svg?style=flat)](https://pypi.python.org/pypi/oct/)
 [![pypi](https://img.shields.io/pypi/status/oct.svg?style=flat)](https://pypi.python.org/pypi/oct/)
-[![pypi](https://travis-ci.org/karec/oct.svg?branch=master)](https://travis-ci.org/TheGhouls/oct)
+[![pypi](https://travis-ci.org/TheGhouls/oct.svg?branch=master)](https://travis-ci.org/TheGhouls/oct)
 
 [Documentation](http://oct.readthedocs.org/en/latest/)
 
