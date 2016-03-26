@@ -38,7 +38,7 @@ def output(results_dir, config, parent='../../'):
         'run_time': config['run_time'],
         'ts_interval': config['results_ts_interval'],
         'turrets_config': results.turrets,
-        'all_results': {"all": results.main_results, "timers": results.timers_results}
+        'results': {"all": results.main_results, "timers": results.timers_results}
     }
 
     print("Generating graphs...")

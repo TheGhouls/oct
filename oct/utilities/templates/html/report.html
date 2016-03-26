@@ -66,13 +66,13 @@
     </tr>
     <tr>
         <td>{{ report.total_transactions }} </td>
-        <td>{{ all_results.all.summary['min'] }}</td>
-        <td>{{ all_results.all.summary['mean'] }}</td>
-        <td>{{ all_results.all.summary['80%'] }}</td>
-        <td>{{ all_results.all.summary['90%'] }}</td>
-        <td>{{ all_results.all.summary['95%'] }}</td>
-        <td>{{ all_results.all.summary['max'] }}</td>
-        <td>{{ all_results.all.summary['std'] }}</td>
+        <td>{{ results.all.summary['min'] }}</td>
+        <td>{{ results.all.summary['mean'] }}</td>
+        <td>{{ results.all.summary['80%'] }}</td>
+        <td>{{ results.all.summary['90%'] }}</td>
+        <td>{{ results.all.summary['95%'] }}</td>
+        <td>{{ results.all.summary['max'] }}</td>
+        <td>{{ results.all.summary['std'] }}</td>
     </tr>
 </table>
 
@@ -90,7 +90,7 @@
         <th>max</th>
         <th>stdev</th>
     </tr>
-    {% for index, row in all_results.all.compiled.iterrows() %}
+    {% for index, row in results.all.compiled.iterrows() %}
     <tr>
         <td>{{ loop.index }}</td>
         <td>{{ row['count'] }}</td>
@@ -125,7 +125,7 @@
     <embed src="All_Transactions_throughput.svg" type="image/svg+xml" />
 </figure>
 
-{% for key, value in all_results.timers.items() %}
+{% for key, value in results.timers.items() %}
 <hr />
 <h2>Custom Timer: {{ key }}</h2>
 
