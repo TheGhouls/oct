@@ -24,8 +24,8 @@ setup(
     },
     description="A library for performances testing, give you the tools for load testing anything with any language",
     long_description=long_description,
-    url='https://github.com/karec/oct',
-    download_url='https://github.com/karec/oct/archive/master.zip',
+    url='https://github.com/TheGhouls/oct',
+    download_url='https://github.com/TheGhouls/oct/archive/master.zip',
     keywords=['testing', 'perfs', 'performances', 'web', 'load', 'zeromq'],
     classifiers=[
         'Development Status :: 3 - Alpha',
