@@ -10,7 +10,7 @@ with open('README.rst') as f:
 setup(
     name='oct',
     version=__version__,
-    author='Emmanuel Valette',
+    author='TheGhouls',
     author_email='manu.valette@gmail.com',
     packages=['oct', 'oct.core', 'oct.utilities', 'oct.tools', 'oct.results'],
     package_data={
