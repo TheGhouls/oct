@@ -1,5 +1,4 @@
 import os
-import time
 import pytz
 import pygal
 import numpy as np

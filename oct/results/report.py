@@ -30,7 +30,7 @@ class ReportResults(object):
         """
         if self.total_transactions == 0:
             return None
-        self.epoch_start =  Result.select(Result.epoch).order_by(Result.epoch.asc()).limit(1).get().epoch
+        self.epoch_start = Result.select(Result.epoch).order_by(Result.epoch.asc()).limit(1).get().epoch
         self.epoch_finish = Result.select(Result.epoch).order_by(Result.epoch.desc()).limit(1).get().epoch
         self.start_datetime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(self.epoch_start))
         self.finish_datetime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(self.epoch_finish))
