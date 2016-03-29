@@ -41,8 +41,8 @@ def configure(project_name, cmd_opts, config_file=None):
 def configure_for_turret(project_name, config_file):
     """Load the configuration file in python dict and check for keys that will be set to default value if not present
 
-    :param project_name str: the name of the project
-    :param config_file str: the path of the configuration file
+    :param str project_name: the name of the project
+    :param str config_file: the path of the configuration file
     :return: the loaded configuration
     :rtype: dict
     """

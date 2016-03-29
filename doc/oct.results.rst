@@ -12,34 +12,34 @@ oct.results.models module
     :undoc-members:
     :show-inheritance:
 
-oct.results.reportresults module
---------------------------------
+oct.results.report module
+-------------------------
 
-.. automodule:: oct.results.reportresults
+.. automodule:: oct.results.report
     :members:
     :undoc-members:
     :show-inheritance:
 
-oct.results.reportwriter module
--------------------------------
+oct.results.writer module
+-------------------------
 
-.. automodule:: oct.results.reportwriter
+.. automodule:: oct.results.writer
     :members:
     :undoc-members:
     :show-inheritance:
 
-oct.results.resultsoutput module
---------------------------------
+oct.results.ouput module
+------------------------
 
-.. automodule:: oct.results.resultsoutput
+.. automodule:: oct.results.ouput
     :members:
     :undoc-members:
     :show-inheritance:
 
-oct.results.resultswriter module
+oct.results.stats_handler module
 --------------------------------
 
-.. automodule:: oct.results.resultswriter
+.. automodule:: oct.results.stats_handler
     :members:
     :undoc-members:
     :show-inheritance:
@@ -52,7 +52,6 @@ oct.results.graphs module
     :members:
     :undoc-members:
     :show-inheritance:
-
 
 
 Module contents

@@ -2,7 +2,7 @@ API Reference
 =============
 
 .. toctree::
-    :maxdepth:2
+    :maxdepth: 2
 
     oct.core
     oct.results

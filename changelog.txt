@@ -1,3 +1,34 @@
+0.3.8 to 0.3.9
+==============
+
+Improvements and bug fixes
+--------------------------
+
+* Replace own statistics analysers with pandas
+* Replace raw graph with Dot graph type
+* All graphs axis now show date time instead of an int representing elapsed seconds
+* Added output for the ouput generation too look less "stuck"
+* Improve speed for report generation
+* Update requirements
+* Improve documentation
+* Refactor docstring comments
+* Improve unit tests
+* Added pygal javascript file in results template
+* Added javascript folder to templates
+
+Backward compatibility breaks
+-----------------------------
+
+* Rename resultsouput module to output
+* Rename reportresults module to report
+* Remove results_file parameter in oct.results.output.output function and in oct.results.report.ReportResults constructor
+since database is configured in the oct.results.models module. You muste use the set_dabase function if you need to change it
+* Renaming in the results module :
+    - reportresults => report and class is ReportResults
+    - reportwriter => writer and class is ReportWriter
+    - resultsouput => output and funciton is output
+    - resultswriter => stats_handler and class is StatsHandler
+
 0.3.7 to 0.3.8
 ==============
 

@@ -1,5 +1,4 @@
 from oct_turrets.base import BaseTransaction
-import random
 import time
 
 
@@ -8,6 +7,6 @@ class Transaction(BaseTransaction):
         pass
 
     def run(self):
-        r = random.uniform(1, 2)
-        time.sleep(r)
-        self.custom_timers['Example_Timer'] = r
+        start = time.time()
+        time.sleep(0.2)
+        self.custom_timers['Example_Timer'] = time.time() - start

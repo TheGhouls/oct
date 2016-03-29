@@ -5,11 +5,10 @@ import json
 from oct.results.models import Result, Turret, set_database, db
 
 
-class ResultsWriter(object):
+class StatsHandler(object):
     """This class will handle results and stats comming from the turrets
 
-    :param output_dir: the output directory for the results
-    :type output_dir: str
+    :param str output_dir: the output directory for the results
     """
     def __init__(self, output_dir, config):
         self.output_dir = output_dir
@@ -29,20 +28,30 @@ class ResultsWriter(object):
         db.connect()
         db.create_tables([Result, Turret])
 
-    def write_turret(self, datas):
-        turret = Turret(name=datas['turret'], canons=datas['canons'], script=datas['script'], rampup=datas['rampup'],
-                        uuid=datas['uuid'], status=datas['status'])
+    def write_turret(self, data):
+        """Write the turret information in database
+
+        :param dict data: the data of the turret to save
+        :return: The turret object after save
+        """
+        turret = Turret(name=data['turret'], canons=data['canons'], script=data['script'], rampup=data['rampup'],
+                        uuid=data['uuid'], status=data['status'])
         turret.save()
         return turret
 
-    def write_result(self, datas):
+    def write_result(self, data):
+        """Write the results received to the database
+
+        :param dict data: the data to save in database
+        :return: None
+        """
         self.trans_count += 1
-        self.timer_count += len(datas['custom_timers'])
-        if datas['error']:
+        self.timer_count += len(data['custom_timers'])
+        if data['error']:
             self.error_count += 1
 
-        datas['custom_timers'] = json.dumps(datas['custom_timers'])
-        self.results.append(datas)
+        data['custom_timers'] = json.dumps(data['custom_timers'])
+        self.results.append(data)
 
         if len(self.results) >= 450:  # SQLite limit for inser_many is 500
             with db.atomic():
@@ -50,6 +59,8 @@ class ResultsWriter(object):
             del self.results[:]
 
     def write_remaining(self):
+        """Write the remaning stack content
+        """
         with db.atomic():
             Result.insert_many(self.results).execute()
         del self.results[:]

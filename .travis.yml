@@ -1,11 +1,21 @@
 language: python
 python:
-    - "2.7"
-    - "3.4"
-    - "3.5"
+- '2.7'
+- '3.4'
+- '3.5'
 install:
-    - pip install -r requirements.txt
-    - pip install nose
+- pip install -r requirements.txt
+- pip install nose
 script:
-    - python setup.py install
-    - nosetests -vdx tests/
+- python setup.py install
+- nosetests -vdx tests/
+deploy:
+  provider: pypi
+  user: Emmanuel.Valette
+  password:
+    secure: e5CWpC0Qs3vut/Zek2IOaUEXd0cIzjXSKe0kDjFL7n7kU+n+l5gqtkXR1PqOwo6tWqg7ZQkqXoTIlH8bOOJ6W+05fTtqi7WeaasfETG7Onus9RzaUoloQYIeC3vQtff90qm/h96+wQR7HS0KAxzOY0uhn7IyhblscrbzANg4ngH3mzlVgfmHyk/RCv7fHHUBGQZaKrZK8ySTwxJ1IK3mzpeMwFqds9QoGl7Ncn8RreU5z1HHowAbugqeMzcnrilEuZ5iZlN/Z5HX8ryTE2OU07ZXydhavTVwEOAXEzHiZhRhh4sVcbsxnL+EP90SX6Yn+7EiKFEuR2FulBw9ff3n3FqAMzt9XOWSVaB/6eGiHnwB7pkAObMhGrdslG4/+4GbHbOX5VEpkDk2qXFwoo14C4pDzq5TaVzbWy19rLoAeg0p8WwMs7CymOZEvkMYAw7s9mPhl32DRnhp/fNyyC6XfqaMF0SZ1lbh7Id04DIGwTQTnv1Bo+hp20sUHEf7NygXY6By06P9+EvjY4y+jUjy/EM3V24a2IZERbEZhVP2x4ZvG6AiCzUty0C/BsNgqiFjv346bKbGT5bJR6g2MgM4lN7RxxmveK5S6ClPoqGmn6wv8DDgQRkMK4beg9QZmEAFkuM/22pPnef2QC+I9klIzDS8BYtU4Rpal0h56ikjJQg=
+  on:
+    tags: true
+    branch: master
+    distributions: sdist bdist_wheel
+    repo: karec/oct

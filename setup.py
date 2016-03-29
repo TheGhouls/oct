@@ -10,16 +10,22 @@ with open('README.rst') as f:
 setup(
     name='oct',
     version=__version__,
-    author='Emmanuel Valette',
+    author='TheGhouls',
     author_email='manu.valette@gmail.com',
     packages=['oct', 'oct.core', 'oct.utilities', 'oct.tools', 'oct.results'],
     package_data={
-        'oct.utilities': ['templates/css/*', 'templates/configuration/*', 'templates/html/*', 'templates/scripts/*']
+        'oct.utilities': [
+            'templates/css/*',
+            'templates/configuration/*',
+            'templates/html/*',
+            'templates/scripts/*',
+            'templates/javascript/*'
+        ]
     },
     description="A library for performances testing, give you the tools for load testing anything with any language",
     long_description=long_description,
-    url='https://github.com/karec/oct',
-    download_url='https://github.com/karec/oct/archive/master.zip',
+    url='https://github.com/TheGhouls/oct',
+    download_url='https://github.com/TheGhouls/oct/archive/master.zip',
     keywords=['testing', 'perfs', 'performances', 'web', 'load', 'zeromq'],
     classifiers=[
         'Development Status :: 3 - Alpha',
@@ -39,7 +45,8 @@ setup(
         'six',
         'pyzmq',
         'numpy',
-        'jinja2'
+        'jinja2',
+        'pandas'
     ],
     entry_points={'console_scripts': [
         'oct-run = oct.utilities.run:main',

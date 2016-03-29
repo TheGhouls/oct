@@ -12,9 +12,9 @@ import os
 import shutil
 import time
 from datetime import datetime
-from oct.results.resultsoutput import output as output_results
+from oct.results.output import output as output_results
 
-import oct.results.resultswriter as resultswriter
+import oct.results.stats_handler as stats_handler
 from oct.utilities.configuration import configure
 from oct.core.hq import HightQuarter
 
@@ -35,7 +35,10 @@ def main():
 
 
 def run(cmd_args):
+    """Start an oct project
 
+    :param Namespace cmd_args: the commande-line arguments
+    """
     project_name = cmd_args.project_name
     config = configure(project_name, cmd_args)
 
@@ -45,7 +48,7 @@ def run(cmd_args):
                                                time.strftime('%Y.%m.%d_%H.%M.%S_' + str(milisec) + '/', run_localtime))
 
     # this queue is shared between all processes/threads
-    rw = resultswriter.ResultsWriter(output_dir, config)
+    rw = stats_handler.StatsHandler(output_dir, config)
 
     script_prefix = os.path.join(cmd_args.project_dir, project_name, "test_scripts")
     script_prefix = os.path.normpath(script_prefix)
@@ -54,10 +57,8 @@ def run(cmd_args):
     hq.wait_turrets(config.get("min_turrets", 1))
     hq.run()
 
-    # all agents are done running at this point
-    time.sleep(.2)  # make sure the writer queue is flushed
     print('\n\nanalyzing results...\n')
-    if output_results(output_dir, 'results.sqlite', config):
+    if output_results(output_dir, config):
         print('created: %sresults.html\n' % output_dir)
 
     # copy config file to results directory

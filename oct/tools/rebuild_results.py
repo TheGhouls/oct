@@ -1,6 +1,6 @@
 import argparse
 
-from oct.results.resultsoutput import output
+from oct.results.output import output
 from oct.results.models import db, set_database
 from oct.utilities.configuration import configure
 
@@ -15,4 +15,4 @@ def main():
 
     config = configure(None, None, args.config_file)
     set_database(args.results_file, db, config)
-    output(args.results_dir, args.results_file, config)
+    output(args.results_dir, config)
