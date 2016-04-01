@@ -66,17 +66,6 @@ For documentation and examples, please visit the official documentation here : [
 Roadmap
 -------
 
-For the 0.3.8 version :
-
-* More unit test for cover the new functioning of the project
-* A whole new documentation explaning how to create a project, how to package it and run it, how to write tests and how
-to write custom turrets
-
-For the 0.3.9 version :
-
-* Performances optimisations
-* Testing and debug
-
 For the 0.4.0 version :
 
 * Release of the beta version
