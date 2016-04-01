@@ -1,5 +1,5 @@
 from oct_turrets.base import BaseTransaction
-from oct_turrets.tools import ActionTimer
+from oct_turrets.tools import CustomTimer
 import random
 import time
 
@@ -16,7 +16,7 @@ class Transaction(BaseTransaction):
     def run(self):
         r = random.uniform(1, 2)
         time.sleep(r)
-        with ActionTimer(self, 'a timer'):
+        with CustomTimer(self, 'a timer'):
             time.sleep(r)
 
     def tear_down(self):
