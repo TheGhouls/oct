@@ -7,4 +7,4 @@ peewee
 pygal
 pyzmq
 six
-oct-turrets==0.1.0
+oct-turrets==0.2.3
