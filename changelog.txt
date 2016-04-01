@@ -1,3 +1,11 @@
+0.3.9 to 0.3.91
+===============
+
+Improvements and bug fixes
+--------------------------
+
+* force oct-turrets version in both setup and requirements for future low level renaming anticipation
+
 0.3.8 to 0.3.9
 ==============
 
