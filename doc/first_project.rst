@@ -46,8 +46,8 @@ The main and more important file here is the `config.json` file, let's take a lo
         "rc_port": 5001,
         "min_turrets": 1,
         "turrets": [
-            {"name": "navigation", "canons": 2, "rampup": 0, "script": "test_scripts/v_user.py"},
-            {"name": "random", "canons": 2, "rampup": 0, "script": "test_scripts/v_user.py"}
+            {"name": "navigation", "cannons": 2, "rampup": 0, "script": "test_scripts/v_user.py"},
+            {"name": "random", "cannons": 2, "rampup": 0, "script": "test_scripts/v_user.py"}
         ],
         "turrets_requirements": []
     }
@@ -81,10 +81,10 @@ Each turret can be configured independently, and you can setup different options
 
 * ``name``: the string representation for the turret
 
-* ``canons``: The number of canons for this turret (aka virtual users)
+* ``cannons``: The number of cannons for this turret (aka virtual users)
 
 * ``rampup``: Turrets can spawn their cannon progressively, not each at the same time. Rampup gives a "step" for
-  cannon initialization. The number of cannon spawned by second is equal to the total number of cannons of the 
+  cannon initialization. The number of cannon spawned by second is equal to the total number of cannons of the
   turret by rampup - e.g., if you have 30 cannons and a rampup of 15 seconds, it will spawn 2 cannons by seconds.
   If you do not want to increase the number of cannons in time but start the tests with all cannons ready to fire,
   leave rampup at 0, as in the exemple.

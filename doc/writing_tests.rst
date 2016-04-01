@@ -42,7 +42,7 @@ So first let's adapt the script to our needs:
 
     class Transaction(BaseTransaction):
         def __init__(self):
-            # each canon will only instanciate Transaction once, so each property
+            # each cannon will only instanciate Transaction once, so each property
             # in the Transaction __init__ method will be set only once so take care if you need to update it
             self.url = "http://my-api/1.0/"
 
@@ -73,8 +73,8 @@ But how to install the dependencies needed by the turrets ? You can simply updat
         "rc_port": 5001,
         "min_turrets": 1,
         "turrets": [
-            {"name": "navigation", "canons": 2, "rampup": 0, "script": "test_scripts/v_user.py"},
-            {"name": "random", "canons": 2, "rampup": 0, "script": "test_scripts/v_user.py"}
+            {"name": "navigation", "cannons": 2, "rampup": 0, "script": "test_scripts/v_user.py"},
+            {"name": "random", "cannons": 2, "rampup": 0, "script": "test_scripts/v_user.py"}
         ],
         "turrets_requirements": [
             "requests"
@@ -106,7 +106,7 @@ How does it works ? Take a look a this example:
 
     class Transaction(BaseTransaction):
         def __init__(self):
-            # each canon will only instanciate Transaction once, so each property
+            # each cannon will only instanciate Transaction once, so each property
             # in the Transaction __init__ method will be set only once so take care if you need to update it
             self.url = "http://my-api/1.0/"
             self.session = None

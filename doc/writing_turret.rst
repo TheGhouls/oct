@@ -35,7 +35,7 @@ Requirements
 Before going any further, you need to know what a turret must be able to do :
 
 * Reading a turret configuration file (see below)
-* Spawning N number of canons (set in the configuration file)
+* Spawning N number of cannons (set in the configuration file)
 * Managing rampup
 * Importing test files and run it
 * Sending well formated json messages to the HQ
@@ -50,7 +50,7 @@ type of configuration file :
 
     {
         "name": "navigation",
-        "canons": 50,
+        "cannons": 50,
         "rampup": 10,
         "script": "v_user.py",
         "hq_address": "127.0.0.1",
@@ -63,7 +63,7 @@ The configuration is pretty simple - and yes this is the full configuration need
 Let's explain all keys :
 
 * ``name``: the display name of the turret for the report
-* ``canons``: the number of canons to spawn (remember, canons == virtual users)
+* ``cannons``: the number of cannons to spawn (remember, cannons == virtual users)
 * ``rampup``: the rampup value in seconds
 * ``script``: the path/name of the test script to load
 * ``hq_address``: the IP address of the HQ
@@ -131,7 +131,7 @@ The status message SHOULD contain all of the following fields:
 * ``uuid``: the unique identifier of the turret
 * ``rampup``: the rampup setting of the turret
 * ``script``: the test script associated with the turret
-* ``canons``: the number of canons on the turret
+* ``cannons``: the number of cannons on the turret
 
 A complete json status message will look like this:
 
@@ -143,7 +143,7 @@ A complete json status message will look like this:
         "uuid": "d7b8a1cc-639a-405c-9b16-62ce5cd66f36",
         'rampup': "30",
         'script': "tests/navigation.py",
-        'canons': "250"
+        'cannons': "250"
     }
 
 .. note::
@@ -204,7 +204,7 @@ a simple status message with the new status of your turret :
         "uuid": "d7b8a1cc-639a-405c-9b16-62ce5cd66f36",
         'rampup': "30",
         'script': "tests/navigation.py",
-        'canons': "250"
+        'cannons': "250"
     }
 
 If you sent this message, in the final html report the user will be able to see that one turret is dead and at
