@@ -41,7 +41,7 @@ setup(
         'argparse',
         'pygal',
         'peewee',
-        'oct-turrets<=0.2.3',
+        'oct-turrets>=0.2.4',
         'six',
         'pyzmq',
         'numpy',

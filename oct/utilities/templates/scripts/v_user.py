@@ -1,11 +1,12 @@
 from oct_turrets.base import BaseTransaction
+from oct_turrets.tools import ActionTimer
 import random
 import time
 
 
 class Transaction(BaseTransaction):
-    def __init__(self):
-        pass
+    def __init__(self, config):
+        super(Transaction, self).__init__(config)
 
     def setup(self):
         """Setup data or objects here
@@ -15,7 +16,8 @@ class Transaction(BaseTransaction):
     def run(self):
         r = random.uniform(1, 2)
         time.sleep(r)
-        self.custom_timers['Example_Timer'] = r
+        with ActionTimer(self, 'a timer'):
+            time.sleep(r)
 
     def tear_down(self):
         """Clear cache or reset objects, etc. Anything that must be done after
@@ -25,6 +27,6 @@ class Transaction(BaseTransaction):
 
 
 if __name__ == '__main__':
-    trans = Transaction()
+    trans = Transaction(None)
     trans.run()
     print(trans.custom_timers)

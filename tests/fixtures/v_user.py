@@ -3,9 +3,6 @@ import time
 
 
 class Transaction(BaseTransaction):
-    def __init__(self):
-        pass
-
     def run(self):
         start = time.time()
         time.sleep(0.2)
