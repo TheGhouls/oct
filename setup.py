@@ -49,10 +49,6 @@ setup(
         'pandas'
     ],
     entry_points={'console_scripts': [
-        'oct-run = oct.utilities.run:main',
-        'oct-newproject = oct.utilities.newproject:main',
-        'oct-tocsv = oct.tools.results_to_csv:main',
-        'oct-rebuild-results = oct.tools.rebuild_results:main',
-        'oct-pack-turrets = oct.utilities.pack:main'
+        'oct = oct.utilities.commands:main'
     ]},
 )

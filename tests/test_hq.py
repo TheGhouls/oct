@@ -6,8 +6,9 @@ import json
 from multiprocessing import Process
 from oct_turrets.turret import Turret
 from oct_turrets.utils import load_file, validate_conf
-from oct.utilities.run import run, main
+from oct.utilities.run import run
 from oct.utilities.newproject import create_project
+from oct.utilities.commands import main
 
 
 BASE_DIR = os.path.dirname(os.path.realpath(__file__))
@@ -41,7 +42,9 @@ class HQTest(unittest.TestCase):
         self.turret.start()
         self.bad_turret = Process(target=run_bad_turret)
         self.bad_turret.start()
-        create_project('/tmp/oct-test')
+        sys.argv = sys.argv[:1]
+        sys.argv += ["new", "/tmp/oct-test"]
+        main()
 
         # update the runtime for the project
         with open(os.path.join(BASE_DIR, 'fixtures', 'config.json')) as f:
@@ -60,14 +63,16 @@ class HQTest(unittest.TestCase):
         """
         sys.argv = sys.argv[:1]
         opts = CmdOpts()
-        sys.argv += [opts.project_name, "-d", opts.project_dir]
+        sys.argv += ["run", opts.project_name, "-d", opts.project_dir]
         main()
 
     def test_create_errors(self):
         """Test errors when creating project
         """
         with self.assertRaises(OSError):
-            create_project('/tmp')
+            sys.argv = sys.argv[:1]
+            sys.argv += ["new", "/tmp/"]
+            main()
 
     def tearDown(self):
         shutil.rmtree('/tmp/oct-test')

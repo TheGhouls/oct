@@ -1,4 +1,4 @@
-import argparse
+import sys
 import tarfile
 import os.path
 import tempfile
@@ -7,11 +7,7 @@ from jinja2 import Environment, PackageLoader
 from oct.utilities.configuration import configure_for_turret
 
 
-def main():
-    parser = argparse.ArgumentParser(description='Give parameters for package a turret config_file and v_user')
-    parser.add_argument('path', type=str, help='path for oct project dir')
-    args = parser.parse_args()
-
+def pack(args):
     if os.path.exists(args.path):
         env = Environment(loader=PackageLoader('oct.utilities', 'templates'))
         turret_config = env.get_template('configuration/turret_config.json')
@@ -38,7 +34,8 @@ def main():
                 print("Error while packaging turret %s" % turret['name'])
                 print("Error: %s" % e)
     else:
-        parser.error("you need to enter a valid project path")
+        print("you need to enter a valid project path")
+        sys.exit(2)
 
 
 def pack_turret(turret_config, tmp_config_file, tmp_setup, base_config_path, path=None):
@@ -62,3 +59,11 @@ def pack_turret(turret_config, tmp_config_file, tmp_setup, base_config_path, pat
     tar_file.close()
     print("Archive %s created" % (file_name + ".tar"))
     print("=========================================")
+
+
+def pack_turrets(sp):
+    parser = sp.add_parser('pack-turrets',
+                           help="create turrets packages from a given oct project",
+                           aliases=['pack'])
+    parser.add_argument('path', type=str, help='path for oct project dir')
+    parser.set_defaults(func=pack)

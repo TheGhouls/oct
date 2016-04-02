@@ -7,7 +7,6 @@
 #  This file is part of Multi-Mechanize | Performance Test Framework
 #
 from __future__ import print_function
-import argparse
 import os
 import shutil
 import time
@@ -19,19 +18,16 @@ from oct.utilities.configuration import configure
 from oct.core.hq import HightQuarter
 
 
-def main():
+def run_command(sp):
     """
     Main function to run oct tests.
     """
-
-    parser = argparse.ArgumentParser(prog="oct-run")
+    parser = sp.add_parser('run', help="run an oct project")
     parser.add_argument('project_name', help="The project directory")
     parser.add_argument('-r', '--results', dest='results_dir', help='results directory to reprocess')
     parser.add_argument('-d', '--directory', dest='project_dir', help='directory containing project folder',
                         default='.')
-    args = parser.parse_args()
-
-    run(args)
+    parser.set_defaults(func=run)
 
 
 def run(cmd_args):
