@@ -8,8 +8,7 @@ Welcome to oct's documentation!
 
 .. sidebar:: Informations
 
-    OCT is still in alpha version and is not yet suitable for production, but
-    we working hard on it for make it to the beta !
+    OCT is still in beta version so use it carefully.
     Follow us for more informations about the next releases
 
     **twitter** `@oct_py <https://twitter.com/oct_py>`_
@@ -35,6 +34,7 @@ Welcome to oct's documentation!
    :maxdepth: 2
 
    writing_turret
+   commands_reference
    api
 
 

@@ -8,8 +8,8 @@
     "rc_port": 5001,
     "min_turrets": 1,
     "turrets": [
-        {"name": "navigation", "canons": 2, "rampup": 0, "script": "test_scripts/{{ script_name }}"},
-        {"name": "random", "canons": 2, "rampup": 0, "script": "test_scripts/{{ script_name }}"}
+        {"name": "navigation", "cannons": 2, "rampup": 0, "script": "test_scripts/{{ script_name }}"},
+        {"name": "random", "cannons": 2, "rampup": 0, "script": "test_scripts/{{ script_name }}"}
     ],
     "turrets_requirements": []
 }

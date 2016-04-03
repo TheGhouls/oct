@@ -6,6 +6,6 @@
     "testing": true,
     "min_turrets": 1,
     "turrets": [
-        {"name": "navigation", "canons": 2, "rampup": 0, "script": "v_user.py"}
+        {"name": "navigation", "cannons": 2, "rampup": 0, "script": "v_user.py"}
     ]
 }

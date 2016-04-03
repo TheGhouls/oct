@@ -34,7 +34,7 @@ class Turret(Model):
     """
     name = TextField()
     uuid = TextField()
-    canons = IntegerField()
+    cannons = IntegerField()
     script = TextField()
     rampup = IntegerField()
     status = TextField()
@@ -48,7 +48,7 @@ class Turret(Model):
         return {
             'name': self.name,
             'uuid': self.uuid,
-            'canons': self.canons,
+            'cannons': self.cannons,
             'script': self.script,
             'rampup': self.rampup,
             'status': self.status,

@@ -1,6 +1,6 @@
 {
     "name": "{{ name }}",
-    "canons": {{ canons }},
+    "cannons": {{ cannons }},
     "rampup": {{ rampup }},
     "script": "{{ script }}",
     "hq_address": "{{ hq_address }}",

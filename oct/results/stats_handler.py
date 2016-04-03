@@ -1,5 +1,4 @@
 import os
-import sys
 import json
 
 from oct.results.models import Result, Turret, set_database, db
@@ -21,8 +20,8 @@ class StatsHandler(object):
         try:
             os.makedirs(self.output_dir, 0o755)
         except OSError:
-            sys.stderr.write("ERROR: Can not create output directory\n")
-            sys.exit(1)
+            print("ERROR: Can not create output directory\n")
+            raise
 
         set_database(self.output_dir + "results.sqlite", db, config)
         db.connect()
@@ -34,7 +33,7 @@ class StatsHandler(object):
         :param dict data: the data of the turret to save
         :return: The turret object after save
         """
-        turret = Turret(name=data['turret'], canons=data['canons'], script=data['script'], rampup=data['rampup'],
+        turret = Turret(name=data['turret'], cannons=data['cannons'], script=data['script'], rampup=data['rampup'],
                         uuid=data['uuid'], status=data['status'])
         turret.save()
         return turret

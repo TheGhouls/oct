@@ -28,7 +28,7 @@ setup(
     download_url='https://github.com/TheGhouls/oct/archive/master.zip',
     keywords=['testing', 'perfs', 'performances', 'web', 'load', 'zeromq'],
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
         'Environment :: Console',
         'Intended Audience :: Developers',
         'Intended Audience :: System Administrators',
@@ -41,7 +41,7 @@ setup(
         'argparse',
         'pygal',
         'peewee',
-        'oct-turrets<=0.2.3',
+        'oct-turrets>=0.2.4',
         'six',
         'pyzmq',
         'numpy',
@@ -49,10 +49,6 @@ setup(
         'pandas'
     ],
     entry_points={'console_scripts': [
-        'oct-run = oct.utilities.run:main',
-        'oct-newproject = oct.utilities.newproject:main',
-        'oct-tocsv = oct.tools.results_to_csv:main',
-        'oct-rebuild-results = oct.tools.rebuild_results:main',
-        'oct-pack-turrets = oct.utilities.pack:main'
+        'oct = oct.utilities.commands:main'
     ]},
 )

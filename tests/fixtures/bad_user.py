@@ -4,9 +4,6 @@ import time
 
 
 class Transaction(BaseTransaction):
-    def __init__(self):
-        pass
-
     def run(self):
         r = random.uniform(1, 2)
         time.sleep(r)

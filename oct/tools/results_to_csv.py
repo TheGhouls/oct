@@ -1,17 +1,19 @@
 import os
 import csv
-import argparse
 
 from oct.results.models import db, Result, set_database
 
 
-def results_to_csv(result_file, output_file, delimiter=';'):
+def to_csv(args):
     """Take a sqlite filled database of results and return a csv file
 
     :param str result_file: the path of the sqlite database
     :param str output_file: the path of the csv output file
     :param str delimiter: the desired delimiter for the output csv file
     """
+    result_file = args.result_file
+    output_file = args.output_file
+    delimiter = args.delimiter
     if not os.path.isfile(result_file):
         raise OSError("Results file does not exists")
     headers = ['elapsed', 'epoch', 'turret_name', 'scriptrun_time', 'error']
@@ -46,11 +48,9 @@ def results_to_csv(result_file, output_file, delimiter=';'):
             writer.writerow(line)
 
 
-def main():
-    parser = argparse.ArgumentParser("Create a csv file from a json results file")
+def results_to_csv(sp):
+    parser = sp.add_parser('results-to-csv', help="Create a csv file from a sqlite results file", aliases=['to-csv'])
     parser.add_argument('result_file', help="The orignial result file")
     parser.add_argument('output_file', help="The output path for the csv file")
     parser.add_argument('-d', '--delimiter', type=str, help="The delimiter for the csv file", default=';')
-    args = parser.parse_args()
-
-    results_to_csv(args.result_file, args.output_file, args.delimiter)
+    parser.set_defaults(func=to_csv)

@@ -19,7 +19,7 @@ class ReportWriter(object):
         """Create statics directory and copy files in it
         """
         if not os.path.exists(self.results_dir):
-            return
+            return None
         try:
             shutil.copytree(os.path.join(self.templates_dir, 'css'), os.path.join(self.results_dir, 'css'))
             shutil.copytree(os.path.join(self.templates_dir, 'img'), os.path.join(self.results_dir, 'img'))

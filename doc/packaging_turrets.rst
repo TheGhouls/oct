@@ -23,7 +23,7 @@ You can use it like this :
 
 .. code-block:: bash
 
-    oct-pack-turrets /path/to/oct/project
+    oct pack-turrets /path/to/oct/project
 
 A sucessful packing should return the following output :
 

@@ -7,11 +7,12 @@ from jinja2 import Environment, PackageLoader
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
 
-def create_project(project_name):
+def create_project(args):
     """Create a new oct project
 
     :param str project_name: the name of the project
     """
+    project_name = args.name
     env = Environment(loader=PackageLoader('oct.utilities', 'templates'))
 
     config_content = env.get_template('configuration/config.json').render(script_name='v_user.py')
@@ -42,12 +43,7 @@ def create_project(project_name):
         f.write(script_content)
 
 
-def main():
-    try:
-        project_name = sys.argv[1]
-    except IndexError:
-        print('ERROR: no project specified', file=sys.stderr)
-        print('Usage: oct-newproject <project name>')
-        raise
-
-    create_project(project_name)
+def new_project(sp):
+    parser = sp.add_parser('new-project', help="create a new oct project", aliases=['new'])
+    parser.add_argument('name', type=str)
+    parser.set_defaults(func=create_project)

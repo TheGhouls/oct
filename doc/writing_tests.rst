@@ -14,18 +14,37 @@ Let's take the default ``v_user.py`` file :
 .. code-block:: python
 
     from oct_turrets.base import BaseTransaction
+    from oct_turrets.tools import CustomTimer
     import random
     import time
 
 
     class Transaction(BaseTransaction):
-        def __init__(self):
+        def __init__(self, config):
+            super(Transaction, self).__init__(config)
+
+        def setup(self):
+            """Setup data or objects here
+            """
             pass
 
         def run(self):
             r = random.uniform(1, 2)
             time.sleep(r)
-            self.custom_timers['Example_Timer'] = r
+            with CustomTimer(self, 'a timer'):
+                time.sleep(r)
+
+        def tear_down(self):
+            """Clear cache or reset objects, etc. Anything that must be done after
+            the run method and before its next execution
+            """
+            pass
+
+
+    if __name__ == '__main__':
+        trans = Transaction(None)
+        trans.run()
+        print(trans.custom_timers)
 
 This raw script will test nothing as it is, so let's work on this simple use case:
 
@@ -41,20 +60,19 @@ So first let's adapt the script to our needs:
 
 
     class Transaction(BaseTransaction):
-        def __init__(self):
-            # each canon will only instanciate Transaction once, so each property
+        def __init__(self, config):
+            super(Transaction, self).__init__(config)
+            # each cannon will only instanciate Transaction once, so each property
             # in the Transaction __init__ method will be set only once so take care if you need to update it
             self.url = "http://my-api/1.0/"
 
         def run(self):
             # For more detailed results we will setup several custom timers
-            start = time.time()
-            requests.get(self.url + "echo")
-            self.custom_timers['Echo service'] = time.time() - start
+            with CustomTimer(self, 'Echo service'):
+                requests.get(self.url + "echo")
 
-            start = time.time()
-            requests.get(self.url + "other-service")
-            self.custom_timers['other-service'] = time.time() - start
+            with CustomTimer(self, 'other-service'):
+                requests.get(self.url + "other-service")
 
 So what are we doing here ? We've just imported requests and used it in our script. For each service we've defined a custom
 timer to see how much time each one will take to answer.
@@ -73,8 +91,8 @@ But how to install the dependencies needed by the turrets ? You can simply updat
         "rc_port": 5001,
         "min_turrets": 1,
         "turrets": [
-            {"name": "navigation", "canons": 2, "rampup": 0, "script": "test_scripts/v_user.py"},
-            {"name": "random", "canons": 2, "rampup": 0, "script": "test_scripts/v_user.py"}
+            {"name": "navigation", "cannons": 2, "rampup": 0, "script": "test_scripts/v_user.py"},
+            {"name": "random", "cannons": 2, "rampup": 0, "script": "test_scripts/v_user.py"}
         ],
         "turrets_requirements": [
             "requests"
@@ -105,8 +123,9 @@ How does it works ? Take a look a this example:
 
 
     class Transaction(BaseTransaction):
-        def __init__(self):
-            # each canon will only instanciate Transaction once, so each property
+        def __init__(self, config):
+            super(Transaction, self).__init__(config)
+            # each cannon will only instanciate Transaction once, so each property
             # in the Transaction __init__ method will be set only once so take care if you need to update it
             self.url = "http://my-api/1.0/"
             self.session = None
@@ -116,13 +135,11 @@ How does it works ? Take a look a this example:
 
         def run(self):
             # For more detailed results we will setup several custom timers
-            start = time.time()
-            self.session.get(self.url + "echo")
-            self.custom_timers['Echo service'] = time.time() - start
+            with CustomTimer(self, 'Echo service'):
+                self.session.get(self.url + "echo")
 
-            start = time.time()
-            self.session.get(self.url + "other-service")
-            self.custom_timers['other-service'] = time.time() - start
+            with CustomTimer(self, 'other-service'):
+                self.session.get(self.url + "other-service")
 
         def tear_down(self):
             self.session.close()

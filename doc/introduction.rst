@@ -15,12 +15,12 @@ Terminology
 -----------
 
 * HQ for Headquarters: it's the "server" component of OCT and it's tasked with sending start signal, stop signal, collecting results and create reports
-* Turret: a turret is the "client" component of OCT. It can be writen in any language and it communicates with the HQ using a zeromq PUSH socket. Each turret owns one or many canons.
-* Canons: represent the virtual users, wich means that each canon of the turret will run a test in parallel
+* Turret: a turret is the "client" component of OCT. It can be writen in any language and it communicates with the HQ using a zeromq PUSH socket. Each turret owns one or many cannons.
+* Cannons: represent the virtual users, wich means that each cannon of the turret will run a test in parallel
 
 .. note::
     Why do we use this terminology ? It gives a good idea of what's happening
-    when you use OCT. Think about it like that : each turret owns X canons that
+    when you use OCT. Think about it like that : each turret owns X cannons that
     shoot at the target and report on the result to the HQ
 
 How it works ?
