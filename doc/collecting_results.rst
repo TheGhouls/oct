@@ -28,7 +28,7 @@ You can simply use the ``oct-rebuild-results`` like this for example:
 
 .. code-block:: bash
 
-    oct-rebuild-results . results.sqlite config.json
+    oct rebuild-results . results.sqlite config.json
 
 .. note::
 

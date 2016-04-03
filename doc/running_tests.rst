@@ -16,7 +16,7 @@ Just type:
 
 .. code-block:: bash
 
-    oct-run /path/to/oct/project
+    oct run /path/to/oct/project
 
 And that's it, your test will start and your turrets will now fire at the target. If everything is going ok you should see
 an output like:
