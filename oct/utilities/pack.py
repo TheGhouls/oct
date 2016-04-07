@@ -1,4 +1,5 @@
 import sys
+import six
 import tarfile
 import os.path
 import tempfile
@@ -62,8 +63,12 @@ def pack_turret(turret_config, tmp_config_file, tmp_setup, base_config_path, pat
 
 
 def pack_turrets(sp):
-    parser = sp.add_parser('pack-turrets',
-                           help="create turrets packages from a given oct project",
-                           aliases=['pack'])
+    if six.PY2:
+        parser = sp.add_parser('pack-turrets',
+                               help="create turrets packages from a given oct project")
+    else:
+        parser = sp.add_parser('pack-turrets',
+                               help="create turrets packages from a given oct project",
+                               aliases=['pack'])
     parser.add_argument('path', type=str, help='path for oct project dir')
     parser.set_defaults(func=pack)

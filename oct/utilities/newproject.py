@@ -1,5 +1,6 @@
 from __future__ import print_function
 import os
+import six
 import shutil
 import sys
 from jinja2 import Environment, PackageLoader
@@ -44,6 +45,9 @@ def create_project(args):
 
 
 def new_project(sp):
-    parser = sp.add_parser('new-project', help="create a new oct project", aliases=['new'])
+    if six.PY2:
+        parser = sp.add_parser('new-project', help="create a new oct project")
+    else:
+        parser = sp.add_parser('new-project', help="create a new oct project", aliases=['new'])
     parser.add_argument('name', type=str)
     parser.set_defaults(func=create_project)

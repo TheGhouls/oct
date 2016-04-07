@@ -7,7 +7,6 @@ from multiprocessing import Process
 from oct_turrets.turret import Turret
 from oct_turrets.utils import load_file, validate_conf
 from oct.utilities.run import run
-from oct.utilities.newproject import create_project
 from oct.utilities.commands import main
 
 
@@ -43,7 +42,7 @@ class HQTest(unittest.TestCase):
         self.bad_turret = Process(target=run_bad_turret)
         self.bad_turret.start()
         sys.argv = sys.argv[:1]
-        sys.argv += ["new", "/tmp/oct-test"]
+        sys.argv += ["new-project", "/tmp/oct-test"]
         main()
 
         # update the runtime for the project
@@ -71,7 +70,7 @@ class HQTest(unittest.TestCase):
         """
         with self.assertRaises(OSError):
             sys.argv = sys.argv[:1]
-            sys.argv += ["new", "/tmp/"]
+            sys.argv += ["new-project", "/tmp/"]
             main()
 
     def tearDown(self):

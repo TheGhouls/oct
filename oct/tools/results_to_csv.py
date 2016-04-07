@@ -1,4 +1,5 @@
 import os
+import six
 import csv
 
 from oct.results.models import db, Result, set_database
@@ -49,7 +50,12 @@ def to_csv(args):
 
 
 def results_to_csv(sp):
-    parser = sp.add_parser('results-to-csv', help="Create a csv file from a sqlite results file", aliases=['to-csv'])
+    if six.PY2:
+        parser = sp.add_parser('results-to-csv', help="Create a csv file from a sqlite results file")
+    else:
+        parser = sp.add_parser('results-to-csv',
+                               help="Create a csv file from a sqlite results file",
+                               aliases=['to-csv'])
     parser.add_argument('result_file', help="The orignial result file")
     parser.add_argument('output_file', help="The output path for the csv file")
     parser.add_argument('-d', '--delimiter', type=str, help="The delimiter for the csv file", default=';')
