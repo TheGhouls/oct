@@ -16,7 +16,7 @@ follow us ! [@oct_py](https://twitter.com/oct_py)
 
 Python Version | OK ?   |
 -------------- | -------|
-Python >= 2.7.9|OK|
+Python >= 2.7.x|OK|
 Python >= 3.4|OK|
 Python == 3.5|OK|
 
