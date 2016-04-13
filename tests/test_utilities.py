@@ -58,7 +58,7 @@ class UtilitiesTest(unittest.TestCase):
         open(os.path.join(self.test_dir, 'navigation.tar.gz'), 'a').close()
         os.chmod(os.path.join(self.test_dir, 'navigation.tar.gz'), 0o444)
 
-        with self.assertRaises(OSError):
+        with self.assertRaises(IOError):
             main()
 
     def tearDown(self):
