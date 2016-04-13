@@ -1,6 +1,7 @@
 import os
 import sys
 import shutil
+import tarfile
 import unittest
 
 from oct.utilities.commands import main
@@ -31,8 +32,18 @@ class UtilitiesTest(unittest.TestCase):
         sys.argv += ["pack-turrets", self.test_dir]
         main()
 
-        self.assertTrue(os.path.exists(os.path.join(self.test_dir, 'navigation.tar')))
-        self.assertTrue(os.path.exists(os.path.join(self.test_dir, 'random.tar')))
+        self.assertTrue(os.path.exists(os.path.join(self.test_dir, 'navigation.tar.gz')))
+        self.assertTrue(os.path.exists(os.path.join(self.test_dir, 'random.tar.gz')))
+
+    def test_pack_python(self):
+        """Pack command with --python args should create setup.py file
+        """
+        sys.argv = sys.argv[:1]
+        sys.argv += ["pack-turrets", "--python", self.test_dir]
+        main()
+
+        tar = tarfile.open(self.test_dir + "/navigation.tar.gz", "r")
+        self.assertIn('setup.py', tar.getnames())
 
     def test_pack_errors(self):
         """Pack function should correctly raise errors
@@ -44,9 +55,11 @@ class UtilitiesTest(unittest.TestCase):
 
         sys.argv = sys.argv[:1]
         sys.argv += ["pack-turrets", self.test_dir]
-        open(os.path.join(self.test_dir, 'navigation.tar'), 'a').close()
-        os.chmod(os.path.join(self.test_dir, 'navigation.tar'), 0o444)
-        main()
+        open(os.path.join(self.test_dir, 'navigation.tar.gz'), 'a').close()
+        os.chmod(os.path.join(self.test_dir, 'navigation.tar.gz'), 0o444)
+
+        with self.assertRaises(OSError):
+            main()
 
     def tearDown(self):
         if os.path.exists(self.valid_dir):
