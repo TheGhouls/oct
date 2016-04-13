@@ -37,11 +37,10 @@ def get_files_and_content(turret, is_python=False):
     turret_setup = env.get_template('scripts/setup.py')
 
     if is_python:
-        tmp_setup = os.path.join(tempfile.gettempdir(), turret['name'] + ".py")
         turrets_requirements = turret.get('turrets_requirements', [])
         setup_file = turret_setup.render({'turrets_requirements': turrets_requirements,
                                          'name': turret.get('name')})
-        ret.append({'filename': tmp_setup, 'content': setup_file})
+        ret.append({'filename': 'setup.py', 'content': setup_file})
 
     content = json.dumps(cleanup_turret_config(turret), indent=2)
     tmp_config = os.path.join(tempfile.gettempdir(), "config.json")
