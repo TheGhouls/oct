@@ -1,5 +1,6 @@
 import sys
 import six
+import json
 import tarfile
 import os.path
 import tempfile
@@ -11,26 +12,30 @@ from oct.utilities.configuration import configure_for_turret
 def pack(args):
     if os.path.exists(args.path):
         env = Environment(loader=PackageLoader('oct.utilities', 'templates'))
-        turret_config = env.get_template('configuration/turret_config.json')
         turret_setup = env.get_template('scripts/setup.py')
 
         config_file = os.path.join(os.path.abspath(args.path), "config.json")
         configs = configure_for_turret(args.path, config_file)
 
         for turret in configs:
-            content = turret_config.render(turret)
+            content = json.dumps(turret, indent=2)
             tmp_file = os.path.join(tempfile.gettempdir(), turret['name'] + ".json")
-            tmp_setup = os.path.join(tempfile.gettempdir(), turret['name'] + ".py")
-            turrets_requirements = turret.get('turrets_requirements', [])
-            setup_file = turret_setup.render({'turrets_requirements': turrets_requirements, 'name': turret.get('name')})
+            tmp_setup = None
+            if args.python:
+                tmp_setup = os.path.join(tempfile.gettempdir(), turret['name'] + ".py")
+                turrets_requirements = turret.get('turrets_requirements', [])
+                setup_file = turret_setup.render({'turrets_requirements': turrets_requirements,
+                                                 'name': turret.get('name')})
             try:
                 with open(tmp_file, 'w') as f:
                     f.write(content)
-                with open(tmp_setup, 'w') as f:
-                    f.write(setup_file)
-                pack_turret(turret, tmp_file, tmp_setup, os.path.dirname(config_file), args.path)
+                if tmp_setup is not None:
+                    with open(tmp_setup, 'w') as f:
+                        f.write(setup_file)
+                pack_turret(turret, tmp_file, os.path.dirname(config_file), args.path, tmp_setup=tmp_setup)
                 os.remove(tmp_file)
-                os.remove(tmp_setup)
+                if tmp_setup is not None:
+                    os.remove(tmp_setup)
             except IOError as e:
                 print("Error while packaging turret %s" % turret['name'])
                 print("Error: %s" % e)
@@ -39,7 +44,7 @@ def pack(args):
         sys.exit(2)
 
 
-def pack_turret(turret_config, tmp_config_file, tmp_setup, base_config_path, path=None):
+def pack_turret(turret_config, tmp_config_file, base_config_path, path=None, tmp_setup=None):
     """pack a turret into a tar file based on the turret configuration
 
     :param dict turret_config: the turret configuration to pack
@@ -51,7 +56,8 @@ def pack_turret(turret_config, tmp_config_file, tmp_setup, base_config_path, pat
         file_name = os.path.join(path, file_name)
     tar_file = tarfile.open(file_name + ".tar", 'w')
     tar_file.add(os.path.abspath(tmp_config_file), arcname="config.json")
-    tar_file.add(os.path.abspath(tmp_setup), arcname="setup.py")
+    if tmp_setup is not None:
+        tar_file.add(os.path.abspath(tmp_setup), arcname="setup.py")
 
     script_path = os.path.join(os.path.abspath(base_config_path), turret_config['script'])
     tar_file.add(script_path, arcname=turret_config['script'])
@@ -71,4 +77,5 @@ def pack_turrets(sp):
                                help="create turrets packages from a given oct project",
                                aliases=['pack'])
     parser.add_argument('path', type=str, help='path for oct project dir')
+    parser.add_argument('--python', action='store_true', default=False, help='If set, a setup.py file will be created')
     parser.set_defaults(func=pack)
