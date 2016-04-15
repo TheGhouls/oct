@@ -38,7 +38,6 @@ setup(
         'Programming Language :: Python :: 3.5'
     ],
     install_requires=[
-        'argparse',
         'pygal',
         'peewee',
         'oct-turrets>=0.2.4',
