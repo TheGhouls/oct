@@ -57,7 +57,7 @@ def pack_turret(turret, temp_files, base_config_path, path=None):
     :param str base_config_path: the base directory of the main configuration file
     """
     file_name = turret['name']
-    files = temp_files.copy()
+    files = temp_files[:]
     for fname in turret.get('extra_files', []):
         if os.path.isabs(fname) or path is None:
             files.append(fname)
