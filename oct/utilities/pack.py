@@ -49,7 +49,7 @@ def get_files_and_content(turret, is_python=False):
     return ret
 
 
-def pack_turret(turret, temp_files, base_config_path, path=None,):
+def pack_turret(turret, temp_files, base_config_path, path=None):
     """pack a turret into a tar file based on the turret configuration
 
     :param dict turret_config: the turret configuration to pack
@@ -57,7 +57,12 @@ def pack_turret(turret, temp_files, base_config_path, path=None,):
     :param str base_config_path: the base directory of the main configuration file
     """
     file_name = turret['name']
-    files = temp_files + turret.get('extra_files', [])
+    files = temp_files
+    for fname in turret.get('extra_files', []):
+        if os.path.isabs(fname) or path is None:
+            files.append(fname)
+        else:
+            files.append(os.path.join(path, fname))
     if path is not None:
         file_name = os.path.join(path, file_name)
     tar_file = tarfile.open(file_name + ".tar.gz", 'w:gz')
