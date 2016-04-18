@@ -7,26 +7,45 @@ import unittest
 from oct.utilities.commands import main
 
 
+BASE_DIR = os.path.dirname(os.path.realpath(__file__))
+
+
 class UtilitiesTest(unittest.TestCase):
 
     def setUp(self):
         self.valid_dir = '/tmp/create-test'
         self.invalid_dir = '/create-test'
         self.test_dir = '/tmp/utiles_tests'
+        self.template_path = os.path.join(BASE_DIR, 'fixtures', 'armory_sample_project.tar.gz')
 
         sys.argv = sys.argv[:1]
         sys.argv += ["new-project", self.test_dir]
         main()
 
     def test_create_success(self):
-        """The newproject utilities should be able to create a project
+        """The newproject utility should be able to create a project
         """
         sys.argv = sys.argv[:1]
         sys.argv += ["new-project", self.valid_dir]
         main()
 
+    def test_create_error(self):
+        """The new project utility should corretly raise errors
+        """
+        sys.argv = sys.argv[:1]
+        sys.argv += ["new-project", self.invalid_dir]
+        with self.assertRaises(IOError):
+            main()
+
+    def test_create_from_template(self):
+        """The new project utility should be able to create project from template
+        """
+        sys.argv = sys.argv[:1]
+        sys.argv += ["new-project", self.valid_dir, "-t", self.template_path]
+        main()
+
     def test_pack_success(self):
-        """Should be able to generate tar archives from project folder
+        """Should be able to generate turrets archives from project folder
         """
         sys.argv = sys.argv[:1]
         sys.argv += ["pack-turrets", self.test_dir]
