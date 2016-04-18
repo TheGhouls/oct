@@ -34,7 +34,7 @@ class UtilitiesTest(unittest.TestCase):
         """
         sys.argv = sys.argv[:1]
         sys.argv += ["new-project", self.invalid_dir]
-        with self.assertRaises(IOError):
+        with self.assertRaises(OSError):
             main()
 
     def test_create_from_template(self):
