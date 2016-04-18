@@ -16,7 +16,7 @@ Auto packaging
 
     This example only works for python based turrets. Please refer to your turret documentation if you use anything else
 
-OCT provides a simple way to package your turrets and set them ready to fire, the ``oct-pack-turrets`` command.
+OCT provides a simple way to package your turrets and set them ready to fire, the ``oct pack-turrets`` command.
 It generates tar files based on your configuration file. Those tar files are the turrets, ready to fire at your command.
 
 You can use it like this :

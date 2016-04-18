@@ -6,9 +6,12 @@ python:
 install:
 - pip install -r requirements.txt
 - pip install nose
+- pip install coveralls
 script:
 - python setup.py install
-- nosetests -vdx tests/
+- nosetests -vdx tests/ --with-coverage --cover-package=oct
+after_success:
+  coveralls
 deploy:
   provider: pypi
   user: Emmanuel.Valette

@@ -18,6 +18,10 @@ WARNING_CONFIG_KEYS = [
     'rc_port'
 ]
 
+REMOVABLE_KEYS = [
+    'turrets_requirements'
+]
+
 
 def configure(project_name, cmd_opts, config_file=None):
     """Get the configuration of the test and return it as a config object
@@ -59,5 +63,20 @@ def configure_for_turret(project_name, config_file):
     configs = []
     for turret in config['turrets']:
         turret.update(common_config)
+        turret.update(config.get('extra_turret_config', {}))
         configs.append(turret)
     return configs
+
+
+def cleanup_turret_config(config):
+    """Remove useless keys from turret configuration
+
+    :param dict config: the configuration to cleanup
+    :return: the cleaned configuration
+    :rtype: dict
+    """
+    for key in REMOVABLE_KEYS:
+        if key in config:
+            del config[key]
+
+    return config

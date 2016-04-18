@@ -9,7 +9,20 @@
     "min_turrets": 1,
     "turrets": [
         {"name": "navigation", "cannons": 2, "rampup": 0, "script": "test_scripts/{{ script_name }}"},
-        {"name": "random", "cannons": 2, "rampup": 0, "script": "test_scripts/{{ script_name }}"}
+        {"name": "random", "cannons": 2, "rampup": 0, "script": "test_scripts/{{ script_name }}"},
+        {
+            "name": "advanced-turret",
+            "cannons": 2,
+            "rampup": 0,
+            "script": "test_scripts/{{ script_name }}",
+            "specific_turret_config": "my_value",
+            "extra_files": [
+                "templates"
+            ]
+        }
     ],
-    "turrets_requirements": []
+    "turrets_requirements": [],
+    "extra_turret_config": {
+
+    }
 }

@@ -24,7 +24,7 @@ Regenerate results
 Sometimes you may need to regenerate the html report with all graphs from an sqlite file.
 OCT got a tool that allows you to do this.
 
-You can simply use the ``oct-rebuild-results`` like this for example:
+You can simply use the ``oct rebuild-results`` like this for example:
 
 .. code-block:: bash
 
@@ -32,5 +32,5 @@ You can simply use the ``oct-rebuild-results`` like this for example:
 
 .. note::
 
-    The oct-rebuild-results command will only work on an already created results folder that contains only the sqlite results
+    The oct rebuild-results command will only work on an already created results folder that contains only the sqlite results
     and optionnaly the configuration.

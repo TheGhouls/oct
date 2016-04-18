@@ -3,7 +3,7 @@ Your first project
 
 OCT exposes several command-line tools to use it, write your tests or run your project.
 
-First we're going to use the ``oct-newproject`` command for creating our first project.
+First we're going to use the ``oct new-project`` command for creating our first project.
 
 .. code-block:: sh
 
@@ -47,9 +47,23 @@ The main and more important file here is the `config.json` file, let's take a lo
         "min_turrets": 1,
         "turrets": [
             {"name": "navigation", "cannons": 2, "rampup": 0, "script": "test_scripts/v_user.py"},
-            {"name": "random", "cannons": 2, "rampup": 0, "script": "test_scripts/v_user.py"}
+            {"name": "random", "cannons": 2, "rampup": 0, "script": "test_scripts/v_user.py"},
+            {
+                "name": "advanced-turret",
+                "cannons": 2,
+                "rampup": 0,
+                "script": "test_scripts/v_user.py",
+                "specific_turret_config": "my_value", // this config value will be present only in this turret config
+                "extra_files": [
+                    "templates"
+                    // allow you to pack files and folder in turrets
+                ]
+            }
         ],
-        "turrets_requirements": []
+        "turrets_requirements": [],
+        "extra_turret_config": {
+            // put global turrets config key / values here
+        }
     }
 
 Every key here is useful, but some keys are not required to run a test. Let's take a look at the main ones :
@@ -68,9 +82,11 @@ Every key here is useful, but some keys are not required to run a test. Let's ta
 
 * ``min_turrets``: The minimum number of turrets that must be deployed before the HQ sends the start message
 
-* ``turrets``: a list of turrets, this key will be use to package turrets with the `oct-pack-turrets` command
+* ``turrets``: a list of turrets, this key will be use to package turrets with the `oct pack-turrets` command
 
 * ``turrets_requirements``: A list of string containing the required packages for turrets (only for python turrets at this time)
+
+* ``extra_turret_config``: A nested object containing all extra turrets parameters. Each value in it will be set in each turret configuration
 
 This configuration is simple but will allow you to run simple tests in a local environment.
 
@@ -90,6 +106,10 @@ Each turret can be configured independently, and you can setup different options
   leave rampup at 0, as in the exemple.
 
 * ``script``: The relative path to the associated test script
+
+* ``extra_files``: put here every file or folder that you want to ship with the turret
+
+Any additional configuration key will be set as is in turret own configuration
 
 Writing tests
 -------------

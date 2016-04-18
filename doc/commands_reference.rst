@@ -51,15 +51,16 @@ usage :
 
 .. code-block:: sh
 
-    oct new-project <path-to-project>
+    oct new-project [-h] [-t TEMPLATE] <project_path>
 
 Arguments :
 
-======== ====  ========== =======================
-name     type  mandatory  description
-======== ====  ========== =======================
-project  str   yes        path of the new project
-======== ====  ========== =======================
+=============== ====  ========== ==================================
+name            type  mandatory  description
+=============== ====  ========== ==================================
+project         str   yes        path of the new project
+-t, --template  str   no         path of existing project template
+=============== ====  ========== ==================================
 
 
 Pack turrets
