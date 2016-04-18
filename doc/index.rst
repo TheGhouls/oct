@@ -28,10 +28,11 @@ Welcome to oct's documentation!
    packaging_turrets
    running_tests
    collecting_results
+   packaging_projects
 
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    writing_turret
    commands_reference
