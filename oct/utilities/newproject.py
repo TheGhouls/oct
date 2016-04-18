@@ -1,17 +1,47 @@
 from __future__ import print_function
 import os
 import six
-import shutil
 import sys
+import shutil
+import tarfile
 from jinja2 import Environment, PackageLoader
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
 
-def create_project(args):
+def check_template(members):
+
+    required_members = [
+        'config.json',
+        'test_scripts',
+        'templates',
+        'templates/report.html'
+    ]
+
+    for fname in required_members:
+        assert fname in members, "Required file %s not in archive" % fname
+        return False
+
+    return True
+
+
+def from_template(args):
+    """Create a new oct project from existing template
+
+    :param Namespace args: command line arguments
+    """
+    project_name = args.name
+    template = args.template
+
+    with tarfile.open(template) as tar:
+        check_template(tar.getnames())
+        tar.extractall(project_name)
+
+
+def from_oct(args):
     """Create a new oct project
 
-    :param str project_name: the name of the project
+    :param Namespace args: the command line arguments
     """
     project_name = args.name
     env = Environment(loader=PackageLoader('oct.utilities', 'templates'))
@@ -19,9 +49,6 @@ def create_project(args):
     config_content = env.get_template('configuration/config.json').render(script_name='v_user.py')
     script_content = env.get_template('scripts/v_user.py').render()
 
-    if os.path.exists(project_name):
-        sys.stderr.write('\nERROR: project already exists: %s\n\n' % project_name)
-        raise OSError("Project %s already exists" % project_name)
     try:
         os.makedirs(project_name)
         os.makedirs(os.path.join(project_name, 'test_scripts'))
@@ -44,10 +71,22 @@ def create_project(args):
         f.write(script_content)
 
 
+def create_project(args):
+
+    if os.path.exists(args.name):
+        raise OSError("Project %s already exists" % args.name)
+
+    if args.template is not None:
+        from_template(args)
+    else:
+        from_oct(args)
+
+
 def new_project(sp):
     if six.PY2:
         parser = sp.add_parser('new-project', help="create a new oct project")
     else:
         parser = sp.add_parser('new-project', help="create a new oct project", aliases=['new'])
     parser.add_argument('name', type=str)
+    parser.add_argument('-t', '--template', type=str, default=None, help="use existing project template")
     parser.set_defaults(func=create_project)
