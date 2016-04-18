@@ -7,18 +7,14 @@ oct
 [![Supported Python versions](https://img.shields.io/pypi/pyversions/oct.svg?style=flat)](https://pypi.python.org/pypi/oct/)
 [![pypi](https://img.shields.io/pypi/status/oct.svg?style=flat)](https://pypi.python.org/pypi/oct/)
 [![pypi](https://travis-ci.org/TheGhouls/oct.svg?branch=master)](https://travis-ci.org/TheGhouls/oct)
+[![Coverage Status](https://coveralls.io/repos/github/TheGhouls/oct/badge.svg?branch=master)](https://coveralls.io/github/TheGhouls/oct?branch=master)
+
 
 [Documentation](http://oct.readthedocs.org/en/latest/)
 
 [OCT on pypi](https://pypi.python.org/pypi/oct)
 
 follow us ! [@oct_py](https://twitter.com/oct_py)
-
-Python Version | OK ?   |
--------------- | -------|
-Python >= 2.7.x|OK|
-Python >= 3.4|OK|
-Python == 3.5|OK|
 
 Description
 -----------
@@ -63,14 +59,17 @@ What's next ?
 
 For documentation and examples, please visit the official documentation here : [doc](http://oct.readthedocs.org/en/latest/)
 
-Roadmap
--------
-
-For the 0.4.0 version :
-
-* Release of the beta version
-
 Contribution
 ------------
 
-Fork, pull requests, issues, we're open to any proposition !
+After cloning this repo you can install oct and dependencies with :
+
+``pip install -r requirements.txt && python setup.py install``
+
+After developping you can run the test suite with nose
+
+``nosetests -vdx tests/``
+
+Or with pytest
+
+``py.test -v tests/``
