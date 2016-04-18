@@ -42,11 +42,11 @@ Installation
 ------------
 You can install OCT with pip :
 
-`pip install oct`
+```pip install oct```
 
 Or using setuptools :
 
-`python setup.py install`
+```python setup.py install```
 
 
 Turrets
@@ -64,12 +64,18 @@ Contribution
 
 After cloning this repo you can install oct and dependencies with :
 
-``pip install -r requirements.txt && python setup.py install``
+```
+pip install -r requirements.txt && python setup.py install
+```
 
 After developping you can run the test suite with nose
 
-``nosetests -vdx tests/``
+```
+nosetests -vdx tests/
+```
 
 Or with pytest
 
-``py.test -v tests/``
+```
+py.test -v tests/
+```
