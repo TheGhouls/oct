@@ -34,7 +34,7 @@ def write_temp_files(turret, files):
 def get_files_and_content(turret, is_python=False):
     ret = []
     env = Environment(loader=PackageLoader('oct.utilities', 'templates'))
-    turret_setup = env.get_template('scripts/setup.py')
+    turret_setup = env.get_template('scripts/setup.j2')
 
     if is_python:
         tmp_setup = os.path.join(tempfile.gettempdir(), "setup.py")

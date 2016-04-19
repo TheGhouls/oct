@@ -47,7 +47,7 @@ def from_oct(args):
     env = Environment(loader=PackageLoader('oct.utilities', 'templates'))
 
     config_content = env.get_template('configuration/config.json').render(script_name='v_user.py')
-    script_content = env.get_template('scripts/v_user.py').render()
+    script_content = env.get_template('scripts/v_user.j2').render()
 
     try:
         os.makedirs(project_name)
