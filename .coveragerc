@@ -1,2 +1,2 @@
 [report]
-omit = oct/utilities/templates/scripts/v_user.py
+omit = oct/utilities/templates/scripts/v_user.j2
