@@ -43,7 +43,7 @@ def run(cmd_args):
     output_dir = '%s/%s/results/results_%s' % (cmd_args.project_dir, project_name,
                                                time.strftime('%Y.%m.%d_%H.%M.%S_' + str(milisec) + '/', run_localtime))
 
-    # this queue is shared between all processes/threads
+    stats_handler.init_stats(output_dir, config)
     rw = stats_handler.StatsHandler(output_dir, config)
 
     script_prefix = os.path.join(cmd_args.project_dir, project_name, "test_scripts")

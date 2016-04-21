@@ -4,6 +4,24 @@ import json
 from oct.results.models import Result, Turret, set_database, db
 
 
+def init_stats(output_dir, config):
+    """Init all required ressources for stats handling
+
+    :param str output_dir: the output directory for the results
+    :param dict config: the project configuration
+    """
+
+    try:
+        os.makedirs(output_dir, 0o755)
+    except OSError:
+        print("ERROR: Can not create output directory\n")
+        raise
+
+    set_database(output_dir + "results.sqlite", db, config)
+    db.connect()
+    db.create_tables([Result, Turret])
+
+
 class StatsHandler(object):
     """This class will handle results and stats comming from the turrets
 
@@ -16,16 +34,6 @@ class StatsHandler(object):
         self.error_count = 0
         self.turret_name = 'Turret'
         self.results = []
-
-        try:
-            os.makedirs(self.output_dir, 0o755)
-        except OSError:
-            print("ERROR: Can not create output directory\n")
-            raise
-
-        set_database(self.output_dir + "results.sqlite", db, config)
-        db.connect()
-        db.create_tables([Result, Turret])
 
     def write_turret(self, data):
         """Write the turret information in database
@@ -53,9 +61,10 @@ class StatsHandler(object):
         self.results.append(data)
 
         if len(self.results) >= 450:  # SQLite limit for inser_many is 500
-            with db.atomic():
-                Result.insert_many(self.results).execute()
-            del self.results[:]
+            with db.execution_context():
+                with db.atomic():
+                    Result.insert_many(self.results).execute()
+                del self.results[:]
 
     def write_remaining(self):
         """Write the remaning stack content
