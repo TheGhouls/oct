@@ -1,6 +1,6 @@
 import six
 import time
-import json
+import ujson as json
 import pandas as pd
 from collections import defaultdict
 
@@ -38,7 +38,10 @@ class ReportResults(object):
     def _init_dataframes(self):
         """Initialise the main dataframe for the results and the custom timers dataframes
         """
-        df = pd.read_sql_query("SELECT elapsed, epoch, scriptrun_time FROM result ORDER BY epoch ASC", db.get_conn())
+        df = pd.read_sql_query("SELECT elapsed, epoch, scriptrun_time, custom_timers FROM result ORDER BY epoch ASC",
+                               db.get_conn())
+
+        self._get_all_timers(df)
         self.main_results = self._get_processed_dataframe(df)
 
         # create all custom timers dataframes
@@ -48,17 +51,24 @@ class ReportResults(object):
             timer_results = self._get_processed_dataframe(df)
             self.timers_results[key] = timer_results
 
-    def _get_all_timers(self):
+        # clear memory
+        del self._timers_values
+
+    def _get_all_timers(self, dataframe):
         """Get all timers and set them in the _timers_values property
+
+        :param pandas.DataFrame dataframe: the main dataframe with row results
         """
-        query = Result.select(Result.custom_timers, Result.epoch).order_by(Result.epoch.asc())
-        for item in query:
-            custom_timers = {}
-            if item.custom_timers:
-                custom_timers = json.loads(item.custom_timers)
-            for key, value in six.iteritems(custom_timers):
-                self._timers_values[key].append((item.epoch, value))
+        s = dataframe['custom_timers'].apply(json.loads)
+        s.index = dataframe['epoch']
+        for index, value in s.iteritems():
+            if not value:
+                continue
+            for key, value in six.iteritems(value):
+                self._timers_values[key].append((index, value))
                 self.total_timers += 1
+        del dataframe['custom_timers']
+        del s
 
     def _get_processed_dataframe(self, dataframe):
         """Generate required dataframe for results from raw dataframe
@@ -88,7 +98,6 @@ class ReportResults(object):
     def compile_results(self):
         """Compile all results for the current test
         """
-        self._get_all_timers()
         self._init_dataframes()
 
         self.total_transactions = len(self.main_results['raw'])
