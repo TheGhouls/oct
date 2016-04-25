@@ -1,8 +1,9 @@
 import six
 import time
+from collections import defaultdict
+
 import ujson as json
 import pandas as pd
-from collections import defaultdict
 
 from oct.results.models import db, Result, Turret
 

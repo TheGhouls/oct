@@ -1,11 +1,7 @@
 from __future__ import print_function
 
 import zmq
-
-try:
-    import ujson as json
-except ImportError:
-    import json
+import ujson as json
 
 from oct.results.models import db, Turret
 
