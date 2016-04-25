@@ -20,7 +20,6 @@ def check_template(members):
 
     for fname in required_members:
         assert fname in members, "Required file %s not in archive" % fname
-        return False
 
     return True
 
