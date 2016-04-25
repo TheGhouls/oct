@@ -8,3 +8,4 @@ pygal
 pyzmq
 six
 oct-turrets>=0.2.4
+ujson
