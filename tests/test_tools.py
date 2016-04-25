@@ -49,6 +49,11 @@ class ToolsTest(unittest.TestCase):
         sys.argv += ["rebuild-results", self.rebuild_dir, self.results_file, self.config_file]
         main()
 
+        # try same rebuild
+        sys.argv = sys.argv[:1]
+        sys.argv += ["rebuild-results", self.rebuild_dir, self.results_file, self.config_file]
+        main()
+
     def tearDown(self):
         if os.path.exists(self.output_file):
             os.remove(self.output_file)
