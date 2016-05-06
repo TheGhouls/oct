@@ -1,6 +1,6 @@
 import unittest
 
-from oct.results.stats_handler import StatsHandler
+from oct.results.stats_handler import init_stats
 
 
 class ReportTest(unittest.TestCase):
@@ -9,4 +9,4 @@ class ReportTest(unittest.TestCase):
         """Not existing directory should raise error
         """
         with self.assertRaises(OSError):
-            StatsHandler('/', '/')
+            init_stats('/', '/')

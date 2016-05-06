@@ -45,7 +45,8 @@ setup(
         'pyzmq',
         'numpy',
         'jinja2',
-        'pandas'
+        'pandas',
+        'ujson'
     ],
     entry_points={'console_scripts': [
         'oct = oct.utilities.commands:main'

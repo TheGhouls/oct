@@ -1,3 +1,11 @@
+0.4.21 to 0.4.3
+===============
+
+* big performances improvement when generating html report
+* added ujson to dependencies
+* move turrets management in specific class `TurretsManager`
+* refactor HQ code
+
 0.4.2 to 0.4.21
 ===============
 

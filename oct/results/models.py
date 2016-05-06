@@ -1,8 +1,21 @@
 import json
 import datetime
-from peewee import Proxy, TextField, FloatField, CharField, IntegerField, SqliteDatabase, Model, DateTimeField
+from playhouse.pool import PooledDatabase
+from peewee import Proxy, TextField, FloatField, CharField, IntegerField, Model, DateTimeField, SqliteDatabase
 
 db = Proxy()
+
+
+# Temporary, waiting new peewee release
+class PooledSqliteDatabase(PooledDatabase, SqliteDatabase):
+    def _is_closed(self, key, conn):
+        closed = super(PooledSqliteDatabase, self)._is_closed(key, conn)
+        if not closed:
+            try:
+                conn.total_changes
+            except:
+                return True
+        return closed
 
 
 class Result(Model):
@@ -66,8 +79,12 @@ def set_database(db_path, proxy, config):
     :param peewee.Proxy proxy: the peewee proxy to initialise
     :param dict config: the configuration dictionnary
     """
+    pooling_params = {
+        'max_connections': config.get('worker_threads', 16),
+        'stale_timeout': 300
+    }
     if 'testing' in config and config['testing'] is True:
-        database = SqliteDatabase('/tmp/results.sqlite', check_same_thread=False)
+        database = PooledSqliteDatabase('/tmp/results.sqlite', check_same_thread=False, **pooling_params)
     else:
-        database = SqliteDatabase(db_path, check_same_thread=False)
+        database = PooledSqliteDatabase(db_path, check_same_thread=False, **pooling_params)
     proxy.initialize(database)
