@@ -82,7 +82,7 @@ class ReportResults(object):
         del dataframe['epoch']
         summary = dataframe.describe(percentiles=[.80, .90, .95]).transpose().loc['scriptrun_time']
         df_grp = dataframe.groupby(pd.TimeGrouper('{}S'.format(self.interval)))
-        df_final = df_grp.apply(lambda x: x.describe(percentiles=[.80, .90, .95])['scriptrun_time']).unstack()
+        df_final = df_grp.apply(lambda x: x.describe(percentiles=[.80, .90, .95])['scriptrun_time'])
 
         return {
             "raw": dataframe.round(2),
