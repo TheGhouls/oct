@@ -2,7 +2,7 @@ import os
 import unittest
 
 from oct.core.turrets_manager import TurretsManager
-from oct.results.models import set_database, db
+from oct.results.models import set_database, db, Turret
 
 BASE_DIR = os.path.dirname(os.path.realpath(__file__))
 
@@ -36,3 +36,7 @@ class ReportTest(unittest.TestCase):
         """
         res = self.manager.update({'not': 'present'})
         self.assertFalse(res)
+
+    def tearDown(self):
+        for turret in Turret.select():
+            turret.delete()
