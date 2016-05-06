@@ -2,7 +2,7 @@ import os
 import unittest
 
 from oct.core.turrets_manager import TurretsManager
-from oct.results.models import set_database, db, Turret
+from oct.results.models import set_database, db, Turret, Result
 
 BASE_DIR = os.path.dirname(os.path.realpath(__file__))
 
@@ -11,6 +11,8 @@ class ReportTest(unittest.TestCase):
 
     def setUp(self):
         set_database(os.path.join(BASE_DIR, 'fixtures', 'avaible_results.sqlite'), db, {})
+        if not Result.table_exists() and not Turret.table_exists():
+            db.create_tables([Result, Turret])
         self.manager = TurretsManager(0)
 
     def test_bad_message(self):
@@ -39,4 +41,4 @@ class ReportTest(unittest.TestCase):
 
     def tearDown(self):
         for turret in Turret.select():
-            turret.delete()
+            turret.delete_instance()
