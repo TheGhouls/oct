@@ -10,7 +10,7 @@ BASE_DIR = os.path.dirname(os.path.realpath(__file__))
 class ReportTest(unittest.TestCase):
 
     def setUp(self):
-        set_database(os.path.join(BASE_DIR, 'fixtures', 'empty_results.sqlite'), db, {})
+        set_database(os.path.join(BASE_DIR, 'fixtures', 'avaible_results.sqlite'), db, {})
         self.manager = TurretsManager(0)
 
     def test_bad_message(self):
