@@ -1,5 +1,7 @@
 import os
+import zmq
 import json
+import threading
 
 from oct.results.models import Result, Turret, set_database, db
 
@@ -22,18 +24,37 @@ def init_stats(output_dir, config):
     db.create_tables([Result, Turret])
 
 
-class StatsHandler(object):
+class StatsHandler(threading.Thread):
     """This class will handle results and stats comming from the turrets
 
     :param str output_dir: the output directory for the results
     """
-    def __init__(self, output_dir, config):
+    def __init__(self, output_dir, config, context):
+        super(StatsHandler, self).__init__()
         self.output_dir = output_dir
         self.trans_count = 0
         self.timer_count = 0
         self.error_count = 0
         self.turret_name = 'Turret'
         self.results = []
+        self.context = context
+        self.is_running = True
+
+        self.poller = zmq.Poller()
+        self.results_socket = self.context.socket(zmq.PULL)
+        self.results_socket.connect("inproc://stats_handler")
+        self.poller.register(self.results_socket)
+
+    def run(self):
+
+        while self.is_running:
+
+            sockets = dict(self.poller.poll(1000))
+            if self.results_socket in sockets:
+                data = self.results_socket.recv_json()
+                self.write_result(data)
+
+        self.write_remaining()
 
     def write_result(self, data):
         """Write the results received to the database

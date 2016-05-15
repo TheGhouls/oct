@@ -4,6 +4,7 @@ import time
 import traceback
 
 from oct.core.turrets_manager import TurretsManager
+from oct.results.stats_handler import StatsHandler
 
 
 class HightQuarter(object):
@@ -15,19 +16,28 @@ class HightQuarter(object):
     :param StatsHandler stats_handler: the stats handler writer
     :param dict config: the configuration of the test
     """
-    def __init__(self, publish_port, rc_port, stats_handler, config):
+    def __init__(self, publish_port, rc_port, output_dir, config):
         self.context = zmq.Context()
         self.poller = zmq.Poller()
 
         self.result_collector = self.context.socket(zmq.PULL)
         self.result_collector.bind("tcp://*:{}".format(rc_port))
 
+        self.stats_handler = self.context.socket(zmq.PUSH)
+        self.stats_handler.bind("inproc://stats_handler")
+
         self.poller.register(self.result_collector, zmq.POLLIN)
 
-        self.stats_handler = stats_handler
         self.turrets_manager = TurretsManager(publish_port)
         self.config = config
         self.started = False
+
+        self.handler_threads = []
+        for i in range(self.config.get("workers", 8)):
+            t = StatsHandler(output_dir, self.config, self.context)
+            t.daemon = True
+            self.handler_threads.append(t)
+            t.start()
 
         # waiting for init sockets
         print("Warmup")
@@ -37,16 +47,19 @@ class HightQuarter(object):
         if self.result_collector in socks:
             data = self.result_collector.recv_json()
             if 'status' not in data:
-                self.stats_handler.write_result(data)
+                self.stats_handler.send_json(data)
             else:
                 self.turrets_manager.process_message(data)
 
     def _print_status(self, elapsed):
         display = 'turrets: {}, elapsed: {}   transactions: {}  timers: {}  errors: {}\r'
         print(display.format(len(self.turrets_manager.turrets), round(elapsed),
-                             self.stats_handler.trans_count,
-                             self.stats_handler.timer_count,
-                             self.stats_handler.error_count), end='')
+                             0,
+                             0,
+                             0), end='')
+        # self.stats_handler.trans_count,
+        # self.stats_handler.timer_count,
+        # self.stats_handler.error_count), end='')
 
     def _clean_queue(self):
         try:
@@ -54,11 +67,13 @@ class HightQuarter(object):
             while data:
                 data = self.result_collector.recv_json(zmq.NOBLOCK)
                 if 'status' not in data:
-                    self.stats_handler.write_result(data)
+                    self.stats_handler.send_json(data)
         except zmq.Again:
             self.result_collector.close()
             self.turrets_manager.clean()
-            self.stats_handler.write_remaining()
+            for t in self.handler_threads:
+                t.is_running = False
+                t.join()
 
     def _run_loop_action(self):
         socks = dict(self.poller.poll(1000))
