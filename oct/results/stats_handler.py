@@ -41,7 +41,6 @@ class StatsHandler(object):
         :param dict data: the data to save in database
         :return: None
         """
-        print(data)
         self.trans_count += 1
         self.timer_count += len(data['custom_timers'])
         if data['error']:
