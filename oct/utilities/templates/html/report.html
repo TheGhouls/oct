@@ -3,12 +3,12 @@
 <head>
     <title>OCT Results report</title>
     <link rel="stylesheet" type="text/css" href="css/style.css" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.11/css/dataTables.bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-2.2.3.min.js"   integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo="   crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-    <script src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.11/js/dataTables.bootstrap.min.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/dataTables.bootstrap.min.css" />
+    <script src="scripts/jquery-2.2.3.min.js"></script>
+    <script src="scripts/bootstrap.min.js"></script>
+    <script src="scripts/jquery.dataTables.min.js"></script>
+    <script src="scripts/dataTables.bootstrap.min.js"></script>
 </head>
 <body id="main">
 
@@ -148,7 +148,8 @@
         <div class="col-md-4">
             <h4>
                 Response Time: {{ ts_interval }} sec time-series
-                (<a href="All_Transactions_response_times.svg" target="_blank">View full size</a>)
+                (<a href="#" class="enlargeGraph">extend</a> |
+                <a href="All_Transactions_response_times.svg" target="_blank">View full size</a>)
             </h4>
 
             <figure>
@@ -159,7 +160,8 @@
         <div class="col-md-4">
             <h4>
                 Response Time: raw data (all points)
-                (<a href="All_Transactions_response_times_intervals.svg" target="_blank">View full size</a>)
+                (<a href="#" class="enlargeGraph">extend</a> |
+                <a href="All_Transactions_response_times_intervals.svg" target="_blank">View full size</a>)
             </h4>
 
             <figure>
@@ -170,7 +172,8 @@
         <div class="col-md-4">
             <h4>
                 Throughput: 5 sec time-series
-                (<a href="All_Transactions_throughput.svg" target="_blank">View full size</a>)
+                (<a href="#" class="enlargeGraph">extend</a> |
+                <a href="All_Transactions_throughput.svg" target="_blank">View full size</a>)
             </h4>
 
             <figure>
@@ -255,7 +258,8 @@
         <div class="col-md-4">
             <h4>
                 Response Time: {{ ts_interval }} sec time-series
-                (<a href="{{ key }}_response_times.svg" target="_blank">View full size</a>)
+                (<a href="#" class="enlargeGraph">extend</a> |
+                <a href="{{ key }}_response_times.svg" target="_blank">View full size</a>)
             </h4>
 
             <figure>
@@ -266,7 +270,8 @@
         <div class="col-md-4">
             <h4>
                 Response Time: raw data (all points)
-                (<a href="{{ key }}_response_times_intervals.svg" target="_blank">View full size</a>)
+                (<a href="#" class="enlargeGraph">extend</a> |
+                <a href="{{ key }}_response_times_intervals.svg" target="_blank">View full size</a>)
             </h4>
 
             <figure>
@@ -277,7 +282,8 @@
         <div class="col-md-4">
             <h4>
                 Throughput: 5 sec time-series
-                (<a href="{{ key }}_throughput.svg" target="_blank">View full size</a>)
+                (<a href="#" class="enlargeGraph">extend</a> |
+                <a href="{{ key }}_throughput.svg" target="_blank">View full size</a>)
             </h4>
 
             <figure>
@@ -288,19 +294,6 @@
 </div>
 {% endfor %}
 </div>
-
-<script type="application/javascript">
-    $('#timersTabs a').click(function (e) {
-        console.log("before prevent");
-        e.preventDefault();
-        $(this).tab('show');
-    })
-    $(document).ready(function() {
-        $('table.dataTable').DataTable({
-            "searching": false
-        });
-        $('table.dataTable').css("width", "100%");
-    } );
-</script>
+<script src="scripts/oct.js"></script>
 </body>
 </html>

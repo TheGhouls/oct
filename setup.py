@@ -19,7 +19,8 @@ setup(
             'templates/configuration/*',
             'templates/html/*',
             'templates/scripts/*',
-            'templates/javascript/*'
+            'templates/javascript/*',
+            'templates/fonts/*'
         ]
     },
     description="A library for performances testing, give you the tools for load testing anything with any language",
