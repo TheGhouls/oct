@@ -30,14 +30,6 @@ class StatsHandler(object):
         self.turret_name = 'Turret'
         self.results = []
 
-    def run(self):
-
-        while self.is_running:
-            data = self.queue.recv()
-            self.write_result(ujson.loads(data))
-
-        self.write_remaining()
-
     def write_result(self, data):
         """Write the results received to the database
         :param dict data: the data to save in database
