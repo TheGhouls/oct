@@ -1,3 +1,13 @@
+0.4.3 to 0.4.4
+==============
+
+* performances improvement for hq loop
+* result colector queue now accepting more messages, HWM set to 0
+* html template report has been fully revisted
+* number of messages display is now more consistent
+* Successfuly generated report for more than 10 millions results in less thant 1 minute
+
+
 0.4.21 to 0.4.3
 ===============
 
