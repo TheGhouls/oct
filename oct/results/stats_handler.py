@@ -58,6 +58,6 @@ class StatsHandler(object):
         if not self.results:
             return
         with db.execution_context():
-            with self.db.atomic():
+            with db.atomic():
                 Result.insert_many(self.results).execute()
         del self.results[:]

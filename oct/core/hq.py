@@ -63,9 +63,10 @@ class HightQuarter(object):
         except zmq.Again:
             self.result_collector.close()
             self.turrets_manager.clean()
+            self.stats_handler.write_remaining()
 
     def _run_loop_action(self):
-        socks = dict(self.poller.poll())
+        socks = dict(self.poller.poll(1000))
         self._process_socks(socks)
 
     def wait_turrets(self, wait_for):
@@ -102,6 +103,7 @@ class HightQuarter(object):
             except (Exception, KeyboardInterrupt):
                 print("\nStopping test, sending stop command to turrets")
                 self.turrets_manager.stop()
+                self.stats_handler.write_remaining()
                 traceback.print_exc()
                 break
 
