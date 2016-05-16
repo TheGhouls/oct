@@ -25,29 +25,29 @@ class StatsHandler(object):
     """This class will handle results and stats comming from the turrets
     :param str output_dir: the output directory for the results
     """
-    def __init__(self, output_dir, config):
+    def __init__(self, output_dir, config, context=None):
         self.output_dir = output_dir
-        self.trans_count = 0
-        self.timer_count = 0
-        self.error_count = 0
         self.turret_name = 'Turret'
         self.results = []
+
+    def run(self):
+
+        while self.is_running:
+            data = self.queue.recv()
+            self.write_result(ujson.loads(data))
+
+        self.write_remaining()
 
     def write_result(self, data):
         """Write the results received to the database
         :param dict data: the data to save in database
         :return: None
         """
-        self.trans_count += 1
-        self.timer_count += len(data['custom_timers'])
-        if data['error']:
-            self.error_count += 1
-
         data['custom_timers'] = ujson.dumps(data['custom_timers'])
         self.results.append(data)
 
-        if len(self.results) >= 450:  # SQLite limit for inser_many is 500
-            with db.execution_context(False):
+        if len(self.results) >= 490:  # SQLite limit for inser_many is 500
+            with db.execution_context():
                 with db.atomic():
                     Result.insert_many(self.results).execute()
                 del self.results[:]
@@ -55,6 +55,9 @@ class StatsHandler(object):
     def write_remaining(self):
         """Write the remaning stack content
         """
-        with db.atomic():
-            Result.insert_many(self.results).execute()
+        if not self.results:
+            return
+        with db.execution_context():
+            with self.db.atomic():
+                Result.insert_many(self.results).execute()
         del self.results[:]

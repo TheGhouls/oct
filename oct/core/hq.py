@@ -106,7 +106,7 @@ class HightQuarter(object):
                 break
 
         self.turrets_manager.stop()
-        print("\n\nProcessing all remaining messages...")
+        print("\n\nProcessing all remaining messages... This could take time depending on message volume")
         t = time.time()
         self.result_collector.unbind(self.result_collector.LAST_ENDPOINT)
         self._clean_queue()

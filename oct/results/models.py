@@ -1,6 +1,5 @@
 import json
 import datetime
-from playhouse.pool import PooledSqliteDatabase, PooledPostgresqlDatabase
 from peewee import Proxy, TextField, FloatField, CharField, IntegerField, Model, DateTimeField, SqliteDatabase
 
 db = Proxy()
@@ -70,7 +69,5 @@ def set_database(db_path, proxy, config):
     if 'testing' in config and config['testing'] is True:
         database = SqliteDatabase('/tmp/results.sqlite', check_same_thread=False, threadlocals=True)
     else:
-        # database = SqliteDatabase(db_path, check_same_thread=False, threadlocals=True)
-        database = PooledSqliteDatabase(db_path, check_same_thread=False, threadlocals=True, max_connections=16)
-        # database = PooledPostgresqlDatabase('oct', user='oct', password='oct', host='localhost', max_connections=100)
+        database = SqliteDatabase(db_path, check_same_thread=False, threadlocals=True)
     proxy.initialize(database)
