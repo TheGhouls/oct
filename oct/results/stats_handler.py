@@ -1,14 +1,11 @@
 import os
-import zmq
-import json
-import threading
+import ujson
 
 from oct.results.models import Result, Turret, set_database, db
 
 
 def init_stats(output_dir, config):
     """Init all required ressources for stats handling
-
     :param str output_dir: the output directory for the results
     :param dict config: the project configuration
     """
@@ -24,41 +21,20 @@ def init_stats(output_dir, config):
     db.create_tables([Result, Turret])
 
 
-class StatsHandler(threading.Thread):
+class StatsHandler(object):
     """This class will handle results and stats comming from the turrets
-
     :param str output_dir: the output directory for the results
     """
-    def __init__(self, output_dir, config, context):
-        super(StatsHandler, self).__init__()
+    def __init__(self, output_dir, config):
         self.output_dir = output_dir
         self.trans_count = 0
         self.timer_count = 0
         self.error_count = 0
         self.turret_name = 'Turret'
         self.results = []
-        self.context = context
-        self.is_running = True
-
-        self.poller = zmq.Poller()
-        self.results_socket = self.context.socket(zmq.PULL)
-        self.results_socket.connect("inproc://stats_handler")
-        self.poller.register(self.results_socket)
-
-    def run(self):
-
-        while self.is_running:
-
-            sockets = dict(self.poller.poll(1000))
-            if self.results_socket in sockets:
-                data = self.results_socket.recv_json()
-                self.write_result(data)
-
-        self.write_remaining()
 
     def write_result(self, data):
         """Write the results received to the database
-
         :param dict data: the data to save in database
         :return: None
         """
@@ -67,11 +43,11 @@ class StatsHandler(threading.Thread):
         if data['error']:
             self.error_count += 1
 
-        data['custom_timers'] = json.dumps(data['custom_timers'])
+        data['custom_timers'] = ujson.dumps(data['custom_timers'])
         self.results.append(data)
 
         if len(self.results) >= 450:  # SQLite limit for inser_many is 500
-            with db.execution_context():
+            with db.execution_context(False):
                 with db.atomic():
                     Result.insert_many(self.results).execute()
                 del self.results[:]
