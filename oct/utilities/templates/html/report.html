@@ -67,7 +67,7 @@
 <ul class="nav nav-tabs col-md-12 clearfix" id="timersTabs" role="tablist">
   <li role="presentation" class="active"><a href="#all">All transactions</a></li>
   {% for timer in results.timers.keys() %}
-    <li role="presentation"><a href="#{{ timer }}">{{ timer }}</a></li>
+    <li role="presentation"><a href="#{{ timer|replace(' ', '') }}">{{ timer }}</a></li>
   {% endfor %}
 </ul>
 </div>
@@ -185,7 +185,7 @@
 </div>
 
 {% for key, value in results.timers.items() %}
-<div class="row tab-pane" role="tabpanel" id="{{ key }}">
+<div class="row tab-pane" role="tabpanel" id="{{ key|replace(' ', '') }}">
     <h2 class="bg-primary">Custom Timer: {{ key }}</h2>
 
     <div class="col-md-3">
