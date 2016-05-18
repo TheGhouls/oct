@@ -47,10 +47,8 @@ class TurretsManager(object):
         """
         if 'status' not in message:
             return False
-        print(message)
         message['name'] = message['turret']
         del message['turret']
-        print("After update : %s" % message)
         if not self.add(message, is_started):
             return self.update(message)
         return True

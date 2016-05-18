@@ -58,6 +58,8 @@ def from_oct(args):
                         os.path.join(project_name, 'templates', 'css'))
         shutil.copytree(os.path.join(BASE_DIR, 'templates', 'javascript'),
                         os.path.join(project_name, 'templates', 'scripts'))
+        shutil.copytree(os.path.join(BASE_DIR, 'templates', 'fonts'),
+                        os.path.join(project_name, 'templates', 'fonts'))
 
         shutil.copy(os.path.join(BASE_DIR, 'templates', 'html', 'report.html'),
                     os.path.join(project_name, 'templates'))

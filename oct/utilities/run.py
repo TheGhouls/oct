@@ -44,12 +44,12 @@ def run(cmd_args):
                                                time.strftime('%Y.%m.%d_%H.%M.%S_' + str(milisec) + '/', run_localtime))
 
     stats_handler.init_stats(output_dir, config)
-    rw = stats_handler.StatsHandler(output_dir, config)
+    # rw = stats_handler.StatsHandler(output_dir, config)
 
     script_prefix = os.path.join(cmd_args.project_dir, project_name, "test_scripts")
     script_prefix = os.path.normpath(script_prefix)
 
-    hq = HightQuarter(config.get('publish_port', 5000), config.get('rc_port', 5001), rw, config)
+    hq = HightQuarter(config.get('publish_port', 5000), config.get('rc_port', 5001), output_dir, config)
     hq.wait_turrets(config.get("min_turrets", 1))
     hq.run()
 

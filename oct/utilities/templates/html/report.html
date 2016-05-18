@@ -3,28 +3,38 @@
 <head>
     <title>OCT Results report</title>
     <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/dataTables.bootstrap.min.css" />
+    <script src="scripts/jquery-2.2.3.min.js"></script>
+    <script src="scripts/bootstrap.min.js"></script>
+    <script src="scripts/jquery.dataTables.min.js"></script>
+    <script src="scripts/dataTables.bootstrap.min.js"></script>
 </head>
 <body id="main">
 
 <h1>Performance results report</h1>
 
-<h2>Summary</h2>
+<h2 class="bg-primary">Summary</h2>
 
-<div class="summary">
-    transaction: {{ report.total_transactions }}
-    <br>
-    errors: {{ report.total_errors }}
-    <br>
-    run time: {{ run_time }}
-    <br>
-    test start: {{ report.start_datetime }}
-    <br>
-    test finish: {{ report.finish_datetime }}
-    <br>
-    time-series interval: {{ ts_interval }} seconds
+<div class="summary row">
+
+
+    <div class="col-md-3">
+        <ul class="list-group">
+            <li class="list-group-item"><span class="badge">{{ report.total_transactions }}</span>transaction</li>
+            <li class="list-group-item"><span class="badge">{{ report.total_errors }}</span>errors</li>
+            <li class="list-group-item"><span class="badge">{{ run_time }}</span>run time</li>
+            <li class="list-group-item"><span class="badge">{{ report.start_datetime }}</span>test start</li>
+            <li class="list-group-item"><span class="badge">{{ report.finish_datetime }}</span>test finish</li>
+            <li class="list-group-item"><span class="badge">{{ ts_interval }} seconds</span>time-series interval</li>
+        </ul>
+    </div>
+
+    <div class="col-md-8">
     {% if turrets_config %}
         workload configuration
-        <table>
+        <table class="table table-bordered table-hover dataTable">
+        <thead>
             <tr>
                 <th>turret name</th>
                 <th>uuid</th>
@@ -34,6 +44,8 @@
                 <th>Last known status</th>
                 <th>Last status update</th>
             </tr>
+        </thead>
+        <tbody>
             {% for turret in turrets_config %}
             <tr>
                 <td>{{ turret.name }}</td>
@@ -45,165 +57,243 @@
                 <td>{{ turret.updated_at }}</td>
             </tr>
             {% endfor %}
+        </tbody>
         </table>
     {% endif %}
+    </div>
 </div>
 
-<h2>All transactions</h2>
+<div class="row">
+<ul class="nav nav-tabs col-md-12 clearfix" id="timersTabs" role="tablist">
+  <li role="presentation" class="active"><a href="#all">All transactions</a></li>
+  {% for timer in results.timers.keys() %}
+    <li role="presentation"><a href="#{{ timer|replace(' ', '') }}">{{ timer }}</a></li>
+  {% endfor %}
+</ul>
+</div>
 
-<h3>Transaction Response Summary (secs)</h3>
+<div class="tab-content">
+<div class="row tab-pane active in" role="tabpanel" id="all">
+    <h2 class="bg-primary">All transactions</h2>
 
-<table>
-    <tr>
-        <th>count</th>
-        <th>min</th>
-        <th>avg</th>
-        <th>80pct</th>
-        <th>90pct</th>
-        <th>95pct</th>
-        <th>max</th>
-        <th>stdev</th>
-    </tr>
-    <tr>
-        <td>{{ report.total_transactions }} </td>
-        <td>{{ results.all.summary['min'] }}</td>
-        <td>{{ results.all.summary['mean'] }}</td>
-        <td>{{ results.all.summary['80%'] }}</td>
-        <td>{{ results.all.summary['90%'] }}</td>
-        <td>{{ results.all.summary['95%'] }}</td>
-        <td>{{ results.all.summary['max'] }}</td>
-        <td>{{ results.all.summary['std'] }}</td>
-    </tr>
-</table>
+    <div class="col-md-3">
+        <h3>Transaction Response Summary (secs)</h3>
 
-<h3>Interval Details (secs)</h3>
+        <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>count</th>
+                <th>min</th>
+                <th>avg</th>
+                <th>80pct</th>
+                <th>90pct</th>
+                <th>95pct</th>
+                <th>max</th>
+                <th>stdev</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ report.total_transactions }} </td>
+                <td>{{ results.all.summary['min'] }}</td>
+                <td>{{ results.all.summary['mean'] }}</td>
+                <td>{{ results.all.summary['80%'] }}</td>
+                <td>{{ results.all.summary['90%'] }}</td>
+                <td>{{ results.all.summary['95%'] }}</td>
+                <td>{{ results.all.summary['max'] }}</td>
+                <td>{{ results.all.summary['std'] }}</td>
+            </tr>
+        </tbody>
+        </table>
+    </div>
 
-<table>
-    <tr>
-        <th>interval</th>
-        <th>count</th>
-        <th>min</th>
-        <th>avg</th>
-        <th>80pct</th>
-        <th>90pct</th>
-        <th>95pct</th>
-        <th>max</th>
-        <th>stdev</th>
-    </tr>
-    {% for index, row in results.all.compiled.iterrows() %}
-    <tr>
-        <td>{{ loop.index }}</td>
-        <td>{{ row['count'] }}</td>
-        <td>{{ row['min'] }}</td>
-        <td>{{ row['mean'] }}</td>
-        <td>{{ row['80%'] }}</td>
-        <td>{{ row['90%'] }}</td>
-        <td>{{ row['95%'] }}</td>
-        <td>{{ row['max'] }}</td>
-        <td>{{ row['std'] }}</td>
-    </tr>
-    {% endfor %}
-</table>
+    <div class="col-md-9">
+        <h3>Interval Details (secs)</h3>
 
-<h3>Graphs</h3>
+        <table class="table table-bordered table-hover dataTable">
+        <thead>
+            <tr>
+                <th>interval</th>
+                <th>count</th>
+                <th>min</th>
+                <th>avg</th>
+                <th>80pct</th>
+                <th>90pct</th>
+                <th>95pct</th>
+                <th>max</th>
+                <th>stdev</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for index, row in results.all.compiled.iterrows() %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ row['count'] }}</td>
+                <td>{{ row['min'] }}</td>
+                <td>{{ row['mean'] }}</td>
+                <td>{{ row['80%'] }}</td>
+                <td>{{ row['90%'] }}</td>
+                <td>{{ row['95%'] }}</td>
+                <td>{{ row['max'] }}</td>
+                <td>{{ row['std'] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        </table>
+    </div>
 
-<h4>Response Time: {{ ts_interval }} sec time-series</h4>
+    <div class="row">
+        <h3>Graphs</h3>
 
-<figure>
-    <embed src="All_Transactions_response_times.svg" type="image/svg+xml" />
-</figure>
+        <div class="col-md-4">
+            <h4>
+                Response Time: {{ ts_interval }} sec time-series
+                (<a href="#" class="enlargeGraph">extend</a> |
+                <a href="All_Transactions_response_times.svg" target="_blank">View full size</a>)
+            </h4>
 
-<h4>Response Time: raw data (all points)</h4>
+            <figure>
+                <embed src="All_Transactions_response_times.svg" type="image/svg+xml" />
+            </figure>
+        </div>
 
-<figure>
-    <embed src="All_Transactions_response_times_intervals.svg" type="image/svg+xml" />
-</figure>
+        <div class="col-md-4">
+            <h4>
+                Response Time: raw data (all points)
+                (<a href="#" class="enlargeGraph">extend</a> |
+                <a href="All_Transactions_response_times_intervals.svg" target="_blank">View full size</a>)
+            </h4>
 
-<h4>Throughput: 5 sec time-series</h4>
+            <figure>
+                <embed src="All_Transactions_response_times_intervals.svg" type="image/svg+xml" />
+            </figure>
+        </div>
 
-<figure>
-    <embed src="All_Transactions_throughput.svg" type="image/svg+xml" />
-</figure>
+        <div class="col-md-4">
+            <h4>
+                Throughput: 5 sec time-series
+                (<a href="#" class="enlargeGraph">extend</a> |
+                <a href="All_Transactions_throughput.svg" target="_blank">View full size</a>)
+            </h4>
+
+            <figure>
+                <embed src="All_Transactions_throughput.svg" type="image/svg+xml" />
+            </figure>
+        </div>
+    </div>
+
+</div>
 
 {% for key, value in results.timers.items() %}
-<hr />
-<h2>Custom Timer: {{ key }}</h2>
+<div class="row tab-pane" role="tabpanel" id="{{ key|replace(' ', '') }}">
+    <h2 class="bg-primary">Custom Timer: {{ key }}</h2>
 
+    <div class="col-md-3">
+        <h3>Timer Summary (secs)</h3>
+        <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>count</th>
+                <th>min</th>
+                <th>avg</th>
+                <th>80pct</th>
+                <th>90pct</th>
+                <th>95pct</th>
+                <th>max</th>
+                <th>stdev</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ value.raw.count()['scriptrun_time'] }} </td>
+                <td>{{ value.summary['min'] }}</td>
+                <td>{{ value.summary['mean'] }}</td>
+                <td>{{ value.summary['80%'] }}</td>
+                <td>{{ value.summary['90%'] }}</td>
+                <td>{{ value.summary['95%'] }}</td>
+                <td>{{ value.summary['max'] }}</td>
+                <td>{{ value.summary['std'] }}</td>
+            </tr>
+        </tbody>
+        </table>
+    </div>
 
-<h3>Timer Summary (secs)</h3>
-<table>
-    <tr>
-        <th>count</th>
-        <th>min</th>
-        <th>avg</th>
-        <th>80pct</th>
-        <th>90pct</th>
-        <th>95pct</th>
-        <th>max</th>
-        <th>stdev</th>
-    </tr>
-    <tr>
-        <td>{{ value.raw.count()['scriptrun_time'] }} </td>
-        <td>{{ value.summary['min'] }}</td>
-        <td>{{ value.summary['mean'] }}</td>
-        <td>{{ value.summary['80%'] }}</td>
-        <td>{{ value.summary['90%'] }}</td>
-        <td>{{ value.summary['95%'] }}</td>
-        <td>{{ value.summary['max'] }}</td>
-        <td>{{ value.summary['std'] }}</td>
-    </tr>
-</table>
+    <div class="col-md-9">
+        <h3>Interval Details (secs)</h3>
 
+        <table class="table table-bordered table-hover dataTable">
+        <thead>
+            <tr>
+                <th>interval</th>
+                <th>count</th>
+                <th>min</th>
+                <th>avg</th>
+                <th>80pct</th>
+                <th>90pct</th>
+                <th>95pct</th>
+                <th>max</th>
+                <th>stdev</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for index, row in value.compiled.iterrows() %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ row['count'] }}</td>
+                <td>{{ row['min'] }}</td>
+                <td>{{ row['mean'] }}</td>
+                <td>{{ row['80%'] }}</td>
+                <td>{{ row['90%'] }}</td>
+                <td>{{ row['95%'] }}</td>
+                <td>{{ row['max'] }}</td>
+                <td>{{ row['std'] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        </table>
+    </div>
 
-<h3>Interval Details (secs)</h3>
+    <div class="row">
+        <h3>Graphs</h3>
+        <div class="col-md-4">
+            <h4>
+                Response Time: {{ ts_interval }} sec time-series
+                (<a href="#" class="enlargeGraph">extend</a> |
+                <a href="{{ key }}_response_times.svg" target="_blank">View full size</a>)
+            </h4>
 
-<table>
-    <tr>
-        <th>interval</th>
-        <th>count</th>
-        <th>min</th>
-        <th>avg</th>
-        <th>80pct</th>
-        <th>90pct</th>
-        <th>95pct</th>
-        <th>max</th>
-        <th>stdev</th>
-    </tr>
-    {% for index, row in value.compiled.iterrows() %}
-    <tr>
-        <td>{{ loop.index }}</td>
-        <td>{{ row['count'] }}</td>
-        <td>{{ row['min'] }}</td>
-        <td>{{ row['mean'] }}</td>
-        <td>{{ row['80%'] }}</td>
-        <td>{{ row['90%'] }}</td>
-        <td>{{ row['95%'] }}</td>
-        <td>{{ row['max'] }}</td>
-        <td>{{ row['std'] }}</td>
-    </tr>
-    {% endfor %}
-</table>
+            <figure>
+                <embed src="{{ key }}_response_times.svg" type="image/svg+xml" />
+            </figure>
+        </div>
 
-<h3>Graphs</h3>
+        <div class="col-md-4">
+            <h4>
+                Response Time: raw data (all points)
+                (<a href="#" class="enlargeGraph">extend</a> |
+                <a href="{{ key }}_response_times_intervals.svg" target="_blank">View full size</a>)
+            </h4>
 
-<h4>Response Time: {{ ts_interval }} sec time-series</h4>
+            <figure>
+                <embed src="{{ key }}_response_times_intervals.svg" type="image/svg+xml" />
+            </figure>
+        </div>
 
-<figure>
-    <embed src="{{ key }}_response_times.svg" type="image/svg+xml" />
-</figure>
+        <div class="col-md-4">
+            <h4>
+                Throughput: 5 sec time-series
+                (<a href="#" class="enlargeGraph">extend</a> |
+                <a href="{{ key }}_throughput.svg" target="_blank">View full size</a>)
+            </h4>
 
-<h4>Response Time: raw data (all points)</h4>
-
-<figure>
-    <embed src="{{ key }}_response_times_intervals.svg" type="image/svg+xml" />
-</figure>
-
-<h4>Throughput: 5 sec time-series</h4>
-
-<figure>
-    <embed src="{{ key }}_throughput.svg" type="image/svg+xml" />
-</figure>
+            <figure>
+                <embed src="{{ key }}_throughput.svg" type="image/svg+xml" />
+            </figure>
+        </div>
+    </div>
+</div>
 {% endfor %}
-
+</div>
+<script src="scripts/oct.js"></script>
 </body>
 </html>

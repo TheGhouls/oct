@@ -24,6 +24,7 @@ class ReportWriter(object):
             shutil.copytree(os.path.join(self.templates_dir, 'css'), os.path.join(self.results_dir, 'css'))
             shutil.copytree(os.path.join(self.templates_dir, 'img'), os.path.join(self.results_dir, 'img'))
             shutil.copytree(os.path.join(self.templates_dir, 'scripts'), os.path.join(self.results_dir, 'scripts'))
+            shutil.copytree(os.path.join(self.templates_dir, 'fonts'), os.path.join(self.results_dir, 'fonts'))
         except OSError as e:
             if e.errno == 17:  # File exists
                 print("WARNING : existing output directory for static files, will not replace them")
