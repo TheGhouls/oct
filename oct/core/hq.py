@@ -18,10 +18,10 @@ class HightQuarter(object):
     :param StatsHandler stats_handler: the stats handler writer
     :param dict config: the configuration of the test
     """
-    def __init__(self, publish_port, rc_port, output_dir, config):
+    def __init__(self, publish_port, rc_port, output_dir, config, topic):
         self.context = zmq.Context()
         self.poller = zmq.Poller()
-        self.topic = config.get('external_publisher_topic', 'oct-publish')
+        self.topic = topic
 
         self.result_collector = self.context.socket(zmq.PULL)
         self.result_collector.set_hwm(0)

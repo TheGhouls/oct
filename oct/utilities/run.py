@@ -10,6 +10,7 @@ from __future__ import print_function
 import os
 import shutil
 import time
+import uuid
 from datetime import datetime
 from oct.results.output import output as output_results
 
@@ -27,6 +28,8 @@ def run_command(sp):
     parser.add_argument('-r', '--results', dest='results_dir', help='results directory to reprocess')
     parser.add_argument('-d', '--directory', dest='project_dir', help='directory containing project folder',
                         default='.')
+    parser.add_argument('-p', '--publisher-channel', dest='publisher_channel',
+                        help='the channel for the external publisher')
     parser.set_defaults(func=run)
 
 
@@ -44,12 +47,16 @@ def run(cmd_args):
                                                time.strftime('%Y.%m.%d_%H.%M.%S_' + str(milisec) + '/', run_localtime))
 
     stats_handler.init_stats(output_dir, config)
-    # rw = stats_handler.StatsHandler(output_dir, config)
+
+    topic = cmd_args.publisher_channel or uuid.uuid4().hex
+    print("External publishing topic is %s" % topic)
 
     script_prefix = os.path.join(cmd_args.project_dir, project_name, "test_scripts")
     script_prefix = os.path.normpath(script_prefix)
 
-    hq = HightQuarter(config.get('publish_port', 5000), config.get('rc_port', 5001), output_dir, config)
+    hq = HightQuarter(config.get('publish_port', 5000),
+                      config.get('rc_port', 5001),
+                      output_dir, config, topic)
     hq.wait_turrets(config.get("min_turrets", 1))
     hq.run()
 
