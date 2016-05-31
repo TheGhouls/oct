@@ -1,3 +1,9 @@
+0.4.4 to 0.4.5
+==============
+
+* added publisher socket for external services, this socket will allow any client to connect to a running core
+and receive informations about the current test
+
 0.4.3 to 0.4.4
 ==============
 
