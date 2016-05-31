@@ -29,7 +29,8 @@ def run_command(sp):
     parser.add_argument('-d', '--directory', dest='project_dir', help='directory containing project folder',
                         default='.')
     parser.add_argument('-p', '--publisher-channel', dest='publisher_channel',
-                        help='the channel for the external publisher')
+                        help='the channel for the external publisher',
+                        default=None)
     parser.set_defaults(func=run)
 
 
