@@ -52,7 +52,6 @@ class HightQuarter(object):
                 self.messages += 1
             else:
                 self.turrets_manager.process_message(ujson.loads(data))
-        pass
 
     def _print_status(self, elapsed):
         display = 'turrets: {}, elapsed: {}  messages received: {}\r'
