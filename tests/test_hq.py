@@ -32,6 +32,7 @@ def run_bad_turret():
 class CmdOpts(object):
     project_dir = '/tmp/oct-test'
     project_name = '.'
+    publisher_channel = None
 
 
 class HQTest(unittest.TestCase):
