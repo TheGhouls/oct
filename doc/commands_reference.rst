@@ -105,13 +105,14 @@ usage :
 
 Arguments :
 
-================ ====  ========== =============================================
-name             type  mandatory  description
-================ ====  ========== =============================================
-project          str   yes        path of the project
--r, --results    str   no         specifiy a custom directory for the results
--d, --directyory str   no         specify the project directory if not current
-================ ====  ========== =============================================
+======================= ====  ========== =================================================
+name                    type  mandatory  description
+======================= ====  ========== =================================================
+project                 str   yes        path of the project
+-r, --results           str   no         specifiy a custom directory for the results
+-d, --directyory        str   no         specify the project directory if not current
+-p, --publisher-channel str   no         specify a custom channel for results publication
+======================= ====  ========== =================================================
 
 Rebuild results
 ---------------

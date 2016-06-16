@@ -3,6 +3,7 @@ import zmq
 import time
 import ujson
 import traceback
+from zmq.utils.strtypes import asbytes
 
 from oct.core.turrets_manager import TurretsManager
 from oct.results.stats_handler import StatsHandler
@@ -17,13 +18,17 @@ class HightQuarter(object):
     :param StatsHandler stats_handler: the stats handler writer
     :param dict config: the configuration of the test
     """
-    def __init__(self, publish_port, rc_port, output_dir, config):
+    def __init__(self, publish_port, rc_port, output_dir, config, topic):
         self.context = zmq.Context()
         self.poller = zmq.Poller()
+        self.topic = topic
 
         self.result_collector = self.context.socket(zmq.PULL)
         self.result_collector.set_hwm(0)
         self.result_collector.bind("tcp://*:{}".format(rc_port))
+
+        self.external_publisher = self.context.socket(zmq.PUB)
+        self.external_publisher.bind("tcp://*:{}".format(config.get('external_publisher', 5002)))
 
         self.stats_handler = StatsHandler(output_dir, config)
 
@@ -40,14 +45,13 @@ class HightQuarter(object):
 
     def _process_socks(self, socks):
         if self.result_collector in socks:
-            self.messages += 1
-            data = self.result_collector.recv()
-            if b'status' not in data:
+            data = self.result_collector.recv_string()
+            if 'status' not in data:
                 self.stats_handler.write_result(ujson.loads(data))
+                self.external_publisher.send_multipart([asbytes(self.topic), asbytes(data)])
                 self.messages += 1
             else:
                 self.turrets_manager.process_message(ujson.loads(data))
-        pass
 
     def _print_status(self, elapsed):
         display = 'turrets: {}, elapsed: {}  messages received: {}\r'

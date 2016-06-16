@@ -1,3 +1,15 @@
+0.4.4 to 0.4.5
+==============
+
+* added publisher socket for external services, this socket will allow any client to connect to a running core
+and receive informations about the current test. This feature is present and works but will not be documented before
+some improvement and the creation of a mini program do display tests progression
+* You can now use an `external_publisher` key in configuration to setup the real time publication socket port, default
+is 5002
+* Add a command line parameter `--publisher-channel` to select the publishing topic for real time pub socket
+* Minor code improvements
+
+
 0.4.3 to 0.4.4
 ==============
 
