@@ -1,6 +1,9 @@
+import os
 import json
 import datetime
-from peewee import Proxy, TextField, FloatField, CharField, IntegerField, Model, DateTimeField, SqliteDatabase
+
+from playhouse.db_url import connect
+from peewee import Proxy, TextField, FloatField, CharField, IntegerField, Model, DateTimeField
 
 db = Proxy()
 
@@ -59,15 +62,19 @@ class Turret(Model):
         database = db
 
 
-def set_database(db_path, proxy, config):
+def set_database(db_url, proxy, config):
     """Initialize the peewee database with the given configuration
 
-    :param str db_path: the path of the sqlite database
+    If the given db_url is a regular file, it will be used as sqlite database
+
+    :param str db_url: the connection string for database or path if sqlite file
     :param peewee.Proxy proxy: the peewee proxy to initialise
     :param dict config: the configuration dictionnary
     """
     if 'testing' in config and config['testing'] is True:
-        database = SqliteDatabase('/tmp/results.sqlite', check_same_thread=False, threadlocals=True)
+        database = connect('sqlite:////tmp/results.sqlite', check_same_thread=False, threadlocals=True)
     else:
-        database = SqliteDatabase(db_path, check_same_thread=False, threadlocals=True)
+        if os.path.isfile(db_url):
+            db_url = "sqlite:///" + db_url
+        database = connect(db_url, check_same_thread=False, threadlocals=True)
     proxy.initialize(database)
