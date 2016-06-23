@@ -1,3 +1,15 @@
+0.4.5 to 0.4.6
+==============
+
+* allow database configuration in project configuration, you can now use any peewee supported database backend
+* update rebuild command to take database configuration in consideration
+
+Backward compatibility break
+----------------------------
+
+* `oct rebuild-results` commands arguments has changed, results_file is now optionnal and the command will by default look
+at the configuration file. If no results_database key is present, it will use the patern `results_directory + results.sqlite`
+
 0.4.4 to 0.4.5
 ==============
 
