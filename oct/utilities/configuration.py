@@ -80,3 +80,17 @@ def cleanup_turret_config(config):
             del config[key]
 
     return config
+
+
+def get_db_uri(config, output_dir):
+    """Process results_database parameters in config to format them for
+    set database function
+
+    :param dict config: project configuration dict
+    :param str output_dir: output directory for results
+    :return: string for db uri
+    """
+    db_config = config.get("results_database", {"db_uri": "default"})
+    if db_config['db_uri'] == 'default':
+        return os.path.join(output_dir, "results.sqlite")
+    return db_config['db_uri']

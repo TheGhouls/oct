@@ -71,10 +71,13 @@ def set_database(db_url, proxy, config):
     :param peewee.Proxy proxy: the peewee proxy to initialise
     :param dict config: the configuration dictionnary
     """
+    db_config = config.get('results_database', {}).get('params', {})
+
     if 'testing' in config and config['testing'] is True:
         database = connect('sqlite:////tmp/results.sqlite', check_same_thread=False, threadlocals=True)
     else:
-        if os.path.isfile(db_url):
+        if os.path.isfile(db_url) or os.path.isdir(os.path.dirname(db_url)):
             db_url = "sqlite:///" + db_url
-        database = connect(db_url, check_same_thread=False, threadlocals=True)
+            db_config.update(check_same_thread=False, threadlocals=True)
+        database = connect(db_url, **db_config)
     proxy.initialize(database)

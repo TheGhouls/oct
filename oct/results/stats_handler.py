@@ -1,6 +1,7 @@
 import os
 import ujson
 
+from oct.utilities.configuration import get_db_uri
 from oct.results.models import Result, Turret, set_database, db
 
 
@@ -16,9 +17,14 @@ def init_stats(output_dir, config):
         print("ERROR: Can not create output directory\n")
         raise
 
-    set_database(output_dir + "results.sqlite", db, config)
+    db_uri = get_db_uri(config, output_dir)
+
+    set_database(db_uri, db, config)
+
+    tables_to_create = [t for t in [Result, Turret] if not t.table_exists()]
+
     db.connect()
-    db.create_tables([Result, Turret])
+    db.create_tables(tables_to_create)
 
 
 class StatsHandler(object):
