@@ -63,6 +63,10 @@ The main and more important file here is the `config.json` file, let's take a lo
         "turrets_requirements": [],
         "extra_turret_config": {
             // put global turrets config key / values here
+        },
+        "results_database": {
+            "db_uri": "default",
+            "params": {}
         }
     }
 
@@ -87,6 +91,8 @@ Every key here is useful, but some keys are not required to run a test. Let's ta
 * ``turrets_requirements``: A list of string containing the required packages for turrets (only for python turrets at this time)
 
 * ``extra_turret_config``: A nested object containing all extra turrets parameters. Each value in it will be set in each turret configuration
+
+* ``results_database``: Nested object that allows results database configuration, for exemple if you don't want to use the default sqlite results database
 
 This configuration is simple but will allow you to run simple tests in a local environment.
 
