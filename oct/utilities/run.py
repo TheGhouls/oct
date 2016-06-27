@@ -37,9 +37,7 @@ def run(cmd_args):
     topic = cmd_args.publisher_channel or uuid.uuid4().hex
     print("External publishing topic is %s" % topic)
 
-    hq = HightQuarter(config.get('publish_port', 5000),
-                      config.get('rc_port', 5001),
-                      output_dir, config, topic)
+    hq = HightQuarter(output_dir, config, topic)
     hq.wait_turrets(config.get("min_turrets", 1))
     hq.run()
 
@@ -65,4 +63,6 @@ def run_command(sp):
     parser.add_argument('-p', '--publisher-channel', dest='publisher_channel',
                         help='the channel for the external publisher',
                         default=None)
+    parser.add_argument('-s', '--with-streamer', action='store_true', help="tell if HQ should connect to streamer")
+    parser.add_argument('-f', '--with-forwarder', action='store_true', help="tell if HQ should connect to forwarder")
     parser.set_defaults(func=run)

@@ -13,28 +13,23 @@ class HightQuarter(object):
     """The main hight quarter that will receive informations from the turrets
     and send the start message
 
-    :param int publish_port: the port for publishing information to turrets
-    :param int rc_port: the result collector port for collecting results from the turrets
-    :param StatsHandler stats_handler: the stats handler writer
+    :param str output_dir: output directory for results
     :param dict config: the configuration of the test
+    :param str topic: topic for external publishing socket
+    :param bool with_forwarder: tell HQ if it should connects to forwarder, default False
+    :param bool with_streamer: tell HQ if ti should connects to streamer, default False
     """
-    def __init__(self, publish_port, rc_port, output_dir, config, topic):
+    def __init__(self, output_dir, config, topic, *args, **kwargs):
         self.context = zmq.Context()
         self.poller = zmq.Poller()
         self.topic = topic
 
         self.result_collector = self.context.socket(zmq.PULL)
-        self.result_collector.set_hwm(0)
-        self.result_collector.bind("tcp://*:{}".format(rc_port))
-
         self.external_publisher = self.context.socket(zmq.PUB)
-        self.external_publisher.bind("tcp://*:{}".format(config.get('external_publisher', 5002)))
-
         self.stats_handler = StatsHandler(output_dir, config)
 
-        self.poller.register(self.result_collector, zmq.POLLIN)
-
-        self.turrets_manager = TurretsManager(publish_port)
+        self._configure_sockets(config)
+        self.turrets_manager = TurretsManager(config.get('publish_port', 5000))
         self.config = config
         self.started = False
         self.messages = 0
@@ -42,6 +37,23 @@ class HightQuarter(object):
         # waiting for init sockets
         print("Warmup")
         time.sleep(1)
+
+    def _configure_sockets(self, config, with_streamer=False, with_forwarder=False):
+        """Configure sockets for HQ
+
+        :param dict config: test configuration
+        :param bool with_streamer: tell if we need to connect to streamer or simply bind
+        :param bool with_forwarder: tell if we need to connect to forwarder or simply bind
+        """
+        rc_port = config.get('rc_port', 5001)
+        external_publisher = config.get('external_publisher', 5002)
+
+        self.result_collector.set_hwm(0)
+        self.result_collector.bind("tcp://*:{}".format(rc_port))
+
+        self.external_publisher.bind("tcp://*:{}".format(external_publisher))
+
+        self.poller.register(self.result_collector, zmq.POLLIN)
 
     def _process_socks(self, socks):
         if self.result_collector in socks:
