@@ -79,3 +79,8 @@ Or with pytest
 ```
 py.test -v tests/
 ```
+
+Docker container for testing external publication
+-------------------------------------------------
+
+https://hub.docker.com/r/karec/oct/
