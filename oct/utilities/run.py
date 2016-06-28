@@ -1,11 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: UTF-8 -*-
-#
-#  Copyright (c) 2010-2012 Corey Goldberg (corey@goldb.org)
-#  License: GNU LGPLv3
-#
-#  This file is part of Multi-Mechanize | Performance Test Framework
-#
 from __future__ import print_function
 import os
 import shutil

@@ -1,5 +1,6 @@
 """Contain all zeromq devices needed by OCT
 """
+from __future__ import print_function, unicode_literals
 import zmq
 
 
@@ -12,18 +13,19 @@ def forwarder(frontend, backend):
     try:
         context = zmq.Context()
 
-        frontend = context.socket(zmq.SUB)
-        frontend.bind("tcp://*:%d" % frontend)
+        front_sub = context.socket(zmq.SUB)
+        front_sub.bind("tcp://*:%d" % frontend)
 
-        backend = context.socket(zmq.PUB)
-        backend.bind("tcp://*:%d" % backend)
+        back_pub = context.socket(zmq.PUB)
+        back_pub.bind("tcp://*:%d" % backend)
 
-        zmq.device(zmq.FORWARDER, frontend, backend)
+        print("forwarder started, backend on port : %d\tfrontend on port: %d" % (backend, frontend))
+        zmq.device(zmq.FORWARDER, front_sub, back_pub)
     except Exception as e:
         print(e)
     finally:
-        frontend.close()
-        backend.close()
+        front_sub.close()
+        back_pub.close()
         context.term()
 
 
@@ -36,15 +38,18 @@ def streamer(frontend, backend):
     try:
         context = zmq.Context()
 
-        frontend = context.socket(zmq.PULL)
-        frontend.set_hwm(0)
-        frontend.bind("tcp://*:%d" % frontend)
+        front_pull = context.socket(zmq.PULL)
+        front_pull.set_hwm(0)
+        front_pull.bind("tcp://*:%d" % frontend)
 
-        backend = context.socket(zmq.PUSH)
-        backend.bind("tcp://*:%d" % backend)
+        back_push = context.socket(zmq.PUSH)
+        back_push.bind("tcp://*:%d" % backend)
+
+        print("streamer started, backend on port : %d\tfrontend on port: %d" % (backend, frontend))
+        zmq.device(zmq.STREAMER, front_pull, back_push)
     except Exception as e:
         print(e)
     finally:
-        frontend.close()
-        backend.close()
+        front_pull.close()
+        back_push.close()
         context.term()
