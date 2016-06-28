@@ -20,7 +20,7 @@ def forwarder(frontend, backend):
         back_pub.bind("tcp://*:%d" % backend)
 
         print("forwarder started, backend on port : %d\tfrontend on port: %d" % (backend, frontend))
-        zmq.device(zmq.FORWARDER, front_sub, back_pub)
+        zmq.proxy(front_sub, back_pub)
     except Exception as e:
         print(e)
     finally:
@@ -46,7 +46,7 @@ def streamer(frontend, backend):
         back_push.bind("tcp://*:%d" % backend)
 
         print("streamer started, backend on port : %d\tfrontend on port: %d" % (backend, frontend))
-        zmq.device(zmq.STREAMER, front_pull, back_push)
+        zmq.proxy(front_pull, back_push)
     except Exception as e:
         print(e)
     finally:
