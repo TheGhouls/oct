@@ -11,22 +11,27 @@ from oct.utilities.configuration import configure
 from oct.core.hq import HightQuarter
 
 
-def run(cmd_args):
+def generate_output_path(args, project_path):
+    """Generate default output directory
+    """
+    milisec = datetime.now().microsecond
+    dirname = 'results_{}_{}'.format(time.strftime('%Y.%m.%d_%H.%M.%S', time.localtime()), str(milisec))
+    return os.path.join(project_path, 'results', dirname)
+
+
+def run(args):
     """Start an oct project
 
-    :param Namespace cmd_args: the commande-line arguments
+    :param Namespace args: the commande-line arguments
     """
-    project_name = cmd_args.project_name
-    config = configure(project_name, cmd_args)
+    project_path = args.project_path
+    config = configure(project_path)
 
-    run_localtime = time.localtime()
-    milisec = datetime.now().microsecond
-    output_dir = '%s/%s/results/results_%s' % (cmd_args.project_dir, project_name,
-                                               time.strftime('%Y.%m.%d_%H.%M.%S_' + str(milisec) + '/', run_localtime))
+    output_dir = generate_output_path(args, project_path)
 
     stats_handler.init_stats(output_dir, config)
 
-    topic = cmd_args.publisher_channel or uuid.uuid4().hex
+    topic = args.publisher_channel or uuid.uuid4().hex
     print("External publishing topic is %s" % topic)
 
     hq = HightQuarter(output_dir, config, topic)
@@ -34,10 +39,10 @@ def run(cmd_args):
     hq.run()
 
     print('\nanalyzing results...\n')
-    if cmd_args.no_results is False and output_results(output_dir, config):
-        print('created: %sresults.html\n' % output_dir)
+    if args.no_results is False and output_results(output_dir, config):
+        print('created: %s/results.html\n' % output_dir)
 
-    project_config = os.path.join(cmd_args.project_dir, project_name, 'config.json')
+    project_config = os.path.join(project_path, 'config.json')
     saved_config = os.path.join(output_dir, 'config.json')
     shutil.copy(project_config, saved_config)
     print('done.\n')
@@ -48,14 +53,12 @@ def run_command(sp):
     Main function to run oct tests.
     """
     parser = sp.add_parser('run', help="run an oct project")
-    parser.add_argument('project_name', help="The project directory")
-    parser.add_argument('-r', '--results', dest='results_dir', help='results directory to reprocess')
-    parser.add_argument('-d', '--directory', dest='project_dir', help='directory containing project folder',
-                        default='.')
+    parser.add_argument('project_path', help="The project directory")
     parser.add_argument('-p', '--publisher-channel', dest='publisher_channel',
                         help='the channel for the external publisher',
                         default=None)
     parser.add_argument('-s', '--with-streamer', action='store_true', help="tell if HQ should connect to streamer")
     parser.add_argument('-f', '--with-forwarder', action='store_true', help="tell if HQ should connect to forwarder")
-    parser.add_argument('-o', '--no-results', action='store_true', help="if set, no results will be output")
+    parser.add_argument('--no-results', action='store_true', help="if set, html report and graphs will not be generated")
+    parser.add_argument('-o', '--output-dir', help="output directory for test results", default=None)
     parser.set_defaults(func=run)

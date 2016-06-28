@@ -23,14 +23,14 @@ REMOVABLE_KEYS = [
 ]
 
 
-def configure(project_name, cmd_opts, config_file=None):
+def configure(project_path, config_file=None):
     """Get the configuration of the test and return it as a config object
 
     :return: the configured config object
     :rtype: Object
     """
     if config_file is None:
-        config_file = os.path.join(cmd_opts.project_dir, project_name, 'config.json')
+        config_file = os.path.join(project_path, 'config.json')
     try:
         with open(config_file, 'r') as f:
             config = json.load(f)
@@ -50,7 +50,7 @@ def configure_for_turret(project_name, config_file):
     :return: the loaded configuration
     :rtype: dict
     """
-    config = configure(project_name, None, config_file)
+    config = configure(project_name, config_file)
     for key in WARNING_CONFIG_KEYS:
         if key not in config:
             print("WARNING: %s configuration key not present, the value will be set to default value" % key)

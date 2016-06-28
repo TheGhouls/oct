@@ -7,7 +7,7 @@ from oct.utilities.configuration import configure, get_db_uri
 
 
 def rebuild(args):
-    config = configure(None, None, args.config_file)
+    config = configure(None, args.config_file)
 
     if args.results_file is None:
         db_uri = get_db_uri(config, args.results_dir)
