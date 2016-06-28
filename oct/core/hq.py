@@ -18,6 +18,7 @@ class HightQuarter(object):
     :param str topic: topic for external publishing socket
     :param bool with_forwarder: tell HQ if it should connects to forwarder, default False
     :param bool with_streamer: tell HQ if ti should connects to streamer, default False
+    :param str streamer_address: streamer address to connect with form : <ip>:<port>
     """
     def __init__(self, output_dir, config, topic, master=True, *args, **kwargs):
         self.context = zmq.Context()
@@ -35,9 +36,24 @@ class HightQuarter(object):
         self.started = False
         self.messages = 0
 
+        with_streamer = kwargs.get('with_streamer', False)
+        streamer_address = None
+        if with_streamer:
+            streamer_address = kwargs.get('streamer_address', "127.0.0.1:{}".format(config.get('external_publisher')))
+
+        self._configure_external_publisher(config, with_streamer, streamer_address)
+
         # waiting for init sockets
         print("Warmup")
         time.sleep(1)
+
+    def _configure_external_publisher(self, config, with_streamer=False, streamer_address=None):
+        external_publisher = config.get('external_publisher', 5002) if not streamer_address else streamer_address
+
+        if with_streamer:
+            self.external_publisher.connect("tcp://{}".format(external_publisher))
+        else:
+            self.external_publisher.bind("tcp://*:{}".format(external_publisher))
 
     def _configure_sockets(self, config, with_streamer=False, with_forwarder=False):
         """Configure sockets for HQ
@@ -47,12 +63,9 @@ class HightQuarter(object):
         :param bool with_forwarder: tell if we need to connect to forwarder or simply bind
         """
         rc_port = config.get('rc_port', 5001)
-        external_publisher = config.get('external_publisher', 5002)
 
         self.result_collector.set_hwm(0)
         self.result_collector.bind("tcp://*:{}".format(rc_port))
-
-        self.external_publisher.bind("tcp://*:{}".format(external_publisher))
 
         self.poller.register(self.result_collector, zmq.POLLIN)
 
