@@ -34,7 +34,7 @@ def run(cmd_args):
     hq.run()
 
     print('\nanalyzing results...\n')
-    if output_results(output_dir, config):
+    if cmd_args.no_results is False and output_results(output_dir, config):
         print('created: %sresults.html\n' % output_dir)
 
     project_config = os.path.join(cmd_args.project_dir, project_name, 'config.json')
@@ -57,4 +57,5 @@ def run_command(sp):
                         default=None)
     parser.add_argument('-s', '--with-streamer', action='store_true', help="tell if HQ should connect to streamer")
     parser.add_argument('-f', '--with-forwarder', action='store_true', help="tell if HQ should connect to forwarder")
+    parser.add_argument('-o', '--no-results', action='store_true', help="if set, no results will be output")
     parser.set_defaults(func=run)
