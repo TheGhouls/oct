@@ -41,7 +41,7 @@ class DevicesTest(unittest.TestCase):
     def test_run_device_function(self):
         """Should be able start device with run_device function
         """
-        p = Process(target=start_device, args=('forwarder', 0, 0))
+        p = Process(target=run_device, args=(DummyArgs,))
         p.start()
         p.join(timeout=1)
         p.terminate()
