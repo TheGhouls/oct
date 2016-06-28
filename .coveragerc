@@ -1,2 +1,5 @@
+[run]
+concurrency=multiprocessing
+
 [report]
 omit = oct/utilities/templates/scripts/v_user.j2
