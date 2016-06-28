@@ -11,6 +11,37 @@ from oct.utilities.configuration import configure
 from oct.core.hq import HightQuarter
 
 
+def process_results(no_results, output_dir, config):
+    """Process results and output them
+    """
+    if no_results:
+        return
+
+    print('\nanalyzing results...\n')
+    res = output_results(output_dir, config)
+    if res:
+        print('created: %s/results.html\n' % output_dir)
+    else:
+        print('results cannot be processed')
+
+
+def copy_config(project_path, output_dir):
+    """Copy current config file to output directory
+    """
+    project_config = os.path.join(project_path, 'config.json')
+    saved_config = os.path.join(output_dir, 'config.json')
+    shutil.copy(project_config, saved_config)
+
+
+def start_hq(output_dir, config, topic, is_master=True):
+    """Start a HQ
+    """
+    hq = HightQuarter(output_dir, config, topic)
+    if is_master:
+        hq.wait_turrets(config.get("min_turrets", 1))
+    hq.run()
+
+
 def generate_output_path(args, project_path):
     """Generate default output directory
     """
@@ -34,17 +65,9 @@ def run(args):
     topic = args.publisher_channel or uuid.uuid4().hex
     print("External publishing topic is %s" % topic)
 
-    hq = HightQuarter(output_dir, config, topic)
-    hq.wait_turrets(config.get("min_turrets", 1))
-    hq.run()
-
-    if not args.no_results and output_results(output_dir, config):
-        print('\nanalyzing results...\n')
-        print('created: %s/results.html\n' % output_dir)
-
-    project_config = os.path.join(project_path, 'config.json')
-    saved_config = os.path.join(output_dir, 'config.json')
-    shutil.copy(project_config, saved_config)
+    start_hq(output_dir, config, topic)
+    process_results(args.no_results, output_dir, config)
+    copy_config(project_path, output_dir)
     print('done.\n')
 
 
