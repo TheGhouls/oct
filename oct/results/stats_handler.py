@@ -13,8 +13,8 @@ def init_stats(output_dir, config):
 
     try:
         os.makedirs(output_dir, 0o755)
-    except OSError:
-        print("ERROR: Can not create output directory\n")
+    except OSError as e:
+        print("ERROR: Can not create output directory: %s\n" % e)
         raise
 
     db_uri = get_db_uri(config, output_dir)

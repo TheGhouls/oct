@@ -19,17 +19,18 @@ class HightQuarter(object):
     :param bool with_forwarder: tell HQ if it should connects to forwarder, default False
     :param bool with_streamer: tell HQ if ti should connects to streamer, default False
     """
-    def __init__(self, output_dir, config, topic, *args, **kwargs):
+    def __init__(self, output_dir, config, topic, master=True, *args, **kwargs):
         self.context = zmq.Context()
         self.poller = zmq.Poller()
         self.topic = topic
+        self.master = master
 
         self.result_collector = self.context.socket(zmq.PULL)
         self.external_publisher = self.context.socket(zmq.PUB)
         self.stats_handler = StatsHandler(output_dir, config)
 
         self._configure_sockets(config)
-        self.turrets_manager = TurretsManager(config.get('publish_port', 5000))
+        self.turrets_manager = TurretsManager(config.get('publish_port', 5000), master)
         self.config = config
         self.started = False
         self.messages = 0

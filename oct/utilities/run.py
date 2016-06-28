@@ -38,8 +38,8 @@ def run(args):
     hq.wait_turrets(config.get("min_turrets", 1))
     hq.run()
 
-    print('\nanalyzing results...\n')
-    if args.no_results is False and output_results(output_dir, config):
+    if not args.no_results and output_results(output_dir, config):
+        print('\nanalyzing results...\n')
         print('created: %s/results.html\n' % output_dir)
 
     project_config = os.path.join(project_path, 'config.json')
@@ -57,8 +57,9 @@ def run_command(sp):
     parser.add_argument('-p', '--publisher-channel', dest='publisher_channel',
                         help='the channel for the external publisher',
                         default=None)
-    parser.add_argument('-s', '--with-streamer', action='store_true', help="tell if HQ should connect to streamer")
-    parser.add_argument('-f', '--with-forwarder', action='store_true', help="tell if HQ should connect to forwarder")
-    parser.add_argument('--no-results', action='store_true', help="if set, html report and graphs will not be generated")
+    parser.add_argument('-n', '--number', type=int,
+                        help="tell how many HQ will be spawned. You must adapt your configuration for this option")
+    parser.add_argument('--no-results', action='store_true',
+                        help="if set, html report and graphs will not be generated")
     parser.add_argument('-o', '--output-dir', help="output directory for test results", default=None)
     parser.set_defaults(func=run)

@@ -9,4 +9,4 @@ class ReportTest(unittest.TestCase):
         """Not existing directory should raise error
         """
         with self.assertRaises(OSError):
-            init_stats('/', '/')
+            init_stats('/', {})
