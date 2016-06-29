@@ -36,21 +36,26 @@ class HightQuarter(object):
         self.started = False
         self.messages = 0
 
-        with_streamer = kwargs.get('with_streamer', False)
-        streamer_address = None
-        if with_streamer:
-            streamer_address = kwargs.get('streamer_address', "127.0.0.1:{}".format(config.get('external_publisher')))
+        print(kwargs)
 
-        self._configure_external_publisher(config, with_streamer, streamer_address)
+        with_forwarder = kwargs.get('with_forwarder', False)
+        forwarder_address = None
+        if with_forwarder is True:
+            forwarder_address = kwargs.get('forwarder_address', None)
+            if forwarder_address is None:
+                forwarder_address = "127.0.0.1:{}".format(config.get('external_publisher', 5002))
+
+        self._configure_external_publisher(config, with_forwarder, forwarder_address)
 
         # waiting for init sockets
         print("Warmup")
         time.sleep(1)
 
-    def _configure_external_publisher(self, config, with_streamer=False, streamer_address=None):
-        external_publisher = config.get('external_publisher', 5002) if not streamer_address else streamer_address
+    def _configure_external_publisher(self, config, with_forwarder=False, forwarder_address=None):
+        external_publisher = config.get('external_publisher', 5002) if not forwarder_address else forwarder_address
 
-        if with_streamer:
+        print(external_publisher)
+        if with_forwarder:
             self.external_publisher.connect("tcp://{}".format(external_publisher))
         else:
             self.external_publisher.bind("tcp://*:{}".format(external_publisher))

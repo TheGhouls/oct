@@ -30,9 +30,12 @@ def run_bad_turret():
 
 
 class CmdOpts(object):
-    project_path = '/tmp/oct-test'
-    publisher_channel = None
-    no_results = False
+
+    def __init__(self):
+
+        self.project_path = '/tmp/oct-test'
+        self.publisher_channel = None
+        self.no_results = False
 
 
 class HQTest(unittest.TestCase):
