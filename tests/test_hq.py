@@ -66,7 +66,7 @@ class HQTest(unittest.TestCase):
         """
         sys.argv = sys.argv[:1]
         opts = CmdOpts()
-        sys.argv += ["run", opts.project_path]
+        sys.argv += ["run", opts.project_path, "--with-forwarder"]
         main()
 
     def test_create_errors(self):
