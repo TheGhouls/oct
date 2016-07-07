@@ -85,8 +85,6 @@ def run_command(sp):
     parser.add_argument('-p', '--publisher-channel', dest='publisher_channel',
                         help='the channel for the external publisher',
                         default=None)
-    parser.add_argument('-n', '--number', type=int,
-                        help="tell how many HQ will be spawned. You must adapt your configuration for this option")
     parser.add_argument('--no-results', action='store_true',
                         help="if set, html report and graphs will not be generated")
     parser.add_argument('-o', '--output-dir', help="output directory for test results")
