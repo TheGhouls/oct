@@ -20,6 +20,7 @@ class HightQuarter(object):
     :param bool with_streamer: tell HQ if ti should connects to streamer, default False
     :param str streamer_address: streamer address to connect with form : <ip>:<port>
     """
+
     def __init__(self, output_dir, config, topic, master=True, *args, **kwargs):
         self.context = zmq.Context()
         self.poller = zmq.Poller()
