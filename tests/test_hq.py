@@ -30,9 +30,12 @@ def run_bad_turret():
 
 
 class CmdOpts(object):
-    project_path = '/tmp/oct-test'
-    publisher_channel = None
-    no_results = False
+
+    def __init__(self):
+
+        self.project_path = '/tmp/oct-test'
+        self.publisher_channel = None
+        self.no_results = False
 
 
 class HQTest(unittest.TestCase):
@@ -63,7 +66,7 @@ class HQTest(unittest.TestCase):
         """
         sys.argv = sys.argv[:1]
         opts = CmdOpts()
-        sys.argv += ["run", opts.project_path]
+        sys.argv += ["run", opts.project_path, "--with-forwarder"]
         main()
 
     def test_create_errors(self):

@@ -16,6 +16,8 @@ def forwarder(frontend, backend):
         front_sub = context.socket(zmq.SUB)
         front_sub.bind("tcp://*:%d" % frontend)
 
+        front_sub.setsockopt_string(zmq.SUBSCRIBE, "")
+
         back_pub = context.socket(zmq.PUB)
         back_pub.bind("tcp://*:%d" % backend)
 
