@@ -36,8 +36,6 @@ class HightQuarter(object):
         self.started = False
         self.messages = 0
 
-        print(kwargs)
-
         with_forwarder = kwargs.get('with_forwarder', False)
         forwarder_address = None
         if with_forwarder is True:
