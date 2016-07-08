@@ -31,7 +31,7 @@ class StatsHandler(object):
     """This class will handle results and stats comming from the turrets
     :param str output_dir: the output directory for the results
     """
-    def __init__(self, output_dir, config, context=None):
+    def __init__(self, output_dir):
         self.output_dir = output_dir
         self.turret_name = 'Turret'
         self.results = []

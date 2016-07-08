@@ -1,5 +1,5 @@
 import six
-from argparse import ArgumentError
+from oct.core.exceptions import OctConfigurationError
 
 from oct.results.output import output
 from oct.results.models import db, set_database
@@ -15,7 +15,7 @@ def rebuild(args):
         db_uri = args.results_file
 
     if not db_uri:
-        raise ArgumentError("Bad database configured, if you use sqlite database use -f option")
+        raise OctConfigurationError("Bad database configured, if you use sqlite database use -f option")
 
     set_database(db_uri, db, config)
     output(args.results_dir, config)
