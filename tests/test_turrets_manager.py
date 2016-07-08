@@ -39,6 +39,13 @@ class ReportTest(unittest.TestCase):
         res = self.manager.update({'not': 'present'})
         self.assertFalse(res)
 
+    def test_master_false(self):
+        """Turrets manager should act correctly in case of master set to false"""
+        self.manager.master = False
+        self.manager.process_message("bad")
+        self.manager.publish("bad")
+        self.manager.master = True
+
     def tearDown(self):
         for turret in Turret.select():
             turret.delete_instance()
