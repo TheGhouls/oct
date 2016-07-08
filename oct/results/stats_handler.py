@@ -28,12 +28,8 @@ def init_stats(output_dir, config):
 
 
 class StatsHandler(object):
-    """This class will handle results and stats comming from the turrets
-    :param str output_dir: the output directory for the results
-    """
-    def __init__(self, output_dir):
-        self.output_dir = output_dir
-        self.turret_name = 'Turret'
+    """This class will handle results and stats comming from the turrets"""
+    def __init__(self):
         self.results = []
 
     def write_result(self, data):

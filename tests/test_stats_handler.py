@@ -13,7 +13,7 @@ class ReportTest(unittest.TestCase):
     def setUp(self):
         config_file = os.path.join(BASE_DIR, 'fixtures', 'config.json')
         self.config = configure(None, config_file)
-        self.handler = StatsHandler(None)
+        self.handler = StatsHandler()
 
     def test_bad_directory(self):
         """Not existing directory should raise error
