@@ -9,17 +9,22 @@ from oct.results.models import db, Turret
 class TurretsManager(object):
     """Turrets management while runing test. This class is in charge to send
     message to turrets and to store informations about active turrets
+
+    :param int publish_port: pub socket port
+    :param bool master: tell if current HQ is a master. Only master can send messages to turrets
     """
     STATUS_REQUEST = {'command': 'status_request', 'msg': None}
     START = {'command': 'start', 'msg': 'open fire'}
     STOP = {'command': 'stop', 'msg': 'premature stop'}
 
-    def __init__(self, publish_port):
+    def __init__(self, publish_port, master=True):
         self.turrets = {}
+        self.master = master
 
-        context = zmq.Context()
-        self.publisher = context.socket(zmq.PUB)
-        self.publisher.bind("tcp://*:{}".format(publish_port))
+        if master:
+            context = zmq.Context()
+            self.publisher = context.socket(zmq.PUB)
+            self.publisher.bind("tcp://*:{}".format(publish_port))
 
     def clean(self):
         self.publisher.close()
@@ -45,6 +50,9 @@ class TurretsManager(object):
         :param dict message: incomming message
         :param bool is_started: test started indicator
         """
+        if not self.master:
+            return False
+
         if 'status' not in message:
             return False
         message['name'] = message['turret']
@@ -97,6 +105,8 @@ class TurretsManager(object):
         :param dict message: message to send to turrets
         :pram str channel: channel to send message, default to empty string
         """
+        if not self.master:
+            return
         channel = channel or ''
         data = json.dumps(message)
         self.publisher.send_string("%s %s" % (channel, data))

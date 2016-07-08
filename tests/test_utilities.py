@@ -80,6 +80,15 @@ class UtilitiesTest(unittest.TestCase):
         with self.assertRaises(IOError):
             main()
 
+        sys.argv = sys.argv[:1]
+        sys.argv += ["pack-turrets", self.test_dir]
+        os.chmod(self.test_dir, 0o444)
+
+        with self.assertRaises(IOError):
+            main()
+
+        os.chmod(self.test_dir, 0o777)
+
     def tearDown(self):
         if os.path.exists(self.valid_dir):
             shutil.rmtree(self.valid_dir)

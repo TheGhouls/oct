@@ -17,19 +17,19 @@ class ConfigTest(unittest.TestCase):
     def test_good_config(self):
         """Configuration should be parsable
         """
-        configure(None, None, config_file=self.good_config)
+        configure(None, config_file=self.good_config)
 
     def test_bad_config(self):
         """Bad configuration file should correctly raise exceptions
         """
         with self.assertRaises(OctConfigurationError):
-            configure(None, None, config_file=self.bad_config)
+            configure(None, config_file=self.bad_config)
 
     def test_missing_keys(self):
         """Missing keys in configuration should correctly raise exceptions
         """
         with self.assertRaises(OctConfigurationError):
-            configure(None, None, config_file=self.missing_keys)
+            configure(None, config_file=self.missing_keys)
 
     def test_config_turrets(self):
         """Turrets must be configurable from a good config file

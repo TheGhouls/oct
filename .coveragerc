@@ -1,2 +1,8 @@
+[run]
+concurrency=multiprocessing
+
 [report]
-omit = oct/utilities/templates/scripts/v_user.j2
+omit =
+    oct/utilities/templates/scripts/v_user.j2
+    oct/core/devices.py
+    oct/utilities/run_device.py

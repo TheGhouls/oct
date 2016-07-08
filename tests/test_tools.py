@@ -3,6 +3,7 @@ import sys
 import shutil
 import unittest
 
+from oct.core.exceptions import OctConfigurationError
 from oct.utilities.commands import main
 
 
@@ -13,6 +14,7 @@ class ToolsTest(unittest.TestCase):
         self.output_file = '/tmp/oct-test-output.csv'
         self.results_file = os.path.join(self.base_dir, 'fixtures', 'results.sqlite')
         self.config_file = os.path.join(self.base_dir, 'fixtures', 'rebuild_config.json')
+        self.bad_config = os.path.join(self.base_dir, 'fixtures', 'bad_rebuild_config.json')
         self.rebuild_project_dir = '/tmp/rebuild_results'
         self.rebuild_dir = '/tmp/rebuild_results/results/test'
 
@@ -46,13 +48,20 @@ class ToolsTest(unittest.TestCase):
         """OCT should be able to rebuild results from sqlite file
         """
         sys.argv = sys.argv[:1]
-        sys.argv += ["rebuild-results", self.rebuild_dir, self.results_file, self.config_file]
+        sys.argv += ["rebuild-results", self.rebuild_dir, self.config_file, "-f", self.results_file]
         main()
 
         # try same rebuild
         sys.argv = sys.argv[:1]
-        sys.argv += ["rebuild-results", self.rebuild_dir, self.results_file, self.config_file]
+        sys.argv += ["rebuild-results", self.rebuild_dir, self.config_file, "-f", self.results_file]
         main()
+
+    def test_rebuild_results_error(self):
+        """rebuild results command should correctly raise errors when bad configured"""
+        sys.argv = sys.argv[:1]
+        sys.argv += ['rebuild-results', self.rebuild_dir, self.bad_config]
+        with self.assertRaises(OctConfigurationError):
+            main()
 
     def tearDown(self):
         if os.path.exists(self.output_file):

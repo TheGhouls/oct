@@ -24,5 +24,9 @@
     "turrets_requirements": [],
     "extra_turret_config": {
 
+    },
+    "results_database": {
+        "db_uri": "default",
+        "params": {}
     }
 }

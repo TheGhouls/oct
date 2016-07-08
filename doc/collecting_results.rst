@@ -28,9 +28,8 @@ You can simply use the ``oct rebuild-results`` like this for example:
 
 .. code-block:: bash
 
-    oct rebuild-results . results.sqlite config.json
+    oct rebuild-results . config.json
 
 .. note::
 
-    The oct rebuild-results command will only work on an already created results folder that contains only the sqlite results
-    and optionnaly the configuration.
+    `rebuild-results` command will use database configuration in `config.json` file

@@ -128,17 +128,17 @@ usage :
 
 .. code-block:: sh
 
-    oct rebuild-results <path-to-results> <path-to-sqlite> <path-to-config>
+    oct rebuild-results <path-to-results> <path-to-config> [-f] <path-to-sqlite-results>
 
 Arguments :
 
-================ ====  ========== =============================================
-name             type  mandatory  description
-================ ====  ========== =============================================
-results_dir      str   yes        results directory to rebuild
-results_file     str   yes        sqlite result file to use
-config_file      str   yes        json config file of the project
-================ ====  ========== =============================================
+================== ====  ========== =============================================
+name               type  mandatory  description
+================== ====  ========== =============================================
+results_dir        str   yes        results directory to rebuild
+config_file        str   yes        json config file of the project
+-f, --results-file str   no         sqlite results file
+================== ====  ========== =============================================
 
 Results to csv
 ---------------

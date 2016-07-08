@@ -1,3 +1,20 @@
+0.4.5 to 0.4.6
+==============
+
+* allow database configuration in project configuration, you can now use any peewee supported database backend
+* update rebuild command to take database configuration in consideration
+* devices has been added to project, allowing you to easily start a zmq forwarder or streamer for more complex tests
+* `oct run` command has been reworked. Some useless and undocumented arguments has been removed and new arguments has been added :
+  * ``-o`` allowing to choose output directory for tests results
+  * ``--with-forwarder`` start HQ with external publisher forwarder, allowing you to connect to forwarder device instead of simply binding a PUB socket
+  * ``--forwarder-address`` allow you to set ip and port for external forwarder with format <ip>:<port>. If not set but ``--with-forwarder`` is present default will be used (localhost:5002). Default port is based on your configuration and use the ``external_publisher`` configuration key
+
+Backward compatibility break
+----------------------------
+
+* `oct rebuild-results` commands arguments has changed, results_file is now optionnal and the command will by default look
+at the configuration file. If no results_database key is present, it will use the patern `results_directory + results.sqlite`
+
 0.4.4 to 0.4.5
 ==============
 
@@ -165,7 +182,7 @@ Backward compatibility breaks
 as been removed. Transaction now inherit by default from the BaseTransaction class located in the oct-turrets package
 * A new command has been added `oct-pack-turrets` that will create a tar file from a test folder containing all files and configuration
 required for running a turret. This command will generate a tar archive per turret in your project `config.json` file
-* More informations are stored in the results for the turrets and the report display the last known status of a turret and the associated last update time
+## Last update Thu Jul  7 17:30:27 2016 VALETTE Emmanuel
 * You can hotplug a turret while a test is running. This turret will appear in the final report
 * The HQ will sleep for 1 second after the creation of the sockets to wait for them
 * Remove the GenericTransaction class in oct.core.generic
