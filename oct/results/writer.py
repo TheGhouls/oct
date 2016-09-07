@@ -32,7 +32,7 @@ class ReportWriter(object):
         try:
             shutil.copytree(os.path.join(self.templates_dir, 'img'), os.path.join(self.results_dir, 'img'))
         except OSError as e:
-            pass  # img is an optionnal directory
+            pass  # img is an optional directory
 
     def write_report(self, template):
         """Write the compiled jinja template to the results file
