@@ -7,6 +7,7 @@ from oct.utilities.run import run_command
 from oct.utilities.run_device import run_device_command
 from oct.tools.rebuild_results import rebuild_results
 from oct.tools.results_to_csv import results_to_csv
+from oct.tools.from_armory import from_armory
 
 
 PARSERS = [
@@ -15,7 +16,8 @@ PARSERS = [
     run_command,
     rebuild_results,
     results_to_csv,
-    run_device_command
+    run_device_command,
+    from_armory
 ]
 
 

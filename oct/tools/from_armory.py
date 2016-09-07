@@ -1,0 +1,44 @@
+import os
+import six
+import tarfile
+import requests
+
+from oct.utilities.newproject import from_template
+
+
+def update_tarfiles(oldtar, plan_name):
+    with tarfile.open(oldtar) as tar:
+        newtar = tarfile.open(plan_name + ".tar.gz")
+
+
+def download_armory(args):
+    plan_name = args.plan
+
+    results = requests.get("http://armory.theghouls.io/get-plan/%s" % plan_name)
+    if results.status_code == 404:
+        print("No plan found with name %s" % plan_name)
+        return None
+    elif results.status_code != 200:
+        print("Error while contacting server")
+        return None
+    results = results.json()
+    download_url = results['plans'][0]['gh_tar_url']
+    file_name = os.path.join("/", "tmp", plan_name + ".tar.gz")
+    r = requests.get(download_url, allow_redirects=True)
+    with open(file_name, 'wb') as f:
+        for chunk in r.iter_content(chunk_size=1024):
+            if chunk:
+                f.write(chunk)
+    args.template = file_name
+    from_template(args)
+    os.remove(file_name)
+
+
+def from_armory(sp):
+    if six.PY2:
+        parser = sp.add_parser('from-armory', help="create project from armory template")
+    else:
+        parser = sp.add_parser('from-armory', help="create project from armory template", aliases=['armory'])
+    parser.add_argument('name', type=str, help="new project name")
+    parser.add_argument('plan')
+    parser.set_defaults(func=download_armory)
