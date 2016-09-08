@@ -29,8 +29,9 @@ def init_stats(output_dir, config):
 
 class StatsHandler(object):
     """This class will handle results and stats comming from the turrets"""
-    def __init__(self):
+    def __init__(self, insert_limit=150):
         self.results = []
+        self.insert_limit = insert_limit
 
     def write_result(self, data):
         """Write the results received to the database
@@ -40,7 +41,7 @@ class StatsHandler(object):
         data['custom_timers'] = ujson.dumps(data['custom_timers'])
         self.results.append(data)
 
-        if len(self.results) >= 490:  # SQLite limit for inser_many is 500
+        if len(self.results) >= 150:  # 150 rows for SQLite default limit
             with db.execution_context():
                 with db.atomic():
                     Result.insert_many(self.results).execute()

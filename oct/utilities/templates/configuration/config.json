@@ -27,6 +27,7 @@
     },
     "results_database": {
         "db_uri": "default",
-        "params": {}
+        "params": {},
+        "insert_limit": "150"
     }
 }

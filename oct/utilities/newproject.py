@@ -9,7 +9,17 @@ from jinja2 import Environment, PackageLoader
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
 
-def check_template(members):
+def get_members(tar, prefix):
+    if not prefix.endswith('/'):
+        prefix += '/'
+    offset = len(prefix)
+    for tarinfo in tar.getmembers():
+        if tarinfo.name.startswith(prefix):
+            tarinfo.name = tarinfo.name[offset:]
+            yield tarinfo
+
+
+def check_template(members, prefix=None):
 
     required_members = [
         'config.json',
@@ -19,6 +29,8 @@ def check_template(members):
     ]
 
     for fname in required_members:
+        if prefix is not None:
+            fname = os.path.join(prefix, fname)
         assert fname in members, "Required file %s not in archive" % fname
 
     return True
@@ -33,8 +45,9 @@ def from_template(args):
     template = args.template
 
     with tarfile.open(template) as tar:
-        check_template(tar.getnames())
-        tar.extractall(project_name)
+        prefix = os.path.commonprefix(tar.getnames())
+        check_template(tar.getnames(), prefix)
+        tar.extractall(project_name, members=get_members(tar, prefix))
 
 
 def from_oct(args):

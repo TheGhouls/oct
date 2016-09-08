@@ -29,7 +29,7 @@ class HightQuarter(object):
 
         self.result_collector = self.context.socket(zmq.PULL)
         self.external_publisher = self.context.socket(zmq.PUB)
-        self.stats_handler = StatsHandler()
+        self.stats_handler = StatsHandler(config.get('results_database', {}).get('insert_limit', 150))
 
         self._configure_sockets(config)
         self.turrets_manager = TurretsManager(config.get('publish_port', 5000), master)

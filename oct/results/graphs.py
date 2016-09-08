@@ -28,16 +28,18 @@ def resp_graph_raw(dataframe, image_name, dir='./'):
     """
     factor = int(len(dataframe) / 10)
     df = dataframe.reset_index()
-    grp = df.groupby(pd.cut(df.index, np.arange(0, len(df), factor)))
-
     fig = pygal.Dot(stroke=False,
                     x_label_rotation=25,
                     x_title='Elapsed Time In Test (secs)',
                     y_title='Average Response Time (secs)',
                     js=('scripts/pygal-tooltip.min.js',))
-    fig.x_labels = [x for x in grp.first()['epoch']]
-    fig.title = image_name.split('.')[0]
-    fig.add('Time', [x for x in grp.describe()['scriptrun_time'].unstack()['mean'].round(2)])
+    try:
+        grp = df.groupby(pd.cut(df.index, np.arange(0, len(df), factor)))
+        fig.x_labels = [x for x in grp.first()['epoch']]
+        fig.title = image_name.split('.')[0]
+        fig.add('Time', [x for x in grp.describe()['scriptrun_time'].unstack()['mean'].round(2)])
+    except ZeroDivisionError:
+        print("Not enough data for raw graph")
     fig.render_to_file(filename=os.path.join(dir, image_name))
 
 

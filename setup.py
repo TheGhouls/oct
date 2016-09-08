@@ -47,7 +47,8 @@ setup(
         'numpy',
         'jinja2',
         'pandas',
-        'ujson'
+        'ujson',
+        'requests'
     ],
     entry_points={'console_scripts': [
         'oct = oct.utilities.commands:main'
