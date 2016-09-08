@@ -63,6 +63,12 @@ class ToolsTest(unittest.TestCase):
         with self.assertRaises(OctConfigurationError):
             main()
 
+    def test_download_armory(self):
+        """From armory command should be able to download and start project from armory"""
+        sys.argv = sys.argv[:1]
+        sys.argv += ['from-armory', "/tmp/test-armory", "karec/armory-wordpress"]
+        main()
+
     def tearDown(self):
         if os.path.exists(self.output_file):
             os.remove(self.output_file)
