@@ -10,13 +10,14 @@ def download_armory(args):
 
     results = requests.get("http://armory.theghouls.io/get-plan/%s" % plan_name)
     plan_name = plan_name.split('/')[-1]
-    if results.status_code == 404:
+    if results.status_code != 200:
         print("No plan found with name %s" % plan_name)
-        return None
-    elif results.status_code != 200:
-        print("Error while contacting server")
+        print("Status : %s" % results.status_code)
         return None
     results = results.json()
+    if not results.get('plans'):
+        print("No plan found with name %s" % plan_name)
+        return
     download_url = results['plans'][0]['gh_tar_url']
     file_name = os.path.join("/", "tmp", plan_name + ".tar.gz")
     r = requests.get(download_url, allow_redirects=True)
