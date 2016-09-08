@@ -1,20 +1,15 @@
 import os
 import six
-import tarfile
 import requests
 
 from oct.utilities.newproject import from_template
-
-
-def update_tarfiles(oldtar, plan_name):
-    with tarfile.open(oldtar) as tar:
-        newtar = tarfile.open(plan_name + ".tar.gz")
 
 
 def download_armory(args):
     plan_name = args.plan
 
     results = requests.get("http://armory.theghouls.io/get-plan/%s" % plan_name)
+    plan_name = plan_name.split('/')[-1]
     if results.status_code == 404:
         print("No plan found with name %s" % plan_name)
         return None
