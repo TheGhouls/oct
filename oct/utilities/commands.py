@@ -23,7 +23,7 @@ PARSERS = [
 
 def build_parser():
     parser = argparse.ArgumentParser(prog='oct')
-    subparsers = parser.add_subparsers(help='sub commands avaibles', dest='parser')
+    subparsers = parser.add_subparsers(help='sub commands availables', dest='parser')
     subparsers.required = True
 
     for p in PARSERS:
