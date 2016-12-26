@@ -1,0 +1,33 @@
+# HQ Configuration
+run_time: 30
+results_ts_interval: 10
+console_logging: false
+testing: false
+publish_port: 5000
+rc_port: 5001
+min_turrets: 1
+
+# Turrets configuration
+turrets:
+  - navigation:
+      cannons: 2
+      rampup: 0
+      script: "test_scripts/{{ script_name }}"
+  - random:
+      cannons: 2
+      rampup: 0
+      script: "test_scripts/{{ script_name }}"
+  - advanced:
+      cannons: 2
+      rampup: 0
+      script: "test_scripts/{{ script_name }}"
+      specific_turret_config: "my_value"
+      extra_files: ["templates"]
+
+# Extra configuration
+turrets_requirements: []
+extra_turret_config: []
+results_database:
+  db_uri: "default"
+  params: null
+  insert_limit: 150
