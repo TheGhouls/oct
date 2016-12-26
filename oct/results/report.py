@@ -13,10 +13,12 @@ class ReportResults(object):
 
     :param int run_time: the run_time of the script
     :param int interval: the time interval between each group of results
+    :param oct.result_backends.base.BaseLoader loader: loader to fetch results
     """
-    def __init__(self, run_time, interval):
+    def __init__(self, run_time, interval, loader):
         self.total_transactions = 0
-        self.total_errors = Result.select(Result.id).where(Result.error != "", Result.error != None).count()
+        self.loader = loader
+        self.total_errors = loader.total_errors
         self.total_timers = 0
         self.timers_results = {}
         self._timers_values = defaultdict(list)
@@ -31,18 +33,17 @@ class ReportResults(object):
         """
         if self.total_transactions == 0:
             return None
-        self.epoch_start = Result.select(Result.epoch).order_by(Result.epoch.asc()).limit(1).get().epoch
-        self.epoch_finish = Result.select(Result.epoch).order_by(Result.epoch.desc()).limit(1).get().epoch
+        self.epoch_start = self.loader.epoch_start
+        self.epoch_finish = self.loader.epoch_end
         self.start_datetime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(self.epoch_start))
         self.finish_datetime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(self.epoch_finish))
 
     def _init_dataframes(self):
         """Initialise the main dataframe for the results and the custom timers dataframes
         """
-        df = pd.read_sql_query("SELECT elapsed, epoch, scriptrun_time, custom_timers FROM result ORDER BY epoch ASC",
-                               db.get_conn())
+        df = self.loader.results_dataframe
 
-        self._get_all_timers(df)
+        self._get_all_timers()
         self.main_results = self._get_processed_dataframe(df)
 
         # create all custom timers dataframes
@@ -60,16 +61,12 @@ class ReportResults(object):
 
         :param pandas.DataFrame dataframe: the main dataframe with row results
         """
-        s = dataframe['custom_timers'].apply(json.loads)
-        s.index = dataframe['epoch']
-        for index, value in s.iteritems():
-            if not value:
+        for epoch, timer in self.loader.custom_timers:
+            if not timer:
                 continue
-            for key, value in six.iteritems(value):
-                self._timers_values[key].append((index, value))
+            for key, value in six.iteritems(timer):
+                self._timers_values[key].append((epoch, value))
                 self.total_timers += 1
-        del dataframe['custom_timers']
-        del s
 
     def _get_processed_dataframe(self, dataframe):
         """Generate required dataframe for results from raw dataframe
@@ -93,8 +90,8 @@ class ReportResults(object):
     def _init_turrets(self):
         """Setup data from database
         """
-        for turret in Turret.select():
-            self.turrets.append(turret.to_dict())
+        for turret in self.loader.turrets:
+            self.turrets.append(turret)
 
     def compile_results(self):
         """Compile all results for the current test
