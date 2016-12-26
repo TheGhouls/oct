@@ -31,3 +31,6 @@ results_database:
   db_uri: "default"
   params: null
   insert_limit: 150
+results_backend:
+  store: "oct.result_backends.sqlite.SQLiteStore"
+  loader: "oct.result_backends.sqlite.SQLiteStore"

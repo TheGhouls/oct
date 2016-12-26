@@ -2,10 +2,7 @@ import six
 import time
 from collections import defaultdict
 
-import ujson as json
 import pandas as pd
-
-from oct.results.models import db, Result, Turret
 
 
 class ReportResults(object):
@@ -56,10 +53,8 @@ class ReportResults(object):
         # clear memory
         del self._timers_values
 
-    def _get_all_timers(self, dataframe):
+    def _get_all_timers(self):
         """Get all timers and set them in the _timers_values property
-
-        :param pandas.DataFrame dataframe: the main dataframe with row results
         """
         for epoch, timer in self.loader.custom_timers:
             if not timer:

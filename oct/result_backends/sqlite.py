@@ -10,7 +10,7 @@ class SQLiteStore(BaseStore):
     """Base class for defining how to store results for specific backend
     """
     def __init__(self, result_backend_config, output_dir):
-        super(BaseStore, self).__init__(result_backend_config, output_dir)
+        super(SQLiteStore, self).__init__(result_backend_config, output_dir)
 
         db_uri = get_db_uri(self.config, self.output_dir)
         set_database(db_uri, db, self.config)
@@ -59,7 +59,7 @@ class SQLiteLoader(BaseLoader):
     could use `yield` syntax
     """
     def __init__(self, result_backend_config, output_dir):
-        super(BaseLoader, self).__init__(result_backend_config, output_dir)
+        super(SQLiteLoader, self).__init__(result_backend_config, output_dir)
 
         db_uri = get_db_uri(self.config, self.output_dir)
         set_database(db_uri, db, self.config)
@@ -89,8 +89,8 @@ class SQLiteLoader(BaseLoader):
 
     @property
     def custom_timers(self):
-        for epoch, timers in Result.select(Result.custom_timers, Result.epoch).order_by(Result.epoch.asc()):
-            yield epoch, ujson.loads(timers)
+        for item in Result.select(Result.custom_timers, Result.epoch).order_by(Result.epoch.asc()):
+            yield item.epoch, ujson.loads(item.custom_timers)
 
     @property
     def turrets(self):

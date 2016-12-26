@@ -12,7 +12,14 @@ setup(
     version=__version__,
     author='TheGhouls',
     author_email='manu.valette@gmail.com',
-    packages=['oct', 'oct.core', 'oct.utilities', 'oct.tools', 'oct.results'],
+    packages=[
+        'oct',
+        'oct.core',
+        'oct.utilities',
+        'oct.tools',
+        'oct.results',
+        'oct.result_backends'
+    ],
     package_data={
         'oct.utilities': [
             'templates/css/*',
