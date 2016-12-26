@@ -1,5 +1,6 @@
 import os
 import json
+import importlib
 
 from oct.core.exceptions import OctConfigurationError
 
@@ -94,3 +95,17 @@ def get_db_uri(config, output_dir):
     if db_config['db_uri'] == 'default':
         return os.path.join(output_dir, "results.sqlite")
     return db_config['db_uri']
+
+
+def get_loader_class(config):
+    """Get results loader class from configuration
+
+    :param dict config: project configuration dict
+    """
+    loader_str = config.get('results_backend', {})\
+                       .get('loader', 'oct.result_backends.sqlite.SQLiteLoader')
+
+    as_list = loader_str.split('.')
+    module = importlib.import_module(".".join(as_list[:-1]))
+    klass = getattr(module, as_list[-1])
+    return klass

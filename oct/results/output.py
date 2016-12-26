@@ -7,6 +7,7 @@ from jinja2 import Environment, FileSystemLoader
 from oct.results import graphs
 from oct.results.report import ReportResults
 from oct.results.writer import ReportWriter
+from oct.utilities.configuration import get_loader_class
 
 
 def generate_graphs(data, name, results_dir):
@@ -60,7 +61,16 @@ def output(results_dir, config, parent='../../'):
     start = time.time()
     print("Compiling results...")
     results_dir = os.path.abspath(results_dir)
-    results = ReportResults(config['run_time'], config['results_ts_interval'])
+
+    try:
+        loader_class = get_loader_class(config)
+    except Exception:
+        raise
+        raise Exception("Improperly configured results backend store")
+
+    loader = loader_class(config, results_dir)
+
+    results = ReportResults(config['run_time'], config['results_ts_interval'], loader)
     results.compile_results()
     print("Results compiled in {} seconds\n".format(time.time() - start))
 
