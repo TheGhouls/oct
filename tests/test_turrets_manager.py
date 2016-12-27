@@ -7,13 +7,21 @@ from oct.results.models import set_database, db, Turret, Result
 BASE_DIR = os.path.dirname(os.path.realpath(__file__))
 
 
+class TestStore(object):
+    def add_turret(self, data):
+        pass
+
+    def update_turret(self, data):
+        pass
+
+
 class ReportTest(unittest.TestCase):
 
     def setUp(self):
         set_database(os.path.join(BASE_DIR, 'fixtures', 'avaible_results.sqlite'), db, {})
         if not Result.table_exists() and not Turret.table_exists():
             db.create_tables([Result, Turret])
-        self.manager = TurretsManager(0)
+        self.manager = TurretsManager(0, TestStore())
 
     def test_bad_message(self):
         """Turrets manager should correctly handle bad messages

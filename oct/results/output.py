@@ -7,6 +7,7 @@ from jinja2 import Environment, FileSystemLoader
 from oct.results import graphs
 from oct.results.report import ReportResults
 from oct.results.writer import ReportWriter
+from oct.core.exceptions import OctConfigurationError
 from oct.utilities.configuration import get_loader_class
 
 
@@ -65,8 +66,7 @@ def output(results_dir, config, parent='../../'):
     try:
         loader_class = get_loader_class(config)
     except Exception:
-        raise
-        raise Exception("Improperly configured results backend store")
+        raise OctConfigurationError("Improperly configured results backend store")
 
     loader = loader_class(config, results_dir)
 

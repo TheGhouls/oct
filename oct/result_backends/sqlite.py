@@ -22,6 +22,7 @@ class SQLiteStore(BaseStore):
 
         self.results = []
         self.insert_limit = 150
+        self.turrets = {}
 
     def write_result(self, data):
         """Method called by HQ when data are received from turrets.
@@ -52,6 +53,32 @@ class SQLiteStore(BaseStore):
             with db.atomic():
                 Result.insert_many(self.results).execute()
         del self.results[:]
+
+    def add_turret(self, data):
+        """Called when turret manager need to register a new turret.
+        Since this method is called by turret manager, you can asume that data are correct and complete.
+
+        :param dict data: turret data sent by turret manager
+        """
+        turret = Turret(**data)
+        with db.execution_context():
+            turret.save()
+
+        self.turrets[turret.uuid] = turret
+
+    def update_turret(self, data):
+        """Called when a turret change status. Since this method is
+        called by turret manager, you can asume that data are correct and complete.
+
+        :param dict data: turret data sent by turret manager
+        """
+        turret = self.turrets.get(data['uuid'])
+        if not turret:
+            return
+
+        turret.update(**data)
+        with db.execution_context():
+            turret.save()
 
 
 class SQLiteLoader(BaseLoader):
