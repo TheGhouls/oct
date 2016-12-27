@@ -57,6 +57,12 @@ setup(
         'ujson',
         'requests'
     ],
+    extras_require={
+        'redis': [
+            'redis',
+            'msgpack-python'
+        ]
+    },
     entry_points={'console_scripts': [
         'oct = oct.utilities.commands:main'
     ]},
