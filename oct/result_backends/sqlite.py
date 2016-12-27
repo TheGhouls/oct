@@ -16,7 +16,9 @@ class SQLiteStore(BaseStore):
         set_database(db_uri, db, self.config)
 
         db.connect()
-        db.create_tables([Result, Turret])
+
+        Result.create_table(fail_silently=True)
+        Turret.create_table(fail_silently=True)
 
         self.results = []
         self.insert_limit = 150
@@ -56,10 +58,10 @@ class SQLiteLoader(BaseLoader):
     """Base class for retrieve results for a specific backend
 
     Mainly composed of properties. All properties returning more than one elements
-    could use `yield` syntax
+    can use `yield` syntax
     """
-    def __init__(self, result_backend_config, output_dir):
-        super(SQLiteLoader, self).__init__(result_backend_config, output_dir)
+    def __init__(self, config, output_dir):
+        super(SQLiteLoader, self).__init__(config, output_dir)
 
         db_uri = get_db_uri(self.config, self.output_dir)
         set_database(db_uri, db, self.config)
