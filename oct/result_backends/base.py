@@ -1,4 +1,4 @@
-class BaseStore:
+class BaseStore(object):
     """Base class for defining how to store results for specific backend
     """
     def __init__(self, result_backend_config, output_dir):
@@ -24,7 +24,7 @@ class BaseStore:
         pass
 
 
-class BaseLoader:
+class BaseLoader(object):
     """Base class for retrieve results for a specific backend
 
     Mainly composed of properties. All properties returning more than one elements

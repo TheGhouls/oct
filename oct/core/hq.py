@@ -8,7 +8,6 @@ from zmq.utils.strtypes import asbytes
 from oct.core.turrets_manager import TurretsManager
 from oct.core.exceptions import OctConfigurationError
 from oct.utilities.configuration import get_store_class
-from oct.result_backends.sqlite import SQLiteStore
 
 
 class HightQuarter(object):
