@@ -109,3 +109,17 @@ def get_loader_class(config):
     module = importlib.import_module(".".join(as_list[:-1]))
     klass = getattr(module, as_list[-1])
     return klass
+
+
+def get_store_class(config):
+    """Get results store backend class from configuration
+
+    :param dict config: project configuration dict
+    """
+    store_str = config.get('results_backend', {})\
+                      .get('loader', 'oct.result_backends.sqlite.SQLiteStore')
+
+    as_list = store_str.split('.')
+    module = importlib.import_module(".".join(as_list[:-1]))
+    klass = getattr(module, as_list[-1])
+    return klass

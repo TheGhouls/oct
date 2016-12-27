@@ -30,8 +30,8 @@ class BaseLoader:
     Mainly composed of properties. All properties returning more than one elements
     could use `yield` syntax
     """
-    def __init__(self, result_backend_config, output_dir):
-        self.config = result_backend_config
+    def __init__(self, config, output_dir):
+        self.config = config
         self.output_dir = output_dir
 
     @property

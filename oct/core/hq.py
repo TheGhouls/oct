@@ -6,7 +6,9 @@ import traceback
 from zmq.utils.strtypes import asbytes
 
 from oct.core.turrets_manager import TurretsManager
-from oct.results.stats_handler import StatsHandler
+from oct.core.exceptions import OctConfigurationError
+from oct.utilities.configuration import get_store_class
+from oct.result_backends.sqlite import SQLiteStore
 
 
 class HightQuarter(object):
@@ -29,7 +31,12 @@ class HightQuarter(object):
 
         self.result_collector = self.context.socket(zmq.PULL)
         self.external_publisher = self.context.socket(zmq.PUB)
-        self.stats_handler = StatsHandler(config.get('results_database', {}).get('insert_limit', 150))
+
+        try:
+            store = get_store_class(config)
+            self.store = store(config, output_dir)
+        except Exception:
+            raise OctConfigurationError("Cannot load store class")
 
         self._configure_sockets(config)
         self.turrets_manager = TurretsManager(config.get('publish_port', 5000), master)
@@ -77,7 +84,7 @@ class HightQuarter(object):
         if self.result_collector in socks:
             data = self.result_collector.recv_string()
             if 'status' not in data:
-                self.stats_handler.write_result(ujson.loads(data))
+                self.store.write_result(ujson.loads(data))
                 self.external_publisher.send_multipart([asbytes(self.topic), asbytes(data)])
                 self.messages += 1
             else:
@@ -93,11 +100,11 @@ class HightQuarter(object):
             while data:
                 data = self.result_collector.recv(zmq.NOBLOCK)
                 if b'status' not in data:
-                    self.stats_handler.write_result(ujson.loads(data))
+                    self.store.write_result(ujson.loads(data))
         except zmq.Again:
             self.result_collector.close()
             self.turrets_manager.clean()
-            self.stats_handler.write_remaining()
+            self.store.after_tests()
 
     def _run_loop_action(self):
         socks = dict(self.poller.poll(1000))
