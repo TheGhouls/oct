@@ -12,14 +12,16 @@ class TurretsManager(object):
 
     :param int publish_port: pub socket port
     :param bool master: tell if current HQ is a master. Only master can send messages to turrets
+    :param oct.result_backends.base.BaseStore store: Store to save turrets informations
     """
     STATUS_REQUEST = {'command': 'status_request', 'msg': None}
     START = {'command': 'start', 'msg': 'open fire'}
     STOP = {'command': 'stop', 'msg': 'premature stop'}
 
-    def __init__(self, publish_port, master=True):
+    def __init__(self, publish_port, store, master=True):
         self.turrets = {}
         self.master = master
+        self.store = store
 
         if master:
             context = zmq.Context()
@@ -70,12 +72,10 @@ class TurretsManager(object):
         if turret_data.get('uuid') in self.turrets:
             return False
 
-        turret = Turret(**turret_data)
-        self.write(turret)
-        self.turrets[turret.uuid] = turret
-
+        self.turrets[turret_data['uuid']] = turret_data
+        self.store.add_turret(turret_data)
         if is_started:
-            self.publish(self.START, turret.uuid)
+            self.publish(self.START, turret_data['uuid'])
 
         return True
 
@@ -86,9 +86,9 @@ class TurretsManager(object):
         """
         if turret_data.get('uuid') not in self.turrets:
             return False
-        turret = self.turrets[turret_data.get('uuid')]
-        turret.update(**turret_data)
-        self.write(turret)
+
+        self.store.update_turret(turret_data)
+        self.turrets[turret_data['uuid']] = turret_data
         return True
 
     def write(self, turret):

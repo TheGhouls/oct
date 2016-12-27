@@ -117,7 +117,7 @@ def get_store_class(config):
     :param dict config: project configuration dict
     """
     store_str = config.get('results_backend', {})\
-                      .get('loader', 'oct.result_backends.sqlite.SQLiteStore')
+                      .get('store', 'oct.result_backends.sqlite.SQLiteStore')
 
     as_list = store_str.split('.')
     module = importlib.import_module(".".join(as_list[:-1]))

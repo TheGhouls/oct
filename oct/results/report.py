@@ -94,4 +94,6 @@ class ReportResults(object):
         self._init_dataframes()
 
         self.total_transactions = len(self.main_results['raw'])
+
+        print(self.turrets)
         self._init_dates()

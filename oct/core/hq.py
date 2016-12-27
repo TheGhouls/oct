@@ -35,10 +35,10 @@ class HightQuarter(object):
             store = get_store_class(config)
             self.store = store(config, output_dir)
         except Exception:
-            raise OctConfigurationError("Cannot load store class")
+            raise OctConfigurationError("Cannot load store class, check your configuration")
 
         self._configure_sockets(config)
-        self.turrets_manager = TurretsManager(config.get('publish_port', 5000), master)
+        self.turrets_manager = TurretsManager(config.get('publish_port', 5000), self.store, master)
         self.config = config
         self.started = False
         self.messages = 0

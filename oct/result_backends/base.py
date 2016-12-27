@@ -1,8 +1,8 @@
 class BaseStore(object):
     """Base class for defining how to store results for specific backend
     """
-    def __init__(self, result_backend_config, output_dir):
-        self.config = result_backend_config
+    def __init__(self, config, output_dir):
+        self.config = config
         self.output_dir = output_dir
 
     def write_result(self, data):
@@ -22,6 +22,22 @@ class BaseStore(object):
         Default to `pass` statement, override not mandatory
         """
         pass
+
+    def add_turret(self, data):
+        """Called when turret manager need to register a new turret.
+        Since this method is called by turret manager, you can asume that data are correct and complete.
+
+        :param dict data: turret data sent by turret manager
+        """
+        raise NotImplementedError("Add turret must be implemented")
+
+    def update_turret(self, data):
+        """Called when a turret change status. Since this method is
+        called by turret manager, you can asume that data are correct and complete.
+
+        :param dict data: turret data sent by turret manager
+        """
+        raise NotImplementedError("Update turret must be implemented")
 
 
 class BaseLoader(object):

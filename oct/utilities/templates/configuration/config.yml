@@ -34,3 +34,7 @@ results_database:
 results_backend:
   store: "oct.result_backends.sqlite.SQLiteStore"
   loader: "oct.result_backends.sqlite.SQLiteStore"
+  backend_params:
+    db: 0
+    host: 'localhost'
+    port: 6379
