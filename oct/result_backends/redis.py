@@ -31,12 +31,20 @@ class RedisStore(BaseStore):
         if self.redis_config.get('must_flush', False):
             self.redis.flushdb()
 
+        self.pipe = self.redis.pipeline()
+        self.pipe_counter = 0
+
     def write_result(self, data):
         new_timers = {'epoch': data['epoch'], 'timers': data['custom_timers']}
         del data['custom_timers']
 
-        self.redis.rpush(self.timers_key, msgpack.packb(new_timers))
-        self.redis.rpush(self.results_key, msgpack.packb(data))
+        self.pipe.rpush(self.timers_key, msgpack.packb(new_timers))
+        self.pipe.rpush(self.results_key, msgpack.packb(data))
+        self.pipe_counter += 2
+
+        if self.pipe_counter >= 500:
+            self.pipe.execute()
+            self.pipe_counter = 0
 
     def add_turret(self, data):
         key = "{}_{}".format(self.turrets_key, data.get('uuid'))
