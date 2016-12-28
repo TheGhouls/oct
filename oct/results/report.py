@@ -70,6 +70,9 @@ class ReportResults(object):
         :return: a dict containing raw, compiled, and summary dataframes from original dataframe
         :rtype: dict
         """
+        if dataframe.empty:
+            return None
+
         dataframe.index = pd.to_datetime(dataframe['epoch'], unit='s', utc=True)
         del dataframe['epoch']
         summary = dataframe.describe(percentiles=[.80, .90, .95]).transpose().loc['scriptrun_time']
@@ -93,7 +96,7 @@ class ReportResults(object):
         """
         self._init_dataframes()
 
-        self.total_transactions = len(self.main_results['raw'])
-
-        print(self.turrets)
+        self.total_transaction = 0
+        if self.main_results:
+            self.total_transactions = len(self.main_results['raw'])
         self._init_dates()
