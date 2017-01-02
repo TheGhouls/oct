@@ -2,7 +2,7 @@ import os
 import six
 import csv
 
-from oct.result_backends.sqlite import db, Result, set_database
+from oct.backends.sqlite import db, Result, set_database
 
 
 def to_csv(args):
