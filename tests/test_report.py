@@ -2,7 +2,7 @@ import os
 import unittest
 
 from oct.results.report import ReportResults
-from oct.result_backends.sqlite import SQLiteLoader
+from oct.backends import SQLiteLoader
 
 BASE_DIR = os.path.dirname(os.path.realpath(__file__))
 

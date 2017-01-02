@@ -2,7 +2,7 @@ import os
 import unittest
 
 from oct.core.turrets_manager import TurretsManager
-from oct.result_backends.sqlite import set_database, db, Turret, Result
+from oct.backends.sqlite import set_database, db, Turret, Result
 
 BASE_DIR = os.path.dirname(os.path.realpath(__file__))
 
