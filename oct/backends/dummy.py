@@ -1,6 +1,6 @@
 import pandas as pd
 
-from oct.result_backends.base import BaseStore, BaseLoader
+from oct.backends.base import BaseStore, BaseLoader
 
 
 class DummyStore(BaseStore):
