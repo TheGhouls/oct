@@ -18,7 +18,7 @@ setup(
         'oct.utilities',
         'oct.tools',
         'oct.results',
-        'oct.result_backends'
+        'oct.backends'
     ],
     package_data={
         'oct.utilities': [

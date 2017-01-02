@@ -32,8 +32,8 @@ results_database:
   params: null
   insert_limit: 150
 results_backend:
-  store: "oct.result_backends.sqlite.SQLiteStore"
-  loader: "oct.result_backends.sqlite.SQLiteStore"
+  store: "oct.backends.SQLiteStore"
+  loader: "oct.backends.SQLiteLoader"
   backend_params:
     db: 0
     host: 'localhost'
