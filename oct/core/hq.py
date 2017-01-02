@@ -143,7 +143,7 @@ class HightQuarter(object):
             except (Exception, KeyboardInterrupt):
                 print("\nStopping test, sending stop command to turrets")
                 self.turrets_manager.stop()
-                self.stats_handler.write_remaining()
+                self.store.after_tests()
                 traceback.print_exc()
                 break
 

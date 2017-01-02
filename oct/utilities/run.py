@@ -6,9 +6,22 @@ import uuid
 from datetime import datetime
 from oct.results.output import output as output_results
 
-import oct.results.stats_handler as stats_handler
+# import oct.results.stats_handler as stats_handler
 from oct.utilities.configuration import configure
 from oct.core.hq import HightQuarter
+
+
+def init_output(output_dir, config):
+    """Init output directory
+
+    :param str output_dir: the output directory for the results
+    :param dict config: the project configuration
+    """
+    try:
+        os.makedirs(output_dir, 0o755)
+    except OSError as e:
+        print("ERROR: Can not create output directory: %s\n" % e)
+        raise
 
 
 def process_results(output_dir, config):
@@ -62,7 +75,7 @@ def run(args):
 
     output_dir = kwargs.pop('output_dir', None) or generate_output_path(args, project_path)
 
-    stats_handler.init_stats(output_dir, config)
+    init_output(output_dir, config)
 
     topic = args.publisher_channel or uuid.uuid4().hex
     print("External publishing topic is %s" % topic)
