@@ -5,8 +5,6 @@ class OctConfigurationError(Exception):
 
 
 class OctGenericException(Exception):
-    """
-    Provide generic exception for reports
-
+    """Provide generic exception for reports
     """
     pass
