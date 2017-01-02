@@ -3,8 +3,6 @@ from __future__ import print_function
 import zmq
 import ujson as json
 
-from oct.results.models import db, Turret
-
 
 class TurretsManager(object):
     """Turrets management while runing test. This class is in charge to send
@@ -90,14 +88,6 @@ class TurretsManager(object):
         self.store.update_turret(turret_data)
         self.turrets[turret_data['uuid']] = turret_data
         return True
-
-    def write(self, turret):
-        """Write a turret to database
-
-        :param dict turret_data: the data of the turret to write
-        """
-        with db.execution_context():
-            turret.save()
 
     def publish(self, message, channel=None):
         """Publish a message for all turrets
