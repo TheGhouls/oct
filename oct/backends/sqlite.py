@@ -2,7 +2,7 @@ import ujson
 import pandas as pd
 
 from oct.utilities.configuration import get_db_uri
-from oct.result_backends.base import BaseStore, BaseLoader
+from oct.backends.base import BaseStore, BaseLoader
 
 
 import os

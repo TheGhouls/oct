@@ -1,7 +1,7 @@
 import pandas as pd
 
 from oct.core.exceptions import OctConfigurationError
-from oct.result_backends.base import BaseStore, BaseLoader
+from oct.backends.base import BaseStore, BaseLoader
 
 try:
     import redis
