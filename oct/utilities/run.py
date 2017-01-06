@@ -20,8 +20,7 @@ def init_output(output_dir, config):
     try:
         os.makedirs(output_dir, 0o755)
     except OSError as e:
-        print("ERROR: Can not create output directory: %s\n" % e)
-        raise
+        raise OSError("ERROR: Can not create output directory: %s\n" % e)
 
 
 def process_results(output_dir, config):
