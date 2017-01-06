@@ -6,7 +6,6 @@ import uuid
 from datetime import datetime
 from oct.results.output import output as output_results
 
-# import oct.results.stats_handler as stats_handler
 from oct.utilities.configuration import configure
 from oct.core.hq import HightQuarter
 
