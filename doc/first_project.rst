@@ -86,7 +86,7 @@ Every key here is useful, but some keys are not required to run a test. Let's ta
 
 * ``min_turrets``: The minimum number of turrets that must be deployed before the HQ sends the start message
 
-* ``turrets``: a list of turrets, this key will be use to package turrets with the `oct pack-turrets` command
+* ``turrets``: a list of turrets, this key will be use to package turrets with the `oct pack-turrets` command. Instead of a JSON it can be a string representing a path to a turret configuration file.
 
 * ``turrets_requirements``: A list of string containing the required packages for turrets (only for python turrets at this time)
 
