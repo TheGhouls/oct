@@ -131,8 +131,8 @@ By default, the ``oct new-project`` command will create an exemple test script u
 
 
     class Transaction(BaseTransaction):
-        def __init__(self, config):
-            super(Transaction, self).__init__(config)
+        def __init__(self, config, context=None):
+            super(Transaction, self).__init__(config, context)
 
         def setup(self):
             """Setup data or objects here
