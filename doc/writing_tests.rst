@@ -20,8 +20,8 @@ Let's take the default ``v_user.py`` file :
 
 
     class Transaction(BaseTransaction):
-        def __init__(self, config):
-            super(Transaction, self).__init__(config)
+        def __init__(self, config, context=None):
+            super(Transaction, self).__init__(config, context)
 
         def setup(self):
             """Setup data or objects here
@@ -60,8 +60,8 @@ So first let's adapt the script to our needs:
 
 
     class Transaction(BaseTransaction):
-        def __init__(self, config):
-            super(Transaction, self).__init__(config)
+        def __init__(self, config, context=None):
+            super(Transaction, self).__init__(config, context)
             # each cannon will only instanciate Transaction once, so each property
             # in the Transaction __init__ method will be set only once so take care if you need to update it
             self.url = "http://my-api/1.0/"
@@ -123,8 +123,8 @@ How does it works ? Take a look a this example:
 
 
     class Transaction(BaseTransaction):
-        def __init__(self, config):
-            super(Transaction, self).__init__(config)
+        def __init__(self, config, context=None):
+            super(Transaction, self).__init__(config, context)
             # each cannon will only instanciate Transaction once, so each property
             # in the Transaction __init__ method will be set only once so take care if you need to update it
             self.url = "http://my-api/1.0/"
