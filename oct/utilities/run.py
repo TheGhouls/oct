@@ -69,7 +69,7 @@ def run(args):
         del kwargs['func']
 
     project_path = kwargs.pop('project_path')
-    config = configure(project_path)
+    config = configure(project_path, kwargs.get('config_file'))
 
     output_dir = kwargs.pop('output_dir', None) or generate_output_path(args, project_path)
 
@@ -103,4 +103,6 @@ def run_command(sp):
                         help="Set if HQ should connect to external forwarder")
     parser.add_argument('--forwarder-address',
                         help="with form ip:port. If not set and --with-forwarder flag present HQ will use default values")
+    parser.add_argument('--config-file', default=None,
+                        help="configuration file to use, default is config.json in project directory")
     parser.set_defaults(func=run)

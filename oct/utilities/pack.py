@@ -82,7 +82,7 @@ def pack_turret(turret, temp_files, base_config_path, path=None):
 
 def pack(args):
     if os.path.exists(args.path):
-        config_file = os.path.join(os.path.abspath(args.path), "config.json")
+        config_file = args.config_file or os.path.join(os.path.abspath(args.path), "config.json")
         configs = configure_for_turret(args.path, config_file)
 
         for turret in configs:
@@ -106,4 +106,6 @@ def pack_turrets(sp):
                                aliases=['pack'])
     parser.add_argument('path', type=str, help='path for oct project dir')
     parser.add_argument('--python', action='store_true', default=False, help='If set, a setup.py file will be created')
+    parser.add_argument('--config-file', default=None,
+                        help="configuration file to use, default is config.json in project directory")
     parser.set_defaults(func=pack)
