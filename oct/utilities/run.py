@@ -8,7 +8,7 @@ from oct.results.output import output as output_results
 
 import oct.results.stats_handler as stats_handler
 from oct.utilities.configuration import configure
-from oct.core.hq import HightQuarter
+from oct.core.hq import get_hq_class
 
 
 def process_results(output_dir, config):
@@ -33,10 +33,13 @@ def copy_config(project_path, output_dir):
 def start_hq(output_dir, config, topic, is_master=True, **kwargs):
     """Start a HQ
     """
+    HightQuarter = get_hq_class(config.get('hq_class'))
     hq = HightQuarter(output_dir, config, topic, **kwargs)
+    hq.setup()
     if is_master:
         hq.wait_turrets(config.get("min_turrets", 1))
     hq.run()
+    hq.tear_down()
 
 
 def generate_output_path(args, project_path):
