@@ -1,5 +1,6 @@
 import os
 import json
+import six
 
 from oct.core.exceptions import OctConfigurationError
 
@@ -42,6 +43,16 @@ def configure(project_path, config_file=None):
     return config
 
 
+def load_turret_config(project_path, config_file):
+    config_file = os.path.join(project_path, config_file)
+    try:
+        with open(config_file, 'r') as f:
+            config = json.load(f)
+    except (ValueError, IOError) as e:
+        raise OctConfigurationError("Turret configuration %s failed: %s" % (config_file, e))
+    return config
+
+
 def configure_for_turret(project_name, config_file):
     """Load the configuration file in python dict and check for keys that will be set to default value if not present
 
@@ -62,6 +73,8 @@ def configure_for_turret(project_name, config_file):
     }
     configs = []
     for turret in config['turrets']:
+        if isinstance(turret, six.string_types):
+            turret = load_turret_config(project_name, turret)
         turret.update(common_config)
         turret.update(config.get('extra_turret_config', {}))
         configs.append(turret)
