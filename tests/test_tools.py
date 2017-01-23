@@ -2,7 +2,6 @@ import os
 import sys
 import shutil
 import unittest
-from unittest.mock import patch
 
 from oct.core.exceptions import OctConfigurationError
 from oct.utilities.commands import main
