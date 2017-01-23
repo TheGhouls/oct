@@ -2,6 +2,7 @@ import os
 import sys
 import shutil
 import unittest
+from unittest.mock import patch
 
 from oct.core.exceptions import OctConfigurationError
 from oct.utilities.commands import main
@@ -62,18 +63,6 @@ class ToolsTest(unittest.TestCase):
         sys.argv += ['rebuild-results', self.rebuild_dir, self.bad_config]
         with self.assertRaises(OctConfigurationError):
             main()
-
-    def test_download_armory(self):
-        """From armory command should be able to download and start project from armory"""
-        sys.argv = sys.argv[:1]
-        sys.argv += ['from-armory', "/tmp/test-armory", "karec/armory-wordpress"]
-        main()
-
-    def test_download_armory_fail(self):
-        """From armory command should be able to download and start project from armory"""
-        sys.argv = sys.argv[:1]
-        sys.argv += ['from-armory', "/tmp/test-armory", "karec/bad-rep"]
-        main()
 
     def tearDown(self):
         if os.path.exists(self.output_file):
