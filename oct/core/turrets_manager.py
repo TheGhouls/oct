@@ -29,9 +29,13 @@ class TurretsManager(object):
     def clean(self):
         self.publisher.close()
 
-    def start(self):
+    def start(self, transaction_context=None):
         """Publish start message to all turrets
         """
+        transaction_context = transaction_context or {}
+        context_cmd = {'command': 'set_transaction_context',
+                       'msg': transaction_context}
+        self.publish(context_cmd)
         self.publish(self.START)
 
     def stop(self):
