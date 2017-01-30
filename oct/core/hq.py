@@ -3,10 +3,22 @@ import zmq
 import time
 import ujson
 import traceback
+import importlib
 from zmq.utils.strtypes import asbytes
 
 from oct.core.turrets_manager import TurretsManager
 from oct.results.stats_handler import StatsHandler
+
+DEFAULT_HIGHTQUATER_CLASS = 'oct.core.hq.HightQuarter'
+
+
+def get_hq_class(path=None):
+    path = path or DEFAULT_HIGHTQUATER_CLASS
+    module_path = '.'.join(path.split('.')[:-1])
+    object_name = path.split('.')[-1]
+    module = importlib.import_module(module_path)
+    hq_class = getattr(module, object_name)
+    return hq_class
 
 
 class HightQuarter(object):
@@ -147,3 +159,13 @@ class HightQuarter(object):
         self.result_collector.unbind(self.result_collector.LAST_ENDPOINT)
         self._clean_queue()
         print("took %s" % (time.time() - t))
+
+    def setup(self):
+        """This method will be called before to start turrets.
+        """
+        pass
+
+    def tear_down(self):
+        """This method will be called after to stop turrets.
+        """
+        pass

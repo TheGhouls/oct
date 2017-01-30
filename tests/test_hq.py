@@ -6,6 +6,7 @@ import json
 from multiprocessing import Process
 from oct_turrets.turret import Turret
 from oct_turrets.utils import load_file, validate_conf
+from oct.core.hq import get_hq_class, HightQuarter
 from oct.utilities.run import run
 from oct.utilities.commands import main
 
@@ -83,6 +84,14 @@ class HQTest(unittest.TestCase):
         self.bad_turret.terminate()
         if os.path.isfile('/tmp/results.sqlite'):
             os.remove('/tmp/results.sqlite')
+
+
+class GetHqClassTest(unittest.TestCase):
+    def test_get_hq_class(self):
+        hq_class = get_hq_class()
+        self.assertEqual(hq_class, HightQuarter)
+        hq_class = get_hq_class('oct.core.hq.HightQuarter')
+        self.assertEqual(hq_class, HightQuarter)
 
 if __name__ == '__main__':
     unittest.main()
