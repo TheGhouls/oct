@@ -44,6 +44,7 @@ class HightQuarter(object):
         self.stats_handler = StatsHandler(config.get('results_database', {}).get('insert_limit', 150))
 
         self._configure_sockets(config)
+        self.transaction_context = {}
         self.turrets_manager = TurretsManager(config.get('publish_port', 5000), master)
         self.config = config
         self.started = False
@@ -138,7 +139,7 @@ class HightQuarter(object):
         run_time = self.config['run_time']
         start_time = time.time()
         t = time.time
-        self.turrets_manager.start()
+        self.turrets_manager.start(self.transaction_context)
         self.started = True
 
         while elapsed <= run_time:
