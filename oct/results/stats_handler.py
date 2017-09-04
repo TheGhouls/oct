@@ -23,7 +23,7 @@ def init_stats(output_dir, config):
 
     tables_to_create = [t for t in [Result, Turret] if not t.table_exists()]
 
-    db.connect()
+    db.get_conn()
     db.create_tables(tables_to_create)
 
 
